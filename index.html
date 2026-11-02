@@ -1,0 +1,1171 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plano de reservas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Composición: cabecera con fecha y modo, pestañas de turno, plano de sala a la izquierda y lista del turno a la derecha. */
+:root{
+  --bg:#EDF0F4; --surface:#FFFFFF; --surface-2:#F4F6F9; --fg:#18212F; --muted:#586376; --line:#D3D9E2;
+  --accent:#2A4A99; --accent-fg:#FFFFFF; --accent-soft:#E2E8F7;
+  --floor:#DCE2E9; --floor-grid:#C9D1DB; --wall:#B38746; --door:#8A5A2B; --plant:#3E8F5A; --chair:#98A3B4;
+  --free:#E3F2E8; --free-line:#4B9867; --res:#FFE8B5; --res-line:#C48610; --occ:#F7CBC2; --occ-line:#C1432C;
+  --danger:#B3361F; --danger-soft:#FBE4DF; --ok:#2C7A4B; --warn-soft:#FFF1CF;
+  --ff-display:'Bricolage Grotesque','Avenir Next','Segoe UI',system-ui,sans-serif;
+  --ff-body:'Figtree','Segoe UI',system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F141C; --surface:#171E29; --surface-2:#1D2633; --fg:#E6EAF1; --muted:#9AA5B7; --line:#2C3747;
+    --accent:#8CA9F2; --accent-fg:#0E1420; --accent-soft:#1F2D4D;
+    --floor:#212A37; --floor-grid:#2A3545; --wall:#9A7440; --door:#B07E45; --plant:#4FA672; --chair:#5B677B;
+    --free:#1C3326; --free-line:#5FB27E; --res:#3A2F12; --res-line:#E0A83A; --occ:#44211B; --occ-line:#E5755E;
+    --danger:#F08A75; --danger-soft:#43211B; --ok:#6CC28C; --warn-soft:#3A2F12;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F141C; --surface:#171E29; --surface-2:#1D2633; --fg:#E6EAF1; --muted:#9AA5B7; --line:#2C3747;
+  --accent:#8CA9F2; --accent-fg:#0E1420; --accent-soft:#1F2D4D;
+  --floor:#212A37; --floor-grid:#2A3545; --wall:#9A7440; --door:#B07E45; --plant:#4FA672; --chair:#5B677B;
+  --free:#1C3326; --free-line:#5FB27E; --res:#3A2F12; --res-line:#E0A83A; --occ:#44211B; --occ-line:#E5755E;
+  --danger:#F08A75; --danger-soft:#43211B; --ok:#6CC28C; --warn-soft:#3A2F12;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--ff-body);font-size:15px;line-height:1.4;
+  padding-block:16px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--ff-display);margin:0;letter-spacing:-.01em}
+.app{max-width:1440px;margin:0 auto;display:grid;gap:14px}
+.top{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between}
+.brand h1{font-size:28px;line-height:1.1}
+.brand p{margin:2px 0 0;color:var(--muted)}
+.group{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 13px;cursor:pointer;font-weight:600;min-height:38px;line-height:1.1}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.danger{color:var(--danger);border-color:var(--danger)}
+.btn.sm{padding:5px 9px;min-height:30px;font-size:13px}
+.btn.ghost{background:transparent}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.btn.icon{width:38px;padding:0;font-size:20px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=text],input[type=tel],input[type=number],input[type=date],input[type=time],select,textarea{
+  width:100%;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-height:38px}
+textarea{resize:vertical;min-height:64px}
+.datebar input[type=date]{width:auto;font-weight:600}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;padding:8px 14px;cursor:pointer;font-weight:600;min-height:36px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+.status{color:var(--muted);font-size:13px;min-width:90px;text-align:right}
+.status.err{color:var(--danger)}
+.shifts{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+.shift{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 14px;cursor:pointer;text-align:left;min-width:150px}
+.shift b{display:block;font-family:var(--ff-display);font-size:17px}
+.shift span{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.shift[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:16px;align-items:start}
+@media (max-width:1020px){.main{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}
+.plan{width:100%;height:auto;display:block;border-radius:8px;user-select:none;-webkit-user-select:none}
+.plan.edit{touch-action:none}
+.floor{fill:var(--floor)}
+.gridline{fill:none;stroke:var(--floor-grid);stroke-width:.7}
+.d-wall .shape{fill:var(--wall)}
+.d-door .shape{fill:var(--door)}
+.d-door .knob{fill:var(--accent-fg);opacity:.85}
+.d-plant .leaf{fill:var(--plant)}
+.plan.edit .tbl,.plan.edit .decor{cursor:grab}
+.selring{fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:6 4}
+.tbl{cursor:pointer}
+.tbody{stroke-width:1.6}
+.chair{fill:var(--chair)}
+.t-free .tbody{fill:var(--free);stroke:var(--free-line)}
+.t-res .tbody{fill:var(--res);stroke:var(--res-line)}
+.t-occ .tbody{fill:var(--occ);stroke:var(--occ-line)}
+.t-busy .tbody{fill:var(--occ);stroke:var(--occ-line)}
+.t-edit .tbody{fill:var(--surface);stroke:var(--muted)}
+.t-picked .tbody{fill:var(--accent);stroke:var(--accent)}
+.tbl.sel .tbody{stroke:var(--accent);stroke-width:3.4}
+.tbl text{font-family:var(--ff-body);fill:var(--fg);pointer-events:none;text-anchor:middle}
+.tbl .tl{font-family:var(--ff-display);font-weight:700;font-size:15px}
+.tbl .ts{font-size:10.5px;font-weight:500;opacity:.82}
+.t-picked text{fill:var(--accent-fg)}
+.timebar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-top:12px}
+.timebar .tv{font-family:var(--ff-display);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;min-width:68px}
+.timebar input[type=range]{flex:1;min-width:160px;accent-color:var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;border:1.5px solid}
+.lg-free{background:var(--free);border-color:var(--free-line)!important}
+.lg-res{background:var(--res);border-color:var(--res-line)!important}
+.lg-occ{background:var(--occ);border-color:var(--occ-line)!important}
+.side{display:grid;gap:12px;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;align-content:start}
+@media (max-width:1020px){.side{position:static;max-height:none}}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--surface-2);border-radius:9px;padding:8px 10px}
+.stat b{display:block;font-family:var(--ff-display);font-size:24px;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{font-size:12px;color:var(--muted)}
+.tpanel{border:1px solid var(--accent);background:var(--accent-soft);border-radius:10px;padding:10px;display:grid;gap:8px}
+.tpanel h3{font-size:18px}
+.tpanel p{margin:0;color:var(--muted);font-size:13px}
+.list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.ritem{border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden}
+.ritem.off{opacity:.62}
+.ritem.off .rname{text-decoration:line-through}
+.rmain{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 12px;width:100%;text-align:left;background:transparent;border:0;padding:10px 12px 6px;cursor:pointer}
+.rtime{font-family:var(--ff-display);font-weight:700;font-size:20px;font-variant-numeric:tabular-nums;grid-row:span 2}
+.rline{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;min-width:0}
+.rname{font-weight:700;overflow-wrap:anywhere}
+.chip{display:inline-block;border-radius:6px;padding:1px 7px;font-size:12px;font-weight:600;background:var(--surface-2);border:1px solid var(--line);white-space:nowrap}
+.chip.st-sentada{background:var(--occ);border-color:var(--occ-line)}
+.chip.st-confirmada{background:var(--res);border-color:var(--res-line)}
+.chip.st-terminada{background:var(--free);border-color:var(--free-line)}
+.rnote{grid-column:2;color:var(--muted);font-size:13px;overflow-wrap:anywhere}
+.ractions{display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 10px}
+.empty{color:var(--muted);padding:14px;text-align:center;border:1px dashed var(--line);border-radius:10px}
+.hero{display:grid;gap:12px;justify-items:start;padding:28px}
+.hero p{margin:0;color:var(--muted);max-width:56ch}
+.field{display:grid;gap:4px;min-width:0}
+.field>label,.lbl{font-size:13px;font-weight:600;color:var(--muted)}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.tools{display:flex;flex-wrap:wrap;gap:6px}
+.hint{font-size:13px;color:var(--muted);margin:0}
+.warn{background:var(--warn-soft);border:1px solid var(--res-line);border-radius:8px;padding:8px 10px;font-size:14px}
+.warn.bad{background:var(--danger-soft);border-color:var(--danger)}
+.banner{background:var(--warn-soft);border:1px solid var(--res-line);border-radius:10px;padding:10px 14px}
+.overlay{position:fixed;inset:0;background:rgba(10,14,22,.55);display:flex;align-items:flex-start;justify-content:center;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));overflow:auto;z-index:50}
+.modal{background:var(--surface);border:1px solid var(--line);border-radius:14px;width:100%;max-width:560px;margin:auto 0;display:flex;flex-direction:column}
+.modal.wide{max-width:760px}
+.mhead{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
+.mhead h2{font-size:21px}
+.mbody{padding:16px;display:grid;gap:14px}
+.mfoot{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;padding:12px 16px;border-top:1px solid var(--line)}
+.mfoot .sp{margin-right:auto}
+.stepper{display:flex;gap:6px;align-items:center}
+.stepper input{text-align:center;width:72px}
+.quick{display:flex;flex-wrap:wrap;gap:6px}
+.quick button{min-width:38px}
+.quick button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.minipl{border:1px solid var(--line);border-radius:10px;padding:6px;background:var(--surface-2)}
+.minipl .plan{max-height:52vh}
+.rules{display:grid;gap:8px}
+.rrow{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}
+.srow{display:grid;grid-template-columns:1.3fr 1fr 1fr auto;gap:8px;align-items:end}
+@media (max-width:520px){.srow{grid-template-columns:1fr 1fr}.srow .field:first-child{grid-column:1/-1}}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:max(20px,env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;z-index:80;max-width:90vw}
+.toast.err{background:var(--danger);color:#fff}
+body.noscroll{overflow:hidden}
+@media (prefers-reduced-motion:no-preference){.tbody{transition:fill .15s}}
+[hidden]{display:none!important}
+html{color-scheme:light}
+body{margin:0}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+  <header class="top">
+    <div class="brand">
+      <h1>Reservas</h1>
+      <p id="dateLong">&nbsp;</p>
+    </div>
+    <div class="group datebar">
+      <button class="btn icon" id="prevDay" aria-label="Día anterior">‹</button>
+      <input type="date" id="dateIn" aria-label="Fecha">
+      <button class="btn icon" id="nextDay" aria-label="Día siguiente">›</button>
+      <button class="btn" id="goToday">Hoy</button>
+    </div>
+    <div class="group">
+      <div class="seg" role="group" aria-label="Modo">
+        <button id="modeService" aria-pressed="true">Servicio</button>
+        <button id="modeEdit" aria-pressed="false">Editar sala</button>
+      </div>
+      <span class="status" id="saveStatus" aria-live="polite"></span>
+      <button class="btn" id="btnSettings">Ajustes</button>
+      <button class="btn" id="btnLogout" hidden>Salir</button>
+      <button class="btn primary" id="btnNew">Nueva reserva</button>
+    </div>
+  </header>
+
+  <div id="banner" hidden></div>
+  <div class="shifts" id="shiftTabs" role="group" aria-label="Turnos"></div>
+
+  <div class="card hero" id="emptyState" hidden>
+    <h2>Todavía no hay plano de sala</h2>
+    <p>Crea una sala vacía y colocas las mesas tú mismo en «Editar sala»: arrastras, cambias los sitios de cada una y ajustas paredes, puertas y plantas.</p>
+    <button class="btn primary" id="btnCreateRoom">Crear sala vacía</button>
+  </div>
+  <div class="card hero" id="loading"><p>Cargando el plano…</p></div>
+
+  <div class="main" id="mainArea" hidden>
+    <section class="card" aria-label="Plano de sala">
+      <svg id="plan" class="plan" role="group" aria-label="Plano de mesas"></svg>
+      <div id="timeArea">
+        <div class="legend" aria-hidden="true">
+          <span><i class="lg-free"></i>Sin reservas en el turno</span>
+          <span><i class="lg-res"></i>Con reserva</span>
+          <span><i class="lg-occ"></i>Cliente sentado</span>
+        </div>
+      </div>
+      <p class="hint" id="editHint" hidden style="margin-top:10px">Arrastra mesas, paredes y puertas para colocarlas. Los cambios se guardan solos.</p>
+    </section>
+
+    <aside class="side" id="side">
+      <div id="sService" class="card" style="display:grid;gap:12px">
+        <div class="stats" id="sStats"></div>
+        <div id="sTable"></div>
+        <div class="field"><label for="sFilter">Buscar en este turno</label><input type="text" id="sFilter" placeholder="Nombre, teléfono o nota" autocomplete="off"></div>
+        <ul class="list" id="sList"></ul>
+      </div>
+      <div id="sEdit" class="card" style="display:grid;gap:14px" hidden></div>
+    </aside>
+  </div>
+</div>
+<div id="authRoot"></div>
+<div id="modalRoot"></div>
+<div id="toastRoot" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+(function(){
+'use strict';
+
+/* ---------- utilidades ---------- */
+const $ = (sel, root) => (root || document).querySelector(sel);
+const NS = 'http://www.w3.org/2000/svg';
+function applyProps(e, p){
+  if(!p) return;
+  for(const k in p){
+    const v = p[k];
+    if(v == null || v === false) continue;
+    if(k === 'class') e.setAttribute('class', v);
+    else if(k === 'text') e.textContent = v;
+    else if(k.slice(0,2) === 'on') e.addEventListener(k.slice(2), v);
+    else if(k === 'value') e.value = v;
+    else if(k === 'checked') e.checked = !!v;
+    else if(k === 'disabled') e.disabled = true;
+    else e.setAttribute(k, v === true ? '' : v);
+  }
+}
+function append(e, kids){
+  for(const k of kids.flat(Infinity)){
+    if(k == null || k === false) continue;
+    e.append(k.nodeType ? k : document.createTextNode(String(k)));
+  }
+}
+function h(tag, props, ...kids){ const e = document.createElement(tag); applyProps(e, props); append(e, kids); return e; }
+function sv(tag, props, ...kids){ const e = document.createElementNS(NS, tag); applyProps(e, props); append(e, kids); return e; }
+const uid = () => Math.random().toString(36).slice(2, 8);
+function stable(o){
+  if(Array.isArray(o)) return '[' + o.map(stable).join(',') + ']';
+  if(o && typeof o === 'object') return '{' + Object.keys(o).sort().map(k => JSON.stringify(k) + ':' + stable(o[k])).join(',') + '}';
+  return JSON.stringify(o);
+}
+const clone = o => JSON.parse(JSON.stringify(o));
+const pad = n => String(n).padStart(2, '0');
+const toMin = t => { const a = String(t).split(':'); return (+a[0]) * 60 + (+a[1] || 0); };
+const fmt = m => pad(Math.floor(m / 60)) + ':' + pad(m % 60);
+function todayStr(){ const d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function parseDate(s){ const a = s.split('-').map(Number); return new Date(a[0], a[1] - 1, a[2]); }
+function addDays(s, n){ const d = parseDate(s); d.setDate(d.getDate() + n); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function nowMin(){ const d = new Date(); return d.getHours() * 60 + d.getMinutes(); }
+function longDate(s){
+  const t = new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(parseDate(s));
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
+const num = l => { const m = String(l).match(/\d+/); return m ? +m[0] : 9999; };
+const cmpLabel = (a, b) => num(a.label) - num(b.label) || String(a.label).localeCompare(String(b.label), 'es', { numeric: true });
+
+const BLOCK = ['confirmada', 'sentada'];
+const STATUS = { confirmada: 'Confirmada', sentada: 'Sentada', terminada: 'Terminada', 'no-show': 'No vino', cancelada: 'Cancelada' };
+const SNAP = 5;
+
+/* ---------- configuración por defecto ---------- */
+function blankCfg(){
+  return {
+    version: 1,
+    plan: { w: 1040, h: 850 },
+    tables: [],
+    decor: [],
+    shifts: [
+      { id: 'comida', name: 'Comida', start: '13:00', end: '16:00' },
+      { id: 'cena', name: 'Cena', start: '20:00', end: '23:30' }
+    ],
+    durationBase: 90,
+    durationRules: [],
+    slotStep: 15
+  };
+}
+function normCfg(c){
+  const b = blankCfg(), x = clone(c || {});
+  const out = Object.assign(b, x);
+  out.plan = Object.assign({ w: 1040, h: 850 }, x.plan || {});
+  out.tables = Array.isArray(x.tables) ? x.tables : [];
+  out.decor = Array.isArray(x.decor) ? x.decor : [];
+  out.shifts = Array.isArray(x.shifts) && x.shifts.length ? x.shifts : blankCfg().shifts;
+  out.durationRules = Array.isArray(x.durationRules) ? x.durationRules : [];
+  return out;
+}
+
+/* ---------- estado ---------- */
+const state = {
+  cfg: null, cfgLoaded: false,
+  date: todayStr(), shiftId: null, viewTime: null,
+  mode: 'service', selTable: null, sel: null,
+  res: [], filter: '', pendingDelete: false
+};
+
+/* ---------- almacén de datos (db o memoria) ---------- */
+let store = null, unsubDay = null, saveTimer = null, saving = false, dirty = false, loadTimer = null;
+
+function makeSbStore(sb){
+  const T = 'res_docs';
+  const toRes = r => Object.assign({ id: r.id }, r.data);
+  function watch(loader, filter, cb, err){
+    let alive = true;
+    async function load(){
+      try { const v = await loader(); if(alive) cb(v); }
+      catch(e){ if(alive && err) err(e); }
+    }
+    load();
+    const ch = sb.channel('res-' + uid()).on('postgres_changes', { event: '*', schema: 'public', table: T, filter }, load).subscribe();
+    const poll = setInterval(load, 30000);
+    return () => { alive = false; clearInterval(poll); sb.removeChannel(ch); };
+  }
+  async function dayRows(date){
+    const { data, error } = await sb.from(T).select('id,data').eq('col', 'reservations').eq('data->>date', date);
+    if(error) throw error;
+    return data.map(toRes);
+  }
+  return {
+    persistent: true,
+    watchConfig(cb, err){
+      return watch(async () => {
+        const { data, error } = await sb.from(T).select('data').eq('col', 'config').eq('id', 'main').maybeSingle();
+        if(error) throw error;
+        return data ? data.data : null;
+      }, 'col=eq.config', v => cb(v, { fromCache: false }), err);
+    },
+    async saveConfig(cfg){
+      const { error } = await sb.from(T).upsert({ col: 'config', id: 'main', data: cfg, updated_at: new Date().toISOString() });
+      if(error) throw error;
+    },
+    watchDay(date, cb, err){ return watch(() => dayRows(date), 'col=eq.reservations', cb, err); },
+    getDay: dayRows,
+    newId(){ return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : 'r' + uid() + uid() + uid(); },
+    async saveRes(id, obj){
+      const { error } = await sb.from(T).upsert({ col: 'reservations', id, data: obj, updated_at: new Date().toISOString() });
+      if(error) throw error;
+    },
+    async deleteRes(id){
+      const { error } = await sb.from(T).delete().eq('col', 'reservations').eq('id', id);
+      if(error) throw error;
+    }
+  };
+}
+/* ---------- avisos ---------- */
+function toast(msg, isErr){
+  const root = $('#toastRoot'); root.replaceChildren();
+  const t = h('div', { class: 'toast' + (isErr ? ' err' : ''), role: 'status', text: msg });
+  root.append(t);
+  setTimeout(() => { if(t.parentNode) t.remove(); }, isErr ? 5000 : 2200);
+}
+function fail(e){
+  const m = (e && e.message) || '';
+  toast(/row-level|permission|42501/i.test(m) ? 'Tu cuenta no tiene permiso para guardar.' : /jwt|expired/i.test(m) ? 'Tu sesión ha caducado. Recarga la página y entra de nuevo.' : 'No se pudo guardar. Inténtalo de nuevo.', true);
+}
+function setBanner(text){
+  const b = $('#banner');
+  if(!text){ b.hidden = true; b.replaceChildren(); return; }
+  b.hidden = false; b.className = 'banner'; b.textContent = text;
+}
+function setSaveStatus(text, err){ const s = $('#saveStatus'); s.textContent = text || ''; s.className = 'status' + (err ? ' err' : ''); }
+
+/* ---------- guardado de la sala ---------- */
+function persistCfg(){
+  dirty = true; clearTimeout(saveTimer); saveTimer = setTimeout(flushCfg, 500); setSaveStatus('Guardando…');
+}
+async function flushCfg(){
+  saveTimer = null;
+  if(saving){ saveTimer = setTimeout(flushCfg, 300); return; }
+  saving = true;
+  try { await store.saveConfig(clone(state.cfg)); dirty = false; setSaveStatus(store.persistent ? 'Guardado' : 'Sin guardado'); }
+  catch(e){ setSaveStatus('No guardado', true); fail(e); }
+  finally { saving = false; }
+}
+
+/* ---------- reglas de negocio ---------- */
+function sortedShifts(){ return state.cfg.shifts.slice().sort((a, b) => toMin(a.start) - toMin(b.start)); }
+function shiftFor(time){
+  const m = toMin(time), sh = sortedShifts();
+  return sh.find(s => m <= toMin(s.end)) || sh[sh.length - 1];
+}
+function curShift(){ return state.cfg.shifts.find(s => s.id === state.shiftId) || sortedShifts()[0]; }
+function durationFor(size){
+  let m = state.cfg.durationBase;
+  state.cfg.durationRules.slice().sort((a, b) => a.from - b.from).forEach(r => { if(size >= r.from) m = r.minutes; });
+  return m;
+}
+function resDur(r){ return r.duration || state.cfg.durationBase; }
+function overlap(a1, a2, b1, b2){ return a1 < b2 && b1 < a2; }
+function tableLabels(ids){
+  const t = state.cfg.tables;
+  return (ids || []).map(id => (t.find(x => x.id === id) || {}).label).filter(Boolean).join(' + ');
+}
+function slotsFor(sh){
+  const out = [], step = state.cfg.slotStep || 15;
+  for(let m = toMin(sh.start); m <= toMin(sh.end); m += step) out.push(fmt(m));
+  return out;
+}
+function defaultView(){
+  const sh = curShift(); if(!sh) return '00:00';
+  const a = toMin(sh.start), b = toMin(sh.end), step = state.cfg.slotStep || 15;
+  if(state.date === todayStr()){
+    const n = nowMin();
+    if(n >= a && n <= b) return fmt(a + Math.floor((n - a) / step) * step);
+  }
+  return sh.start;
+}
+function defaultShiftId(){
+  const sh = sortedShifts();
+  if(state.date === todayStr()){
+    const n = nowMin();
+    const s = sh.find(x => n <= toMin(x.end));
+    if(s) return s.id;
+  }
+  return sh[0].id;
+}
+function tableInfo(tid, vt, list){
+  const rs = list.filter(r => (r.tables || []).includes(tid) && BLOCK.includes(r.status));
+  const isToday = state.date === todayStr();
+  const act = rs.find(r => {
+    const a = toMin(r.time), e = a + resDur(r);
+    if(a <= vt && vt < e) return true;
+    return r.status === 'sentada' && isToday && vt >= e && vt <= nowMin();
+  });
+  if(act) return { kind: act.status === 'sentada' ? 'occ' : 'res', r: act };
+  const nxt = rs.filter(r => toMin(r.time) > vt).sort((a, b) => toMin(a.time) - toMin(b.time))[0];
+  return { kind: 'free', next: nxt };
+}
+function busyTable(tid, start, dur, list){
+  return list.find(r => BLOCK.includes(r.status) && (r.tables || []).includes(tid) &&
+    overlap(start, start + dur, toMin(r.time), toMin(r.time) + resDur(r)));
+}
+function tableGap(a, b){
+  const dx = Math.max(0, Math.abs((a.x + a.w / 2) - (b.x + b.w / 2)) - (a.w + b.w) / 2);
+  const dy = Math.max(0, Math.abs((a.y + a.h / 2) - (b.y + b.h / 2)) - (a.h + b.h) / 2);
+  return Math.hypot(dx, dy);
+}
+function suggestTables(size, start, dur, list){
+  const free = state.cfg.tables.filter(t => !busyTable(t.id, start, dur, list));
+  const singles = free.filter(t => t.seats >= size).sort((a, b) => a.seats - b.seats || cmpLabel(a, b));
+  if(singles.length) return [singles[0]];
+  let best = null, bestCost = Infinity;
+  for(let i = 0; i < free.length; i++) for(let j = i + 1; j < free.length; j++){
+    const a = free[i], b = free[j], sum = a.seats + b.seats;
+    if(sum < size || tableGap(a, b) > 34) continue;
+    const cost = (sum - size) + tableGap(a, b) / 50;
+    if(cost < bestCost){ bestCost = cost; best = [a, b]; }
+  }
+  return best;
+}
+
+/* ---------- dibujo del plano ---------- */
+function chairsFor(t){
+  const out = [], n = t.seats;
+  if(t.shape === 'round'){
+    const cx = t.x + t.w / 2, cy = t.y + t.h / 2, r = t.w / 2 + 6;
+    for(let i = 0; i < n; i++){
+      const ang = -Math.PI / 2 + i * 2 * Math.PI / n;
+      out.push({ cx: cx + r * Math.cos(ang), cy: cy + r * Math.sin(ang), w: 16, h: 8, rot: ang * 180 / Math.PI + 90 });
+    }
+    return out;
+  }
+  const per = 2 * (t.w + t.h);
+  const sides = [{ k: 'top', L: t.w }, { k: 'bottom', L: t.w }, { k: 'left', L: t.h }, { k: 'right', L: t.h }];
+  sides.forEach(s => { s.q = n * s.L / per; s.c = Math.floor(s.q); s.r = s.q - s.c; });
+  let left = n - sides.reduce((a, s) => a + s.c, 0);
+  sides.slice().sort((a, b) => b.r - a.r).slice(0, Math.max(0, left)).forEach(s => s.c++);
+  sides.forEach(s => {
+    for(let i = 0; i < s.c; i++){
+      const p = (i + 1) / (s.c + 1);
+      if(s.k === 'top') out.push({ cx: t.x + p * t.w, cy: t.y - 6, w: 16, h: 8, rot: 0 });
+      if(s.k === 'bottom') out.push({ cx: t.x + p * t.w, cy: t.y + t.h + 6, w: 16, h: 8, rot: 0 });
+      if(s.k === 'left') out.push({ cx: t.x - 6, cy: t.y + p * t.h, w: 8, h: 16, rot: 0 });
+      if(s.k === 'right') out.push({ cx: t.x + t.w + 6, cy: t.y + p * t.h, w: 8, h: 16, rot: 0 });
+    }
+  });
+  return out;
+}
+
+function makePlan(svg, ctx){
+  const pid = uid();
+  let drag = null;
+  function toPlan(e){
+    const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY;
+    const m = svg.getScreenCTM();
+    return m ? p.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+  }
+  function drawDecor(d, c){
+    const isSel = c.sel && c.sel.kind === 'decor' && c.sel.id === d.id;
+    const g = sv('g', { class: 'decor d-' + d.kind, 'data-kind': 'decor', 'data-id': d.id });
+    if(d.kind === 'plant'){
+      const cx = d.x + d.w / 2, cy = d.y + d.h / 2, r = Math.min(d.w, d.h) / 2;
+      for(let i = 0; i < 7; i++) g.append(sv('ellipse', { class: 'leaf', cx, cy: cy - r * 0.45, rx: r * 0.2, ry: r * 0.55, transform: 'rotate(' + (i * 360 / 7) + ' ' + cx + ' ' + cy + ')' }));
+    } else {
+      g.append(sv('rect', { class: 'shape', x: d.x, y: d.y, width: d.w, height: d.h, rx: d.kind === 'door' ? 4 : 2 }));
+      if(d.kind === 'door') g.append(sv('circle', { class: 'knob', cx: d.w >= d.h ? d.x + d.w - 8 : d.x + d.w / 2, cy: d.w >= d.h ? d.y + d.h / 2 : d.y + d.h - 8, r: 3 }));
+    }
+    if(isSel) g.append(sv('rect', { class: 'selring', x: d.x - 4, y: d.y - 4, width: d.w + 8, height: d.h + 8, rx: 6 }));
+    return g;
+  }
+  function drawTable(t, c){
+    const d = c.describe(t);
+    const interactive = c.mode !== 'edit';
+    const g = sv('g', {
+      class: 'tbl ' + d.cls + (c.isSel(t) ? ' sel' : ''), 'data-kind': 'table', 'data-id': t.id,
+      tabindex: interactive ? 0 : null, role: interactive ? 'button' : null, 'aria-label': d.aria
+    });
+    chairsFor(t).forEach(ch => {
+      g.append(sv('rect', { class: 'chair', x: ch.cx - ch.w / 2, y: ch.cy - ch.h / 2, width: ch.w, height: ch.h, rx: 2.5, transform: ch.rot ? 'rotate(' + ch.rot + ' ' + ch.cx + ' ' + ch.cy + ')' : null }));
+    });
+    if(t.shape === 'round') g.append(sv('circle', { class: 'tbody', cx: t.x + t.w / 2, cy: t.y + t.h / 2, r: t.w / 2 }));
+    else g.append(sv('rect', { class: 'tbody', x: t.x, y: t.y, width: t.w, height: t.h, rx: 8 }));
+    const lines = [d.l2, d.l3].filter(Boolean);
+    const cx = t.x + t.w / 2, cy = t.y + t.h / 2;
+    const y0 = cy - (lines.length * 6) + 5;
+    const maxc = Math.max(5, Math.floor(t.w / 5.6));
+    g.append(sv('text', { class: 'tl', x: cx, y: y0 }, t.label));
+    lines.forEach((ln, i) => {
+      const txt = ln.length > maxc ? ln.slice(0, maxc - 1) + '…' : ln;
+      g.append(sv('text', { class: 'ts', x: cx, y: y0 + 13 + i * 12 }, txt));
+    });
+    if(c.mode === 'edit' && c.isSel(t)) g.append(sv('rect', { class: 'selring', x: t.x - 12, y: t.y - 12, width: t.w + 24, height: t.h + 24, rx: 12 }));
+    return g;
+  }
+  function render(){
+    const c = ctx.get(), cfg = c.cfg;
+    svg.replaceChildren();
+    svg.setAttribute('viewBox', '0 0 ' + cfg.plan.w + ' ' + cfg.plan.h);
+    svg.setAttribute('class', 'plan' + (c.mode === 'edit' ? ' edit' : ''));
+    svg.append(sv('defs', null, sv('pattern', { id: 'grid' + pid, width: 20, height: 20, patternUnits: 'userSpaceOnUse' }, sv('path', { class: 'gridline', d: 'M20 0H0V20' }))));
+    svg.append(sv('rect', { class: 'floor', x: 0, y: 0, width: cfg.plan.w, height: cfg.plan.h, rx: 10 }));
+    if(c.mode === 'edit') svg.append(sv('rect', { x: 0, y: 0, width: cfg.plan.w, height: cfg.plan.h, fill: 'url(#grid' + pid + ')', 'pointer-events': 'none' }));
+    cfg.decor.forEach(d => svg.append(drawDecor(d, c)));
+    cfg.tables.forEach(t => svg.append(drawTable(t, c)));
+  }
+  svg.addEventListener('pointerdown', e => {
+    const c = ctx.get(); if(c.mode !== 'edit') return;
+    const g = e.target.closest('[data-id]');
+    if(!g){ c.onSelect(null); return; }
+    const kind = g.dataset.kind, id = g.dataset.id;
+    const item = (kind === 'table' ? c.cfg.tables : c.cfg.decor).find(x => x.id === id);
+    if(!item) return;
+    const changed = !c.sel || c.sel.kind !== kind || c.sel.id !== id;
+    if(changed) c.onSelect({ kind, id });
+    const p = toPlan(e);
+    drag = { item, sx: p.x, sy: p.y, ix: item.x, iy: item.y, moved: false };
+    try { svg.setPointerCapture(e.pointerId); } catch(_){}
+    e.preventDefault();
+  });
+  svg.addEventListener('pointermove', e => {
+    if(!drag) return;
+    const c = ctx.get(), p = toPlan(e), it = drag.item;
+    const snap = v => Math.round(v / SNAP) * SNAP;
+    const nx = Math.max(0, Math.min(c.cfg.plan.w - it.w, snap(drag.ix + p.x - drag.sx)));
+    const ny = Math.max(0, Math.min(c.cfg.plan.h - it.h, snap(drag.iy + p.y - drag.sy)));
+    if(nx !== it.x || ny !== it.y){ it.x = nx; it.y = ny; drag.moved = true; render(); }
+  });
+  function end(){ if(drag && drag.moved) ctx.get().onCommit(); drag = null; }
+  svg.addEventListener('pointerup', end);
+  svg.addEventListener('pointercancel', end);
+  function tableFrom(e){
+    const g = e.target.closest('[data-kind="table"]'); if(!g) return null;
+    return ctx.get().cfg.tables.find(x => x.id === g.dataset.id) || null;
+  }
+  svg.addEventListener('click', e => {
+    const c = ctx.get(); if(c.mode === 'edit') return;
+    const t = tableFrom(e);
+    if(t) c.onTable(t); else if(c.onBg) c.onBg();
+  });
+  svg.addEventListener('keydown', e => {
+    const c = ctx.get(); if(c.mode === 'edit') return;
+    if(e.key === 'Enter' || e.key === ' '){ const t = tableFrom(e); if(t){ e.preventDefault(); c.onTable(t); } }
+  });
+  return { render, isDragging: () => !!drag };
+}
+
+/* ---------- plano principal ---------- */
+const mainPlan = makePlan($('#plan'), { get: () => ({
+  cfg: state.cfg, mode: state.mode, sel: state.sel,
+  isSel: t => state.mode === 'edit' ? (state.sel && state.sel.kind === 'table' && state.sel.id === t.id) : state.selTable === t.id,
+  describe: t => {
+    if(state.mode === 'edit') return { cls: 't-edit', l2: t.seats + ' pl.', aria: 'Mesa ' + t.label };
+    const rs = tableShiftRes(t.id);
+    if(rs.length){
+      const seated = rs.some(r => r.status === 'sentada');
+      const sn = r => String(r.name).split(' ')[0];
+      let l2, l3;
+      if(rs.length === 1){ l2 = rs[0].time + ' · ' + rs[0].size + 'p'; l3 = sn(rs[0]); }
+      else { l2 = rs[0].time + ' ' + sn(rs[0]); l3 = rs.length === 2 ? rs[1].time + ' ' + sn(rs[1]) : '+' + (rs.length - 1) + ' más'; }
+      return { cls: seated ? 't-occ' : 't-res', l2, l3,
+        aria: 'Mesa ' + t.label + ', ' + (seated ? 'con cliente sentado' : 'reservada') + ': ' + rs.map(r => r.time + ' ' + r.name).join(', ') };
+    }
+    return { cls: 't-free', l2: t.seats + ' pl.', aria: 'Mesa ' + t.label + ' sin reservas en el turno, ' + t.seats + ' plazas' };
+  },
+  onTable: t => { state.selTable = state.selTable === t.id ? null : t.id; renderLive(); },
+  onBg: () => { if(state.selTable){ state.selTable = null; renderLive(); } },
+  onSelect: s => { state.sel = s; state.pendingDelete = false; mainPlan.render(); renderEdit(); },
+  onCommit: () => { persistCfg(); }
+}) });
+
+/* ---------- ventanas ---------- */
+let escHandler = null;
+function closeModal(){
+  $('#modalRoot').replaceChildren(); document.body.classList.remove('noscroll');
+  if(escHandler){ document.removeEventListener('keydown', escHandler); escHandler = null; }
+}
+function openModal(o){
+  closeModal();
+  const ov = h('div', { class: 'overlay', onmousedown: e => { if(e.target === ov) closeModal(); } },
+    h('div', { class: 'modal' + (o.wide ? ' wide' : ''), role: 'dialog', 'aria-modal': 'true', 'aria-label': o.title },
+      h('div', { class: 'mhead' }, h('h2', { text: o.title }), h('button', { class: 'btn icon ghost', 'aria-label': 'Cerrar', text: '×', onclick: closeModal })),
+      h('div', { class: 'mbody' }, o.body),
+      o.footer ? h('div', { class: 'mfoot' }, o.footer) : null));
+  $('#modalRoot').append(ov);
+  document.body.classList.add('noscroll');
+  escHandler = e => { if(e.key === 'Escape') closeModal(); };
+  document.addEventListener('keydown', escHandler);
+}
+
+/* ---------- ventana de reserva ---------- */
+function openResModal(init){
+  const cfg = state.cfg, editing = !!init.id;
+  const f = Object.assign({ name: '', phone: '', notes: '', size: 2, tables: [], status: 'confirmada' }, clone(init));
+  if(!f.date) f.date = state.date;
+  if(!f.time) f.time = state.viewTime || curShift().start;
+  if(f.duration == null) f.duration = durationFor(f.size);
+  let durTouched = editing || init.duration != null, tablesTouched = editing || (f.tables && f.tables.length > 0), dayList = [], saving = false, confirmDel = false;
+
+  const nameIn = h('input', { type: 'text', id: 'f-name', value: f.name, autocomplete: 'off', oninput: e => { f.name = e.target.value; } });
+  const phoneIn = h('input', { type: 'tel', id: 'f-phone', value: f.phone, autocomplete: 'off', inputmode: 'tel', oninput: e => { f.phone = e.target.value; } });
+  const sizeIn = h('input', { type: 'number', id: 'f-size', min: 1, max: 60, value: f.size, 'aria-label': 'Comensales' });
+  const quick = h('div', { class: 'quick' });
+  const dateIn = h('input', { type: 'date', id: 'f-date', value: f.date });
+  const timeSel = h('select', { id: 'f-time' });
+  const durIn = h('input', { type: 'number', id: 'f-dur', min: 15, max: 480, step: 5, value: f.duration });
+  const durHint = h('p', { class: 'hint' });
+  const notesIn = h('textarea', { id: 'f-notes', oninput: e => { f.notes = e.target.value; } });
+  notesIn.value = f.notes;
+  const statusSel = h('select', { id: 'f-status', onchange: e => { f.status = e.target.value; update(); } },
+    Object.keys(STATUS).map(k => h('option', { value: k, text: STATUS[k] })));
+  statusSel.value = f.status;
+  const tInfo = h('p', { class: 'hint' });
+  const warn = h('div');
+  const miniSvg = sv('svg', { class: 'plan', role: 'group', 'aria-label': 'Elegir mesas' });
+  const mini = makePlan(miniSvg, { get: () => ({
+    cfg, mode: 'pick', sel: null, isSel: t => f.tables.includes(t.id),
+    describe: t => {
+      if(f.tables.includes(t.id)) return { cls: 't-picked', l2: t.seats + ' pl.', aria: 'Mesa ' + t.label + ' elegida' };
+      const b = busyTable(t.id, toMin(f.time), +f.duration || cfg.durationBase, dayList);
+      return b ? { cls: 't-busy', l2: b.time, l3: b.name, aria: 'Mesa ' + t.label + ' ocupada a esa hora por ' + b.name }
+        : { cls: 't-free', l2: t.seats + ' pl.', aria: 'Mesa ' + t.label + ' libre' };
+    },
+    onTable: t => { tablesTouched = true; const i = f.tables.indexOf(t.id); if(i >= 0) f.tables.splice(i, 1); else f.tables.push(t.id); update(); }
+  }) });
+  const saveBtn = h('button', { class: 'btn primary', onclick: save });
+
+  function buildTimes(){
+    timeSel.replaceChildren();
+    cfg.shifts.slice().sort((a, b) => toMin(a.start) - toMin(b.start)).forEach(sh => {
+      timeSel.append(h('optgroup', { label: sh.name }, slotsFor(sh).map(t => h('option', { value: t, text: t }))));
+    });
+    if(!Array.from(timeSel.options).some(o => o.value === f.time)) timeSel.append(h('option', { value: f.time, text: f.time }));
+    timeSel.value = f.time;
+  }
+  function buildQuick(){
+    quick.replaceChildren();
+    [1, 2, 3, 4, 5, 6, 8, 10].forEach(n => quick.append(h('button', { type: 'button', class: 'btn sm', 'aria-pressed': String(+f.size === n), text: String(n), onclick: () => setSize(n) })));
+  }
+  function setSize(n){
+    f.size = Math.max(1, Math.min(60, n)); sizeIn.value = f.size;
+    if(!durTouched){ f.duration = durationFor(f.size); durIn.value = f.duration; }
+    if(!tablesTouched) autoSuggest();
+    update();
+  }
+  function autoSuggest(){
+    const pick = suggestTables(+f.size, toMin(f.time), +f.duration || cfg.durationBase, dayList);
+    f.tables = pick ? pick.map(t => t.id) : [];
+  }
+  async function loadDay(){
+    try { dayList = (await store.getDay(f.date)).filter(r => r.id !== f.id); } catch(e){ dayList = []; }
+    if(!tablesTouched) autoSuggest();
+    update();
+  }
+  function update(){
+    buildQuick();
+    const start = toMin(f.time), dur = +f.duration || cfg.durationBase, end = start + dur;
+    durHint.textContent = 'Termina sobre las ' + fmt(end % 1440) + '. Regla actual para ' + f.size + ' personas: ' + durationFor(+f.size) + ' min.';
+    const chosen = cfg.tables.filter(t => f.tables.includes(t.id)).sort(cmpLabel);
+    const seats = chosen.reduce((a, t) => a + t.seats, 0);
+    tInfo.textContent = chosen.length
+      ? 'Mesa ' + chosen.map(t => t.label).join(' + ') + ' · ' + seats + ' plazas'
+      : 'Sin mesa asignada. Toca una mesa libre del plano o pulsa «Sugerir».';
+    warn.replaceChildren();
+    const issues = [];
+    chosen.forEach(t => {
+      if(!BLOCK.includes(f.status)) return;
+      const b = busyTable(t.id, start, dur, dayList);
+      if(b) issues.push('La mesa ' + t.label + ' está ocupada de ' + b.time + ' a ' + fmt((toMin(b.time) + resDur(b)) % 1440) + ' por ' + b.name + '.');
+    });
+    if(chosen.length && seats < +f.size) warn.append(h('div', { class: 'warn', text: 'Faltan ' + (f.size - seats) + ' plazas. Junta otra mesa o añade sillas.' }));
+    if(issues.length) warn.append(h('div', { class: 'warn bad' }, issues.map(t => h('div', { text: t }))));
+    f._conflict = issues.length > 0;
+    saveBtn.textContent = saving ? 'Guardando…' : (f._conflict ? 'Guardar con solape' : 'Guardar reserva');
+    saveBtn.disabled = saving;
+    mini.render();
+  }
+  async function save(){
+    if(!f.name.trim()){ nameIn.focus(); toast('Escribe un nombre para la reserva', true); return; }
+    if(!(+f.size >= 1)){ sizeIn.focus(); return; }
+    saving = true; update();
+    const id = f.id || store.newId();
+    const obj = {
+      date: f.date, shiftId: shiftFor(f.time).id, time: f.time, size: +f.size, name: f.name.trim(), phone: (f.phone || '').trim(),
+      notes: (f.notes || '').trim(), tables: f.tables.slice(), duration: +f.duration || cfg.durationBase, status: f.status,
+      createdAt: f.createdAt || new Date().toISOString(), updatedAt: new Date().toISOString()
+    };
+    try {
+      await store.saveRes(id, obj);
+      closeModal(); toast('Reserva guardada');
+      if(obj.date !== state.date || shiftFor(obj.time).id !== state.shiftId){
+        state.shiftId = shiftFor(obj.time).id;
+        if(obj.date !== state.date){ state.date = obj.date; subscribeDay(); }
+        state.viewTime = defaultView(); state.selTable = null; renderAll();
+      }
+    } catch(e){ saving = false; update(); fail(e); }
+  }
+  async function del(btn){
+    if(!confirmDel){ confirmDel = true; btn.textContent = '¿Seguro? Pulsa otra vez'; return; }
+    try { await store.deleteRes(f.id); closeModal(); toast('Reserva eliminada'); } catch(e){ fail(e); }
+  }
+
+  sizeIn.addEventListener('input', () => { const n = parseInt(sizeIn.value, 10); if(n >= 1) setSize(n); });
+  dateIn.addEventListener('change', () => { if(dateIn.value){ f.date = dateIn.value; loadDay(); } });
+  timeSel.addEventListener('change', () => { f.time = timeSel.value; if(!tablesTouched) autoSuggest(); update(); });
+  durIn.addEventListener('input', () => { durTouched = true; f.duration = +durIn.value || 0; if(!tablesTouched) autoSuggest(); update(); });
+
+  const tagBtns = ['Alergias', 'Trona', 'Cumpleaños', 'Mascota'].map(tg => h('button', { type: 'button', class: 'btn sm', text: tg, onclick: () => {
+    const v = notesIn.value.trim(); if(v.toLowerCase().includes(tg.toLowerCase())) return;
+    notesIn.value = v ? v + ' · ' + tg : tg; f.notes = notesIn.value;
+  } }));
+
+  const body = [
+    h('div', { class: 'row' },
+      h('div', { class: 'field' }, h('label', { for: 'f-name', text: 'Nombre' }), nameIn),
+      h('div', { class: 'field' }, h('label', { for: 'f-phone', text: 'Teléfono' }), phoneIn)),
+    h('div', { class: 'field' }, h('label', { for: 'f-size', text: 'Comensales' }),
+      h('div', { class: 'stepper' },
+        h('button', { type: 'button', class: 'btn icon', 'aria-label': 'Uno menos', text: '−', onclick: () => setSize(+f.size - 1) }),
+        sizeIn,
+        h('button', { type: 'button', class: 'btn icon', 'aria-label': 'Uno más', text: '+', onclick: () => setSize(+f.size + 1) })),
+      quick),
+    h('div', { class: 'row' },
+      h('div', { class: 'field' }, h('label', { for: 'f-date', text: 'Fecha' }), dateIn),
+      h('div', { class: 'field' }, h('label', { for: 'f-time', text: 'Hora' }), timeSel),
+      h('div', { class: 'field' }, h('label', { for: 'f-dur', text: 'Duración (min)' }), durIn)),
+    durHint,
+    h('div', { class: 'field' }, h('label', { for: 'f-notes', text: 'Notas' }), notesIn, h('div', { class: 'tools' }, tagBtns)),
+    editing ? h('div', { class: 'field' }, h('label', { for: 'f-status', text: 'Estado' }), statusSel) : null,
+    h('div', { class: 'field' },
+      h('span', { class: 'lbl', text: 'Mesa' }),
+      tInfo,
+      h('div', { class: 'minipl' }, miniSvg),
+      h('div', { class: 'tools' },
+        h('button', { type: 'button', class: 'btn sm', text: 'Sugerir mesa', onclick: () => { tablesTouched = false; autoSuggest(); update(); if(!f.tables.length) toast('No hay mesa libre a esa hora', true); } }),
+        h('button', { type: 'button', class: 'btn sm', text: 'Quitar mesas', onclick: () => { tablesTouched = true; f.tables = []; update(); } }))),
+    warn
+  ];
+  const footer = [];
+  if(editing){ const d = h('button', { class: 'btn danger sp', text: 'Eliminar' }); d.addEventListener('click', () => del(d)); footer.push(d); }
+  footer.push(h('button', { class: 'btn', text: 'Cancelar', onclick: closeModal }), saveBtn);
+  openModal({ title: editing ? 'Editar reserva' : 'Nueva reserva', body, footer, wide: true });
+  buildTimes(); buildQuick();
+  if(!tablesTouched) autoSuggest();
+  update(); loadDay();
+  if(!editing) nameIn.focus();
+}
+
+/* ---------- ajustes ---------- */
+function openSettings(){
+  const cfg = clone(state.cfg);
+  const baseIn = h('input', { type: 'number', id: 's-base', min: 15, max: 480, step: 5, value: cfg.durationBase });
+  const stepSel = h('select', { id: 's-step' }, [10, 15, 30].map(n => h('option', { value: n, text: n + ' min' })));
+  stepSel.value = String(cfg.slotStep || 15);
+  const wIn = h('input', { type: 'number', id: 's-w', min: 400, max: 3000, step: 10, value: cfg.plan.w });
+  const hIn = h('input', { type: 'number', id: 's-h', min: 300, max: 3000, step: 10, value: cfg.plan.h });
+  const rulesBox = h('div', { class: 'rules' }), shiftsBox = h('div', { class: 'rules' });
+  function drawRules(){
+    rulesBox.replaceChildren();
+    cfg.durationRules.forEach((r, i) => rulesBox.append(h('div', { class: 'rrow' },
+      h('div', { class: 'field' }, h('label', { text: 'A partir de (comensales)' }), h('input', { type: 'number', min: 1, max: 60, value: r.from, oninput: e => { r.from = +e.target.value; } })),
+      h('div', { class: 'field' }, h('label', { text: 'Duración (min)' }), h('input', { type: 'number', min: 15, max: 480, step: 5, value: r.minutes, oninput: e => { r.minutes = +e.target.value; } })),
+      h('button', { class: 'btn sm danger', 'aria-label': 'Quitar regla', text: 'Quitar', onclick: () => { cfg.durationRules.splice(i, 1); drawRules(); } }))));
+    if(!cfg.durationRules.length) rulesBox.append(h('p', { class: 'hint', text: 'Sin reglas: todas las mesas usan la duración base.' }));
+  }
+  function drawShifts(){
+    shiftsBox.replaceChildren();
+    cfg.shifts.forEach((s, i) => shiftsBox.append(h('div', { class: 'srow' },
+      h('div', { class: 'field' }, h('label', { text: 'Nombre' }), h('input', { type: 'text', value: s.name, oninput: e => { s.name = e.target.value; } })),
+      h('div', { class: 'field' }, h('label', { text: 'Desde' }), h('input', { type: 'time', value: s.start, oninput: e => { s.start = e.target.value; } })),
+      h('div', { class: 'field' }, h('label', { text: 'Hasta' }), h('input', { type: 'time', value: s.end, oninput: e => { s.end = e.target.value; } })),
+      h('button', { class: 'btn sm danger', text: 'Quitar', disabled: cfg.shifts.length <= 1, onclick: () => { cfg.shifts.splice(i, 1); drawShifts(); } }))));
+  }
+  drawRules(); drawShifts();
+  const body = [
+    h('div', { class: 'row' },
+      h('div', { class: 'field' }, h('label', { for: 's-base', text: 'Duración base de una mesa (min)' }), baseIn),
+      h('div', { class: 'field' }, h('label', { for: 's-step', text: 'Intervalo de horas' }), stepSel)),
+    h('div', { class: 'field' }, h('span', { class: 'lbl', text: 'Duración según el tamaño del grupo' }), rulesBox,
+      h('div', { class: 'tools' }, h('button', { class: 'btn sm', text: 'Añadir regla', onclick: () => { cfg.durationRules.push({ from: 7, minutes: 120 }); drawRules(); } }))),
+    h('div', { class: 'field' }, h('span', { class: 'lbl', text: 'Turnos' }), shiftsBox,
+      h('div', { class: 'tools' }, h('button', { class: 'btn sm', text: 'Añadir turno', onclick: () => { cfg.shifts.push({ id: 's' + uid(), name: 'Nuevo turno', start: '18:00', end: '19:30' }); drawShifts(); } }))),
+    h('div', { class: 'row' },
+      h('div', { class: 'field' }, h('label', { for: 's-w', text: 'Ancho del plano' }), wIn),
+      h('div', { class: 'field' }, h('label', { for: 's-h', text: 'Alto del plano' }), hIn))
+  ];
+  const footer = [h('button', { class: 'btn', text: 'Cancelar', onclick: closeModal }), h('button', { class: 'btn primary', text: 'Guardar ajustes', onclick: () => {
+    const base = +baseIn.value;
+    if(!(base >= 15)){ toast('La duración base debe ser de al menos 15 min', true); return; }
+    for(const s of cfg.shifts){
+      if(!s.name.trim() || !s.start || !s.end || toMin(s.start) >= toMin(s.end)){ toast('Revisa los turnos: la hora de inicio debe ser anterior a la de fin', true); return; }
+    }
+    if(cfg.durationRules.some(r => !(r.from >= 1) || !(r.minutes >= 15))){ toast('Revisa las reglas de duración', true); return; }
+    cfg.durationBase = base; cfg.slotStep = +stepSel.value;
+    cfg.plan = { w: Math.max(400, +wIn.value || 1040), h: Math.max(300, +hIn.value || 850) };
+    cfg.shifts.forEach(s => { s.name = s.name.trim(); });
+    state.cfg = cfg;
+    if(!cfg.shifts.some(s => s.id === state.shiftId)) state.shiftId = defaultShiftId();
+    state.viewTime = defaultView();
+    persistCfg(); closeModal(); renderAll(); toast('Ajustes guardados');
+  } })];
+  openModal({ title: 'Ajustes', body, footer });
+}
+
+/* ---------- lista del turno ---------- */
+function shiftRes(sh){
+  return state.res.filter(r => shiftFor(r.time).id === sh.id).sort((a, b) => toMin(a.time) - toMin(b.time) || a.name.localeCompare(b.name, 'es'));
+}
+async function setStatus(r, st){
+  const rest = Object.assign({}, r); delete rest.id; rest.status = st; rest.updatedAt = new Date().toISOString();
+  try { await store.saveRes(r.id, rest); } catch(e){ fail(e); }
+}
+function resItem(r){
+  const off = ['cancelada', 'no-show'].includes(r.status);
+  const acts = [];
+  if(r.status === 'confirmada'){
+    acts.push(h('button', { class: 'btn sm primary', text: 'Sentar', onclick: () => setStatus(r, 'sentada') }));
+    acts.push(h('button', { class: 'btn sm', text: 'No vino', onclick: () => setStatus(r, 'no-show') }));
+    acts.push(h('button', { class: 'btn sm', text: 'Cancelar', onclick: () => setStatus(r, 'cancelada') }));
+  } else if(r.status === 'sentada'){
+    acts.push(h('button', { class: 'btn sm primary', text: 'Liberar mesa', onclick: () => setStatus(r, 'terminada') }));
+  } else {
+    acts.push(h('button', { class: 'btn sm', text: 'Reactivar', onclick: () => setStatus(r, 'confirmada') }));
+  }
+  const tl = tableLabels(r.tables);
+  return h('li', { class: 'ritem' + (off ? ' off' : '') },
+    h('button', { class: 'rmain', 'aria-label': 'Editar reserva de ' + r.name, onclick: () => openResModal(clone(r)) },
+      h('span', { class: 'rtime', text: r.time }),
+      h('span', { class: 'rline' },
+        h('span', { class: 'rname', text: r.name }),
+        h('span', { class: 'chip', text: r.size + (r.size === 1 ? ' persona' : ' personas') }),
+        tl ? h('span', { class: 'chip', text: 'Mesa ' + tl }) : h('span', { class: 'chip', text: 'Sin mesa' }),
+        h('span', { class: 'chip st-' + r.status, text: STATUS[r.status] || r.status })),
+      (r.phone || r.notes) ? h('span', { class: 'rnote', text: [r.phone, r.notes].filter(Boolean).join(' · ') }) : null),
+    h('div', { class: 'ractions' }, acts));
+}
+
+/* ---------- render ---------- */
+function renderHeader(){
+  $('#dateIn').value = state.date;
+  $('#dateLong').textContent = longDate(state.date);
+  $('#modeService').setAttribute('aria-pressed', String(state.mode === 'service'));
+  $('#modeEdit').setAttribute('aria-pressed', String(state.mode === 'edit'));
+}
+function renderShiftTabs(){
+  const box = $('#shiftTabs'); box.replaceChildren();
+  if(!state.cfg) return;
+  sortedShifts().forEach(sh => {
+    const rs = shiftRes(sh).filter(r => !['cancelada', 'no-show'].includes(r.status));
+    const pax = rs.reduce((a, r) => a + (+r.size || 0), 0);
+    box.append(h('button', { class: 'shift', 'aria-pressed': String(sh.id === state.shiftId), onclick: () => {
+      state.shiftId = sh.id; state.viewTime = defaultView(); state.selTable = null; renderAll();
+    } }, h('b', { text: sh.name }), h('span', { text: sh.start + ' – ' + sh.end + ' · ' + rs.length + ' reservas · ' + pax + ' pers.' })));
+  });
+}
+function tableShiftRes(tid){
+  return shiftRes(curShift()).filter(r => BLOCK.includes(r.status) && (r.tables || []).includes(tid));
+}
+function renderStats(){
+  const sh = curShift();
+  const all = shiftRes(sh), live = all.filter(r => !['cancelada', 'no-show'].includes(r.status));
+  const freeCount = state.cfg.tables.filter(t => !tableShiftRes(t.id).length).length;
+  const box = $('#sStats'); box.replaceChildren();
+  [[live.length, 'Reservas'], [live.reduce((a, r) => a + (+r.size || 0), 0), 'Comensales'], [freeCount + '/' + state.cfg.tables.length, 'Mesas sin reserva']]
+    .forEach(([v, l]) => box.append(h('div', { class: 'stat' }, h('b', { text: String(v) }), h('span', { text: l }))));
+}
+function renderTablePanel(){
+  const box = $('#sTable'); box.replaceChildren();
+  const t = state.cfg.tables.find(x => x.id === state.selTable);
+  if(!t){ state.selTable = null; return; }
+  const rs = tableShiftRes(t.id);
+  const status = rs.length ? 'Reservas en este turno: ' + rs.map(r => r.time + ' ' + r.name + (r.status === 'sentada' ? ' (sentado)' : '')).join(' · ')
+    : 'Sin reservas en este turno.';
+  box.append(h('div', { class: 'tpanel' },
+    h('h3', { text: 'Mesa ' + t.label + ' · ' + t.seats + ' plazas' }),
+    h('p', { text: status }),
+    h('div', { class: 'tools' },
+      h('button', { class: 'btn sm primary', text: 'Reservar esta mesa', onclick: () => openResModal({ time: state.viewTime, tables: [t.id], size: Math.min(t.seats, 4) }) }),
+      h('button', { class: 'btn sm', text: 'Sentar sin reserva', onclick: () => openResModal({ time: state.viewTime, tables: [t.id], size: t.seats, name: 'Sin reserva', status: 'sentada' }) }),
+      h('button', { class: 'btn sm ghost', text: 'Ver todas', onclick: () => { state.selTable = null; renderLive(); } }))));
+}
+function renderList(){
+  const ul = $('#sList'); ul.replaceChildren();
+  const sh = curShift(); let rs = shiftRes(sh);
+  if(state.selTable) rs = rs.filter(r => (r.tables || []).includes(state.selTable));
+  const q = state.filter.trim().toLowerCase();
+  if(q) rs = rs.filter(r => [r.name, r.phone, r.notes, tableLabels(r.tables)].join(' ').toLowerCase().includes(q));
+  if(!rs.length){
+    ul.append(h('li', { class: 'empty', text: q ? 'Nada coincide con la búsqueda.' : (state.selTable ? 'Esta mesa no tiene reservas en el turno.' : 'Sin reservas en este turno. Pulsa «Nueva reserva» o toca una mesa libre.') }));
+    return;
+  }
+  rs.forEach(r => ul.append(resItem(r)));
+}
+function renderLive(){
+  if(!state.cfg) return;
+  renderShiftTabs();
+  mainPlan.render();
+  if(state.mode === 'service'){ renderStats(); renderTablePanel(); renderList(); }
+}
+function renderAll(){
+  renderHeader();
+  const has = !!state.cfg;
+  $('#loading').hidden = state.cfgLoaded;
+  $('#emptyState').hidden = !(state.cfgLoaded && !has);
+  $('#mainArea').hidden = !has;
+  $('#shiftTabs').hidden = !has || state.mode === 'edit';
+  $('#btnNew').disabled = !has; $('#btnSettings').disabled = !has;
+  if(!has) return;
+  if(!state.shiftId || !state.cfg.shifts.some(s => s.id === state.shiftId)) state.shiftId = defaultShiftId();
+  if(!state.viewTime) state.viewTime = defaultView();
+  const edit = state.mode === 'edit';
+  $('#timeArea').hidden = edit; $('#editHint').hidden = !edit;
+  $('#sService').hidden = edit; $('#sEdit').hidden = !edit;
+  renderLive();
+  if(edit) renderEdit();
+}
+
+/* ---------- editor de sala ---------- */
+function selItem(){
+  if(!state.sel) return null;
+  return (state.sel.kind === 'table' ? state.cfg.tables : state.cfg.decor).find(x => x.id === state.sel.id) || null;
+}
+function freeSpot(w, h2){
+  const cfg = state.cfg;
+  for(let y = 30; y <= cfg.plan.h - h2 - 20; y += 20) for(let x = 30; x <= cfg.plan.w - w - 20; x += 20){
+    const hit = cfg.tables.some(t => x < t.x + t.w + 16 && x + w + 16 > t.x && y < t.y + t.h + 16 && y + h2 + 16 > t.y);
+    if(!hit) return { x, y };
+  }
+  return { x: 30, y: 30 };
+}
+function nextLabel(){
+  const n = state.cfg.tables.reduce((a, t) => Math.max(a, num(t.label) === 9999 ? 0 : num(t.label)), 0);
+  return String(n + 1);
+}
+function addTable(shape, w, hh, seats){
+  const pos = freeSpot(w, hh);
+  const t = { id: 't' + uid(), label: nextLabel(), seats, shape, x: pos.x, y: pos.y, w, h: hh };
+  state.cfg.tables.push(t); state.sel = { kind: 'table', id: t.id }; state.pendingDelete = false;
+  persistCfg(); mainPlan.render(); renderEdit();
+}
+function addDecor(kind, w, hh){
+  const pos = freeSpot(w, hh);
+  const d = { id: 'd' + uid(), kind, x: pos.x, y: pos.y, w, h: hh };
+  state.cfg.decor.push(d); state.sel = { kind: 'decor', id: d.id }; state.pendingDelete = false;
+  persistCfg(); mainPlan.render(); renderEdit();
+}
+function clampItem(it){
+  it.x = Math.max(0, Math.min(state.cfg.plan.w - it.w, it.x));
+  it.y = Math.max(0, Math.min(state.cfg.plan.h - it.h, it.y));
+}
+function renderEdit(){
+  const box = $('#sEdit'); if(!box || state.mode !== 'edit') return;
+  box.replaceChildren();
+  box.append(h('div', { class: 'field' }, h('span', { class: 'lbl', text: 'Añadir al plano' }),
+    h('div', { class: 'tools' },
+      h('button', { class: 'btn sm', text: '+ Mesa cuadrada', onclick: () => addTable('rect', 56, 56, 4) }),
+      h('button', { class: 'btn sm', text: '+ Mesa larga', onclick: () => addTable('rect', 120, 56, 6) }),
+      h('button', { class: 'btn sm', text: '+ Mesa redonda', onclick: () => addTable('round', 64, 64, 4) }),
+      h('button', { class: 'btn sm', text: '+ Pared', onclick: () => addDecor('wall', 160, 14) }),
+      h('button', { class: 'btn sm', text: '+ Puerta', onclick: () => addDecor('door', 56, 50) }),
+      h('button', { class: 'btn sm', text: '+ Planta', onclick: () => addDecor('plant', 36, 36) }))));
+  const it = selItem();
+  if(!it){ box.append(h('p', { class: 'hint', text: 'Toca una mesa, pared, puerta o planta del plano para editarla. Las mesas de una reserva se pueden juntar luego al reservar, no hace falta unirlas aquí.' })); return; }
+  const isTable = state.sel.kind === 'table';
+  const upd = () => { clampItem(it); persistCfg(); mainPlan.render(); };
+  const fields = [];
+  if(isTable){
+    fields.push(h('div', { class: 'row' },
+      h('div', { class: 'field' }, h('label', { for: 'e-label', text: 'Nombre de la mesa' }), h('input', { type: 'text', id: 'e-label', value: it.label, oninput: e => { it.label = e.target.value.slice(0, 6); upd(); } })),
+      h('div', { class: 'field' }, h('label', { for: 'e-seats', text: 'Sitios' }), h('input', { type: 'number', id: 'e-seats', min: 1, max: 30, value: it.seats, oninput: e => { const n = parseInt(e.target.value, 10); if(n >= 1 && n <= 30){ it.seats = n; upd(); } } }))));
+    const shapeSel = h('select', { id: 'e-shape', onchange: e => {
+      it.shape = e.target.value;
+      if(it.shape === 'round'){ const d = Math.round((it.w + it.h) / 2); it.w = d; it.h = d; }
+      upd(); renderEdit();
+    } }, [h('option', { value: 'rect', text: 'Rectangular' }), h('option', { value: 'round', text: 'Redonda' })]);
+    shapeSel.value = it.shape;
+    fields.push(h('div', { class: 'field' }, h('label', { for: 'e-shape', text: 'Forma' }), shapeSel));
+  }
+  const round = isTable && it.shape === 'round';
+  fields.push(h('div', { class: 'row' },
+    h('div', { class: 'field' }, h('label', { for: 'e-w', text: round ? 'Diámetro' : 'Ancho' }), h('input', { type: 'number', id: 'e-w', min: 14, max: 800, step: 2, value: it.w, oninput: e => { const v = +e.target.value; if(v >= 14){ it.w = v; if(round) it.h = v; upd(); } } })),
+    round ? null : h('div', { class: 'field' }, h('label', { for: 'e-h', text: 'Alto' }), h('input', { type: 'number', id: 'e-h', min: 10, max: 800, step: 2, value: it.h, oninput: e => { const v = +e.target.value; if(v >= 10){ it.h = v; upd(); } } }))));
+  fields.push(h('div', { class: 'tools' },
+    round ? null : h('button', { class: 'btn sm', text: 'Girar 90°', onclick: () => { const w = it.w; it.w = it.h; it.h = w; upd(); renderEdit(); } }),
+    isTable ? h('button', { class: 'btn sm', text: 'Duplicar', onclick: () => {
+      const c = clone(it); c.id = 't' + uid(); c.label = nextLabel(); c.x += 30; c.y += 30; clampItem(c);
+      state.cfg.tables.push(c); state.sel = { kind: 'table', id: c.id }; persistCfg(); mainPlan.render(); renderEdit();
+    } }) : null,
+    h('button', { class: 'btn sm danger', text: state.pendingDelete ? '¿Seguro? Pulsa otra vez' : 'Eliminar', onclick: () => {
+      if(!state.pendingDelete){ state.pendingDelete = true; renderEdit(); return; }
+      const arr = isTable ? state.cfg.tables : state.cfg.decor;
+      arr.splice(arr.indexOf(it), 1); state.sel = null; state.pendingDelete = false;
+      persistCfg(); mainPlan.render(); renderEdit();
+    } })));
+  box.append(h('div', { class: 'field' }, h('h3', { text: isTable ? 'Mesa ' + it.label : ({ wall: 'Pared', door: 'Puerta', plant: 'Planta' })[it.kind] }), fields));
+}
+
+/* ---------- datos del día ---------- */
+function subscribeDay(){
+  if(unsubDay){ unsubDay(); unsubDay = null; }
+  state.res = [];
+  unsubDay = store.watchDay(state.date, list => { state.res = list; if(state.cfg) renderLive(); }, () => setBanner('No se pudieron leer las reservas de este día. Recarga la página.'));
+}
+function goDate(d){
+  if(!d || d === state.date) return;
+  state.date = d; state.shiftId = state.cfg ? defaultShiftId() : null; state.viewTime = state.cfg ? defaultView() : null; state.selTable = null;
+  subscribeDay(); renderAll();
+}
+
+/* ---------- eventos fijos ---------- */
+$('#prevDay').addEventListener('click', () => goDate(addDays(state.date, -1)));
+$('#nextDay').addEventListener('click', () => goDate(addDays(state.date, 1)));
+$('#goToday').addEventListener('click', () => goDate(todayStr()));
+$('#dateIn').addEventListener('change', e => goDate(e.target.value));
+$('#modeService').addEventListener('click', () => setMode('service'));
+$('#modeEdit').addEventListener('click', () => setMode('edit'));
+function setMode(m){ state.mode = m; state.sel = null; state.selTable = null; state.pendingDelete = false; renderAll(); }
+$('#btnNew').addEventListener('click', () => state.cfg && openResModal({ time: state.viewTime }));
+$('#btnSettings').addEventListener('click', () => state.cfg && openSettings());
+$('#btnCreateRoom').addEventListener('click', () => { state.cfg = blankCfg(); state.shiftId = defaultShiftId(); state.viewTime = defaultView(); persistCfg(); renderAll(); });
+$('#sFilter').addEventListener('input', e => { state.filter = e.target.value; renderList(); });
+
+/* ---------- acceso y arranque ---------- */
+const SB_URL = 'https://wneprqmaueenbeowuykz.supabase.co';
+const SB_KEY = 'sb_publishable_ZlJgdb_V4c6IFlqQnsdvxA_sLSphozE';
+let sb = null;
+
+function authMsg(err){
+  const m = (err && err.message) || '';
+  if(/invalid login/i.test(m)) return 'Correo o contraseña incorrectos.';
+  if(/already registered/i.test(m)) return 'Ese correo ya tiene cuenta. Pulsa Entrar.';
+  if(/not confirmed/i.test(m)) return 'Confirma primero el correo que te hemos enviado.';
+  if(/rate|too many/i.test(m)) return 'Demasiados intentos. Espera un minuto.';
+  return 'No se pudo entrar: ' + m;
+}
+function authCard(title, body, footer){
+  const root = $('#authRoot'); root.replaceChildren();
+  root.append(h('div', { class: 'overlay' }, h('div', { class: 'modal', role: 'dialog', 'aria-modal': 'true', 'aria-label': title },
+    h('div', { class: 'mhead' }, h('h2', { text: title })),
+    h('div', { class: 'mbody' }, body),
+    footer ? h('div', { class: 'mfoot' }, footer) : null)));
+}
+function showAuth(note){
+  const email = h('input', { type: 'email', id: 'a-email', autocomplete: 'username', required: true });
+  const pass = h('input', { type: 'password', id: 'a-pass', autocomplete: 'current-password', required: true, minlength: 6 });
+  const msg = h('p', { class: 'hint', role: 'status', text: note || '' });
+  const bIn = h('button', { type: 'submit', class: 'btn primary', text: 'Entrar' });
+  const bUp = h('button', { type: 'button', class: 'btn', text: 'Crear cuenta' });
+  const btns = [bIn, bUp];
+  async function go(kind){
+    msg.textContent = '';
+    const e = email.value.trim(), p = pass.value;
+    if(!e || p.length < 6){ msg.textContent = 'Escribe tu correo y una contraseña de al menos 6 caracteres.'; return; }
+    btns.forEach(b => { b.disabled = true; });
+    try {
+      if(kind === 'in'){ const r = await sb.auth.signInWithPassword({ email: e, password: p }); if(r.error) throw r.error; }
+      else {
+        const r = await sb.auth.signUp({ email: e, password: p }); if(r.error) throw r.error;
+        if(!r.data.session){ msg.textContent = 'Cuenta creada. Revisa tu correo, confírmala y vuelve a pulsar Entrar.'; btns.forEach(b => { b.disabled = false; }); return; }
+      }
+      const s = await sb.auth.getSession();
+      startApp(s.data.session);
+    } catch(err){ msg.textContent = authMsg(err); btns.forEach(b => { b.disabled = false; }); }
+  }
+  bUp.addEventListener('click', () => go('up'));
+  const form = h('form', { class: 'mbody', style: 'padding:0', onsubmit: e => { e.preventDefault(); go('in'); } },
+    h('div', { class: 'field' }, h('label', { for: 'a-email', text: 'Correo' }), email),
+    h('div', { class: 'field' }, h('label', { for: 'a-pass', text: 'Contraseña' }), pass),
+    msg, h('div', { class: 'tools' }, bIn, bUp),
+    h('p', { class: 'hint', text: 'Solo entran los correos autorizados. Si es tu primera vez, pulsa Crear cuenta.' }));
+  authCard('Reservas', form);
+  email.focus();
+}
+function showNoAccess(mail){
+  authCard('Sin acceso', [h('p', { text: 'El correo ' + mail + ' todavía no está autorizado para ver las reservas. Pide que lo añadan y vuelve a entrar.' })],
+    [h('button', { class: 'btn', text: 'Salir', onclick: logout })]);
+}
+async function logout(){ try { await sb.auth.signOut(); } catch(e){} location.reload(); }
+$('#btnLogout').addEventListener('click', logout);
+
+async function startApp(session){
+  $('#authRoot').replaceChildren();
+  const chk = await sb.from('res_miembros').select('email').limit(1);
+  if(chk.error || !chk.data || !chk.data.length){ showNoAccess(session.user.email); return; }
+  $('#btnLogout').hidden = false; $('#btnLogout').title = session.user.email;
+  store = makeSbStore(sb);
+  loadTimer = setTimeout(() => setBanner('Tarda en responder la base de datos. Revisa la conexión; los cambios podrían no guardarse.'), 10000);
+  subscribeDay();
+  store.watchConfig((data, meta) => {
+    if(!meta || meta.fromCache === false){ clearTimeout(loadTimer); setBanner(''); }
+    if(state.cfgLoaded && (dirty || saving || mainPlan.isDragging())) return;
+    const incoming = data ? normCfg(data) : null;
+    if(state.cfgLoaded && incoming && state.cfg && stable(incoming) === stable(state.cfg)) return;
+    state.cfgLoaded = true;
+    state.cfg = incoming;
+    if(state.cfg){
+      if(!state.cfg.shifts.some(s => s.id === state.shiftId)) state.shiftId = defaultShiftId();
+      if(!state.viewTime) state.viewTime = defaultView();
+    }
+    renderAll();
+  }, () => setBanner('No se pudo leer la sala. Recarga la página.'));
+}
+async function init(){
+  renderHeader();
+  if(!window.supabase){ setBanner('No se pudo cargar la conexión con la base de datos. Revisa internet y recarga.'); $('#loading').hidden = true; return; }
+  sb = window.supabase.createClient(SB_URL, SB_KEY);
+  const s = await sb.auth.getSession();
+  if(s.data.session) startApp(s.data.session); else showAuth();
+}
+init();
+})();
+</script>
+</body>
+</html>
