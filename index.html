@@ -163,6 +163,58 @@ textarea{resize:vertical;min-height:64px}
 .toast.err{background:var(--danger);color:#fff}
 body.noscroll{overflow:hidden}
 @media (prefers-reduced-motion:no-preference){.tbody{transition:fill .15s}}
+.match{border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:10px;display:grid;gap:8px;font-size:14px}
+.match.ok{border-color:var(--free-line);background:var(--free)}
+.match.warnbox{border-color:var(--res-line);background:var(--warn-soft)}
+.cand{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center}
+.cmain{display:grid;gap:4px;width:100%;text-align:left;background:transparent;border:0;padding:10px 12px;cursor:pointer}
+.cmain .l1{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.cmain .l2{color:var(--muted);font-size:13px;overflow-wrap:anywhere}
+.chip.bad{background:var(--occ);border-color:var(--occ-line)}
+.hist{list-style:none;margin:0;padding:0;display:grid;gap:6px;max-height:220px;overflow:auto}
+.hist li{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:14px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.chk{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500}
+.chk input{width:18px;height:18px;accent-color:var(--accent)}
+/* panel público */
+.pub{max-width:520px;margin:0 auto;padding:24px 16px 40px;color:var(--fg);font-family:'Figtree',system-ui,sans-serif;font-size:16px;line-height:1.45;display:grid;gap:22px}
+.pub h1{font-family:'Bricolage Grotesque','Figtree',sans-serif;font-weight:700;font-size:30px;line-height:1.1;margin:0;text-wrap:balance}
+.pub h2{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.pub h3{font-size:15px;margin:0 0 6px}
+.pub-head{display:grid;gap:6px}
+.pub-lead,.pub-note{margin:0;color:var(--muted);font-size:15px}
+.pub-ok{margin:0;color:var(--free-line);font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase}
+.pub-form{display:grid;gap:22px}
+.pub-sizes,.pub-times{display:flex;flex-wrap:wrap;gap:8px}
+.pub-chip{min-width:48px;min-height:46px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;font-weight:600;cursor:pointer;font-variant-numeric:tabular-nums}
+.pub-chip.on{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.pub-chip:focus-visible,.pub-btn:focus-visible,.pub input:focus-visible,.pub textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.pub-shift+.pub-shift{margin-top:14px}
+.pub-data{display:grid;gap:14px}
+.pub-sum{margin:0;font-weight:600}
+.pub-field{display:grid;gap:4px;min-width:0}
+.pub-field label{font-size:13px;font-weight:600;color:var(--muted)}
+.pub input[type=text],.pub input[type=tel],.pub input[type=email],.pub input[type=date],.pub textarea{width:100%;box-sizing:border-box;min-height:46px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit}
+.pub textarea{resize:vertical}
+.pub-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.pub-check{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--muted)}
+.pub-check input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var(--accent)}
+.pub-btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border-radius:10px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:700;cursor:pointer;text-decoration:none}
+.pub-btn.ghost{background:transparent;color:var(--accent)}
+.pub-btn.danger{background:var(--occ-line);border-color:var(--occ-line);color:#fff}
+.pub-btn:disabled{opacity:.6;cursor:default}
+.pub-msg{margin:0;padding:10px 12px;border-radius:10px;background:var(--occ);border:1px solid var(--occ-line);color:var(--fg);font-size:15px}
+.pub-card{margin:0;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);display:grid;gap:10px}
+.pub-card div{display:flex;justify-content:space-between;gap:12px}
+.pub-card dt{color:var(--muted)}
+.pub-card dd{margin:0;font-weight:700;text-align:right}
+.pub-linkrow{display:grid;grid-template-columns:1fr auto;gap:8px}
+.pub-linkrow .pub-link{min-width:0}
+.pubov{position:fixed;inset:0;z-index:60;background:var(--bg);overflow:auto}
+.pubov-bar{position:sticky;top:0;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--accent-soft);border-bottom:1px solid var(--line);font-size:14px}
+.pubov-bar span{min-width:0}
+.pubov-bar{flex-wrap:wrap}
+.pubov-bar .tools input{flex:1 1 100%;max-width:none!important}
+
 [hidden]{display:none!important}
 html{color-scheme:light}
 body{margin:0}
@@ -186,8 +238,10 @@ body{margin:0}
       <div class="seg" role="group" aria-label="Modo">
         <button id="modeService" aria-pressed="true">Servicio</button>
         <button id="modeEdit" aria-pressed="false">Editar sala</button>
+        <button id="modeClients" aria-pressed="false">Clientes</button>
       </div>
       <span class="status" id="saveStatus" aria-live="polite"></span>
+      <button class="btn" id="btnPublic">Panel online</button>
       <button class="btn" id="btnSettings">Ajustes</button>
       <button class="btn" id="btnLogout" hidden>Salir</button>
       <button class="btn primary" id="btnNew">Nueva reserva</button>
@@ -203,6 +257,14 @@ body{margin:0}
     <button class="btn primary" id="btnCreateRoom">Crear sala vacía</button>
   </div>
   <div class="card hero" id="loading"><p>Cargando el plano…</p></div>
+
+  <section class="card" id="clientsArea" hidden style="display:grid;gap:12px">
+    <div class="row" style="align-items:end">
+      <div class="field"><label for="cFilter">Buscar cliente</label><input type="text" id="cFilter" placeholder="Nombre, teléfono o email" autocomplete="off"></div>
+      <p class="hint" id="cCount"></p>
+    </div>
+    <ul class="list" id="cList"></ul>
+  </section>
 
   <div class="main" id="mainArea" hidden>
     <section class="card" aria-label="Plano de sala">
@@ -283,6 +345,37 @@ function longDate(s){
 const num = l => { const m = String(l).match(/\d+/); return m ? +m[0] : 9999; };
 const cmpLabel = (a, b) => num(a.label) - num(b.label) || String(a.label).localeCompare(String(b.label), 'es', { numeric: true });
 
+function normPhone(s){
+  let d = String(s || '').trim().replace(/[\s().-]/g, '');
+  if(d.startsWith('00')) d = '+' + d.slice(2);
+  if(d.startsWith('+34')) d = d.slice(3);
+  else if(!d.startsWith('+') && /^34\d{9}$/.test(d)) d = d.slice(2);
+  return d;
+}
+const validPhone = p => /^[6-9]\d{8}$/.test(p) || /^\+\d{8,15}$/.test(p);
+const fmtPhone = p => { p = String(p || ''); return /^\d{9}$/.test(p) ? p.replace(/(\d{3})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4') : p; };
+const normEmail = s => String(s || '').trim().toLowerCase();
+const validEmail = e => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
+const normName = s => String(s || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' ');
+const dmy = d => d ? d.split('-').reverse().join('/') : '';
+function statsOf(list){
+  const visits = list.filter(r => r.status === 'sentada' || r.status === 'terminada');
+  return {
+    visits: visits.length,
+    noShows: list.filter(r => r.status === 'no-show').length,
+    upcoming: list.filter(r => r.status === 'confirmada' && r.date >= todayStr()).length,
+    last: visits.map(r => r.date).sort().pop() || null
+  };
+}
+function statsText(st){
+  if(!st.visits && !st.noShows && !st.upcoming) return 'Sin visitas todavía';
+  const out = [st.visits + (st.visits === 1 ? ' visita' : ' visitas')];
+  if(st.noShows) out.push(st.noShows + (st.noShows === 1 ? ' no vino' : ' no vinieron'));
+  if(st.upcoming) out.push(st.upcoming + (st.upcoming === 1 ? ' reserva próxima' : ' reservas próximas'));
+  if(st.last) out.push('última ' + dmy(st.last));
+  return out.join(' · ');
+}
+
 const BLOCK = ['confirmada', 'sentada'];
 const STATUS = { confirmada: 'Confirmada', sentada: 'Sentada', terminada: 'Terminada', 'no-show': 'No vino', cancelada: 'Cancelada' };
 const SNAP = 5;
@@ -311,6 +404,7 @@ function normCfg(c){
   out.decor = Array.isArray(x.decor) ? x.decor : [];
   out.shifts = Array.isArray(x.shifts) && x.shifts.length ? x.shifts : blankCfg().shifts;
   out.durationRules = Array.isArray(x.durationRules) ? x.durationRules : [];
+  out.online = Object.assign({ enabled: false, name: '', phone: '', maxSize: 8, minAdvanceH: 2, maxDaysAhead: 60, closedDates: [] }, x.online || {});
   return out;
 }
 
@@ -319,15 +413,18 @@ const state = {
   cfg: null, cfgLoaded: false,
   date: todayStr(), shiftId: null, viewTime: null,
   mode: 'service', selTable: null, sel: null,
-  res: [], filter: '', pendingDelete: false
+  res: [], filter: '', pendingDelete: false,
+  customers: [], allRes: []
 };
+const statsCache = new Map();
 
 /* ---------- almacén de datos (db o memoria) ---------- */
 let store = null, unsubDay = null, saveTimer = null, saving = false, dirty = false, loadTimer = null;
 
 function makeSbStore(sb){
   const T = 'res_docs';
-  const toRes = r => Object.assign({ id: r.id }, r.data);
+  const toDoc = r => Object.assign({ id: r.id }, r.data);
+  const uuid = () => (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : 'r' + uid() + uid() + uid();
   function watch(loader, filter, cb, err){
     let alive = true;
     async function load(){
@@ -339,11 +436,8 @@ function makeSbStore(sb){
     const poll = setInterval(load, 30000);
     return () => { alive = false; clearInterval(poll); sb.removeChannel(ch); };
   }
-  async function dayRows(date){
-    const { data, error } = await sb.from(T).select('id,data').eq('col', 'reservations').eq('data->>date', date);
-    if(error) throw error;
-    return data.map(toRes);
-  }
+  async function rows(q){ const { data, error } = await q; if(error) throw error; return data.map(toDoc); }
+  const dayRows = date => rows(sb.from(T).select('id,data').eq('col', 'reservations').eq('data->>date', date));
   return {
     persistent: true,
     watchConfig(cb, err){
@@ -359,7 +453,7 @@ function makeSbStore(sb){
     },
     watchDay(date, cb, err){ return watch(() => dayRows(date), 'col=eq.reservations', cb, err); },
     getDay: dayRows,
-    newId(){ return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : 'r' + uid() + uid() + uid(); },
+    newId: uuid,
     async saveRes(id, obj){
       const { error } = await sb.from(T).upsert({ col: 'reservations', id, data: obj, updated_at: new Date().toISOString() });
       if(error) throw error;
@@ -367,7 +461,19 @@ function makeSbStore(sb){
     async deleteRes(id){
       const { error } = await sb.from(T).delete().eq('col', 'reservations').eq('id', id);
       if(error) throw error;
-    }
+    },
+    watchCustomers(cb, err){ return watch(() => rows(sb.from(T).select('id,data').eq('col', 'customers').limit(5000)), 'col=eq.customers', cb, err); },
+    async saveCustomer(id, obj){
+      const { error } = await sb.from(T).upsert({ col: 'customers', id, data: obj, updated_at: new Date().toISOString() });
+      if(error) throw error;
+    },
+    async deleteCustomer(id){
+      const { error } = await sb.from(T).delete().eq('col', 'customers').eq('id', id);
+      if(error) throw error;
+    },
+    newCustomerId: uuid,
+    getCustomerRes(id){ return rows(sb.from(T).select('id,data').eq('col', 'reservations').eq('data->>customerId', id)); },
+    getAllRes(){ return rows(sb.from(T).select('id,data').eq('col', 'reservations').order('data->>date', { ascending: false }).limit(1000)); }
   };
 }
 /* ---------- avisos ---------- */
@@ -463,18 +569,25 @@ function tableGap(a, b){
   const dy = Math.max(0, Math.abs((a.y + a.h / 2) - (b.y + b.h / 2)) - (a.h + b.h) / 2);
   return Math.hypot(dx, dy);
 }
+const maxSeats = t => Math.max(t.seats, +t.seatsMax || 0);
+const seatsLabel = t => t.seats + (maxSeats(t) > t.seats ? '-' + maxSeats(t) : '') + ' pl.';
 function suggestTables(size, start, dur, list){
   const free = state.cfg.tables.filter(t => !busyTable(t.id, start, dur, list));
-  const singles = free.filter(t => t.seats >= size).sort((a, b) => a.seats - b.seats || cmpLabel(a, b));
-  if(singles.length) return [singles[0]];
-  let best = null, bestCost = Infinity;
-  for(let i = 0; i < free.length; i++) for(let j = i + 1; j < free.length; j++){
-    const a = free[i], b = free[j], sum = a.seats + b.seats;
-    if(sum < size || tableGap(a, b) > 34) continue;
-    const cost = (sum - size) + tableGap(a, b) / 50;
-    if(cost < bestCost){ bestCost = cost; best = [a, b]; }
+  const exact = free.filter(t => t.seats >= size).sort((a, b) => a.seats - b.seats || cmpLabel(a, b));
+  if(exact.length) return [exact[0]];
+  const stretch = free.filter(t => maxSeats(t) >= size).sort((a, b) => maxSeats(a) - maxSeats(b) || cmpLabel(a, b));
+  if(stretch.length) return [stretch[0]];
+  for(const cap of [t => t.seats, maxSeats]){
+    let best = null, bestCost = Infinity;
+    for(let i = 0; i < free.length; i++) for(let j = i + 1; j < free.length; j++){
+      const a = free[i], b = free[j], sum = cap(a) + cap(b);
+      if(sum < size || tableGap(a, b) > 34) continue;
+      const cost = (sum - size) + tableGap(a, b) / 50;
+      if(cost < bestCost){ bestCost = cost; best = [a, b]; }
+    }
+    if(best) return best;
   }
-  return best;
+  return null;
 }
 
 /* ---------- dibujo del plano ---------- */
@@ -607,7 +720,7 @@ const mainPlan = makePlan($('#plan'), { get: () => ({
   cfg: state.cfg, mode: state.mode, sel: state.sel,
   isSel: t => state.mode === 'edit' ? (state.sel && state.sel.kind === 'table' && state.sel.id === t.id) : state.selTable === t.id,
   describe: t => {
-    if(state.mode === 'edit') return { cls: 't-edit', l2: t.seats + ' pl.', aria: 'Mesa ' + t.label };
+    if(state.mode === 'edit') return { cls: 't-edit', l2: seatsLabel(t), aria: 'Mesa ' + t.label };
     const rs = tableShiftRes(t.id);
     if(rs.length){
       const seated = rs.some(r => r.status === 'sentada');
@@ -618,7 +731,7 @@ const mainPlan = makePlan($('#plan'), { get: () => ({
       return { cls: seated ? 't-occ' : 't-res', l2, l3,
         aria: 'Mesa ' + t.label + ', ' + (seated ? 'con cliente sentado' : 'reservada') + ': ' + rs.map(r => r.time + ' ' + r.name).join(', ') };
     }
-    return { cls: 't-free', l2: t.seats + ' pl.', aria: 'Mesa ' + t.label + ' sin reservas en el turno, ' + t.seats + ' plazas' };
+    return { cls: 't-free', l2: seatsLabel(t), aria: 'Mesa ' + t.label + ' sin reservas en el turno, ' + t.seats + ' plazas' };
   },
   onTable: t => { state.selTable = state.selTable === t.id ? null : t.id; renderLive(); },
   onBg: () => { if(state.selTable){ state.selTable = null; renderLive(); } },
@@ -646,16 +759,37 @@ function openModal(o){
 }
 
 /* ---------- ventana de reserva ---------- */
+function custStats(id){
+  if(!statsCache.has(id)) statsCache.set(id, store.getCustomerRes(id).then(statsOf).catch(() => statsOf([])));
+  return statsCache.get(id);
+}
+function findCandidates(p, e, okP, okE){
+  return state.customers.filter(c => (okP && c.phone === p) || (okE && c.email === e));
+}
+
 function openResModal(init){
-  const cfg = state.cfg, editing = !!init.id;
-  const f = Object.assign({ name: '', phone: '', notes: '', size: 2, tables: [], status: 'confirmada' }, clone(init));
+  const cfg = state.cfg, editing = !!init.id, walkin = !!init.walkin;
+  const f = Object.assign({ name: '', phone: '', email: '', notes: '', customerNotes: '', customerId: null, size: 2, tables: [], status: 'confirmada' }, clone(init));
+  delete f.walkin;
   if(!f.date) f.date = state.date;
   if(!f.time) f.time = state.viewTime || curShift().start;
   if(f.duration == null) f.duration = durationFor(f.size);
+  const linked = f.customerId ? state.customers.find(c => c.id === f.customerId) : null;
+  if(linked){
+    if(!f.phone) f.phone = linked.phone;
+    if(!f.email) f.email = linked.email;
+    if(!f.customerNotes) f.customerNotes = linked.notes || '';
+  }
+  f.phone = fmtPhone(f.phone || '');
+  const cr = { choice: linked ? linked.id : null, keep: !!linked, auto: false, forced: false };
   let durTouched = editing || init.duration != null, tablesTouched = editing || (f.tables && f.tables.length > 0), dayList = [], saving = false, confirmDel = false;
 
-  const nameIn = h('input', { type: 'text', id: 'f-name', value: f.name, autocomplete: 'off', oninput: e => { f.name = e.target.value; } });
-  const phoneIn = h('input', { type: 'tel', id: 'f-phone', value: f.phone, autocomplete: 'off', inputmode: 'tel', oninput: e => { f.phone = e.target.value; } });
+  const nameIn = h('input', { type: 'text', id: 'f-name', value: f.name, autocomplete: 'off' });
+  const phoneIn = h('input', { type: 'tel', id: 'f-phone', value: f.phone, autocomplete: 'off', inputmode: 'tel', placeholder: '612 34 56 78', 'aria-required': 'true' });
+  const emailIn = h('input', { type: 'email', id: 'f-email', value: f.email, autocomplete: 'off', inputmode: 'email', placeholder: 'nombre@correo.com', 'aria-required': 'true' });
+  const cNotesIn = h('textarea', { id: 'f-cnotes', placeholder: 'Alergias, mesa preferida, costumbres…' });
+  cNotesIn.value = f.customerNotes;
+  const matchBox = h('div', { 'aria-live': 'polite' });
   const sizeIn = h('input', { type: 'number', id: 'f-size', min: 1, max: 60, value: f.size, 'aria-label': 'Comensales' });
   const quick = h('div', { class: 'quick' });
   const dateIn = h('input', { type: 'date', id: 'f-date', value: f.date });
@@ -673,14 +807,84 @@ function openResModal(init){
   const mini = makePlan(miniSvg, { get: () => ({
     cfg, mode: 'pick', sel: null, isSel: t => f.tables.includes(t.id),
     describe: t => {
-      if(f.tables.includes(t.id)) return { cls: 't-picked', l2: t.seats + ' pl.', aria: 'Mesa ' + t.label + ' elegida' };
+      if(f.tables.includes(t.id)) return { cls: 't-picked', l2: seatsLabel(t), aria: 'Mesa ' + t.label + ' elegida' };
       const b = busyTable(t.id, toMin(f.time), +f.duration || cfg.durationBase, dayList);
       return b ? { cls: 't-busy', l2: b.time, l3: b.name, aria: 'Mesa ' + t.label + ' ocupada a esa hora por ' + b.name }
-        : { cls: 't-free', l2: t.seats + ' pl.', aria: 'Mesa ' + t.label + ' libre' };
+        : { cls: 't-free', l2: seatsLabel(t), aria: 'Mesa ' + t.label + ' libre' };
     },
     onTable: t => { tablesTouched = true; const i = f.tables.indexOf(t.id); if(i >= 0) f.tables.splice(i, 1); else f.tables.push(t.id); update(); }
   }) });
   const saveBtn = h('button', { class: 'btn primary', onclick: save });
+
+  /* --- cliente: reconocer por teléfono o email --- */
+  function autofill(c){
+    if(!f.name.trim()){ f.name = c.name; nameIn.value = c.name; }
+    if(!f.phone.trim()){ f.phone = fmtPhone(c.phone); phoneIn.value = f.phone; }
+    if(!f.email.trim()){ f.email = c.email; emailIn.value = c.email; }
+    if(!f.customerNotes.trim() && c.notes){ f.customerNotes = c.notes; cNotesIn.value = c.notes; }
+  }
+  function resolve(){
+    if(walkin) return;
+    const p = normPhone(f.phone), e = normEmail(f.email), okP = validPhone(p), okE = validEmail(e);
+    const cands = findCandidates(p, e, okP, okE);
+    const chosenExists = cr.choice && cr.choice !== 'new' && state.customers.some(c => c.id === cr.choice);
+    if(!chosenExists && !(cr.choice === 'new' && cr.forced)){
+      cr.choice = null; cr.auto = false;
+      if(!cands.length){ if(okP && okE) cr.choice = 'new'; }
+      else if(cands.length === 1){
+        const c = cands[0];
+        const consistent = (!okP || c.phone === p) && (!okE || c.email === e) && (!f.name.trim() || normName(c.name) === normName(f.name));
+        if(consistent){ cr.choice = c.id; cr.auto = true; autofill(c); }
+      }
+    }
+    renderMatch(cands);
+  }
+  function choose(c){ cr.choice = c.id; cr.auto = false; cr.forced = false; autofill(c); resolve(); }
+  function renderMatch(cands){
+    matchBox.replaceChildren();
+    if(cr.choice && cr.choice !== 'new'){
+      const c = state.customers.find(x => x.id === cr.choice);
+      if(c){
+        const line = h('span', { class: 'hint', text: 'Cargando historial…' });
+        custStats(c.id).then(st => { line.textContent = statsText(st); });
+        matchBox.append(h('div', { class: 'match ok' },
+          h('b', { text: 'Cliente existente: ' + c.name }), line,
+          cr.keep ? null : h('div', { class: 'tools' }, h('button', { type: 'button', class: 'btn sm', text: 'No es esta persona', onclick: () => { cr.choice = 'new'; cr.forced = true; cr.auto = false; resolve(); } }))));
+        return;
+      }
+    }
+    if(cr.choice === 'new'){
+      matchBox.append(h('div', { class: 'match' }, h('span', { text: 'Cliente nuevo: se guardará su ficha con esta reserva.' })));
+      return;
+    }
+    if(cands.length){
+      const box = h('div', { class: 'match warnbox' }, h('b', { text: 'Ya hay clientes con estos datos. ¿Quién es?' }));
+      cands.forEach(c => {
+        const line = h('span', { class: 'hint', text: 'Cargando historial…' });
+        custStats(c.id).then(st => { line.textContent = statsText(st); });
+        const differs = f.name.trim() && normName(f.name) !== normName(c.name);
+        box.append(h('div', { class: 'cand' },
+          h('div', null, h('b', { text: c.name }), ' · ' + fmtPhone(c.phone) + ' · ' + c.email, h('br'), line),
+          h('button', { type: 'button', class: 'btn sm', text: differs ? 'Es ella o él (cambiar nombre)' : 'Es esta persona', onclick: () => choose(c) })));
+      });
+      box.append(h('div', { class: 'tools' }, h('button', { type: 'button', class: 'btn sm', text: 'Es una persona nueva', onclick: () => { cr.choice = 'new'; cr.forced = true; cr.auto = false; resolve(); } })));
+      matchBox.append(box);
+      return;
+    }
+    matchBox.append(h('p', { class: 'hint', text: 'Escribe teléfono y email. Si ya es cliente, se reconoce solo.' }));
+  }
+  function contactChanged(){
+    if(!cr.keep){ cr.choice = null; cr.forced = false; cr.auto = false; }
+    resolve();
+  }
+  phoneIn.addEventListener('input', () => { f.phone = phoneIn.value; contactChanged(); });
+  emailIn.addEventListener('input', () => { f.email = emailIn.value; contactChanged(); });
+  nameIn.addEventListener('input', () => {
+    f.name = nameIn.value;
+    if(cr.auto){ cr.choice = null; cr.auto = false; }
+    resolve();
+  });
+  cNotesIn.addEventListener('input', () => { f.customerNotes = cNotesIn.value; });
 
   function buildTimes(){
     timeSel.replaceChildren();
@@ -714,9 +918,9 @@ function openResModal(init){
     const start = toMin(f.time), dur = +f.duration || cfg.durationBase, end = start + dur;
     durHint.textContent = 'Termina sobre las ' + fmt(end % 1440) + '. Regla actual para ' + f.size + ' personas: ' + durationFor(+f.size) + ' min.';
     const chosen = cfg.tables.filter(t => f.tables.includes(t.id)).sort(cmpLabel);
-    const seats = chosen.reduce((a, t) => a + t.seats, 0);
+    const seats = chosen.reduce((a, t) => a + t.seats, 0), maxS = chosen.reduce((a, t) => a + maxSeats(t), 0);
     tInfo.textContent = chosen.length
-      ? 'Mesa ' + chosen.map(t => t.label).join(' + ') + ' · ' + seats + ' plazas'
+      ? 'Mesa ' + chosen.map(t => t.label).join(' + ') + ' · ' + seats + ' plazas' + (maxS > seats ? ' (hasta ' + maxS + ' con sillas extra)' : '')
       : 'Sin mesa asignada. Toca una mesa libre del plano o pulsa «Sugerir».';
     warn.replaceChildren();
     const issues = [];
@@ -725,7 +929,10 @@ function openResModal(init){
       const b = busyTable(t.id, start, dur, dayList);
       if(b) issues.push('La mesa ' + t.label + ' está ocupada de ' + b.time + ' a ' + fmt((toMin(b.time) + resDur(b)) % 1440) + ' por ' + b.name + '.');
     });
-    if(chosen.length && seats < +f.size) warn.append(h('div', { class: 'warn', text: 'Faltan ' + (f.size - seats) + ' plazas. Junta otra mesa o añade sillas.' }));
+    if(chosen.length && seats < +f.size){
+      if(maxS >= +f.size) warn.append(h('div', { class: 'warn', text: 'Caben con sillas extra: ' + (f.size - seats) + ' más de lo normal en ' + chosen.filter(t => maxSeats(t) > t.seats).map(t => 'la mesa ' + t.label).join(' y ') + '.' }));
+      else warn.append(h('div', { class: 'warn', text: 'Faltan ' + (f.size - maxS) + ' plazas. Junta otra mesa o añade sillas.' }));
+    }
     if(issues.length) warn.append(h('div', { class: 'warn bad' }, issues.map(t => h('div', { text: t }))));
     f._conflict = issues.length > 0;
     saveBtn.textContent = saving ? 'Guardando…' : (f._conflict ? 'Guardar con solape' : 'Guardar reserva');
@@ -733,28 +940,46 @@ function openResModal(init){
     mini.render();
   }
   async function save(){
+    const p = normPhone(f.phone), e = normEmail(f.email);
     if(!f.name.trim()){ nameIn.focus(); toast('Escribe un nombre para la reserva', true); return; }
+    if(!walkin){
+      if(!validPhone(p)){ phoneIn.focus(); toast('Escribe un teléfono válido: 9 dígitos, o con prefijo si es extranjero', true); return; }
+      if(!validEmail(e)){ emailIn.focus(); toast('Escribe un email válido', true); return; }
+      if(!cr.choice){ toast('Elige si es un cliente existente o uno nuevo', true); return; }
+    }
     if(!(+f.size >= 1)){ sizeIn.focus(); return; }
     saving = true; update();
-    const id = f.id || store.newId();
-    const obj = {
-      date: f.date, shiftId: shiftFor(f.time).id, time: f.time, size: +f.size, name: f.name.trim(), phone: (f.phone || '').trim(),
-      notes: (f.notes || '').trim(), tables: f.tables.slice(), duration: +f.duration || cfg.durationBase, status: f.status,
-      createdAt: f.createdAt || new Date().toISOString(), updatedAt: new Date().toISOString()
-    };
+    const now = new Date().toISOString();
     try {
+      let customerId = null;
+      if(!walkin){
+        const ex = cr.choice !== 'new' ? state.customers.find(c => c.id === cr.choice) : null;
+        customerId = ex ? ex.id : store.newCustomerId();
+        const base = ex ? Object.assign({}, ex) : { createdAt: now };
+        delete base.id;
+        await store.saveCustomer(customerId, Object.assign(base, { name: f.name.trim(), phone: p, email: e, notes: (f.customerNotes || '').trim(), updatedAt: now }));
+      }
+      const id = f.id || store.newId();
+      const obj = {
+        date: f.date, shiftId: shiftFor(f.time).id, time: f.time, size: +f.size, name: f.name.trim(), phone: walkin ? '' : p, email: walkin ? '' : e,
+        notes: (f.notes || '').trim(), tables: f.tables.slice(), duration: +f.duration || cfg.durationBase, status: f.status,
+        createdAt: f.createdAt || now, updatedAt: now
+      };
+      if(customerId) obj.customerId = customerId;
+      if(walkin) obj.walkin = true;
       await store.saveRes(id, obj);
+      statsCache.clear();
       closeModal(); toast('Reserva guardada');
       if(obj.date !== state.date || shiftFor(obj.time).id !== state.shiftId){
         state.shiftId = shiftFor(obj.time).id;
         if(obj.date !== state.date){ state.date = obj.date; subscribeDay(); }
         state.viewTime = defaultView(); state.selTable = null; renderAll();
       }
-    } catch(e){ saving = false; update(); fail(e); }
+    } catch(err){ saving = false; update(); fail(err); }
   }
   async function del(btn){
     if(!confirmDel){ confirmDel = true; btn.textContent = '¿Seguro? Pulsa otra vez'; return; }
-    try { await store.deleteRes(f.id); closeModal(); toast('Reserva eliminada'); } catch(e){ fail(e); }
+    try { await store.deleteRes(f.id); statsCache.clear(); closeModal(); toast('Reserva eliminada'); } catch(err){ fail(err); }
   }
 
   sizeIn.addEventListener('input', () => { const n = parseInt(sizeIn.value, 10); if(n >= 1) setSize(n); });
@@ -768,9 +993,13 @@ function openResModal(init){
   } }));
 
   const body = [
-    h('div', { class: 'row' },
-      h('div', { class: 'field' }, h('label', { for: 'f-name', text: 'Nombre' }), nameIn),
-      h('div', { class: 'field' }, h('label', { for: 'f-phone', text: 'Teléfono' }), phoneIn)),
+    walkin ? null : h('div', { class: 'row' },
+      h('div', { class: 'field' }, h('label', { for: 'f-phone', text: 'Teléfono *' }), phoneIn),
+      h('div', { class: 'field' }, h('label', { for: 'f-email', text: 'Email *' }), emailIn)),
+    h('div', { class: 'field' }, h('label', { for: 'f-name', text: 'Nombre' + (walkin ? '' : ' *') }), nameIn),
+    walkin ? null : matchBox,
+    walkin ? null : h('div', { class: 'field' }, h('label', { for: 'f-cnotes', text: 'Notas del cliente' }), cNotesIn,
+      h('p', { class: 'hint', text: 'Se guardan en su ficha y salen solas en sus próximas reservas.' })),
     h('div', { class: 'field' }, h('label', { for: 'f-size', text: 'Comensales' }),
       h('div', { class: 'stepper' },
         h('button', { type: 'button', class: 'btn icon', 'aria-label': 'Uno menos', text: '−', onclick: () => setSize(+f.size - 1) }),
@@ -782,7 +1011,7 @@ function openResModal(init){
       h('div', { class: 'field' }, h('label', { for: 'f-time', text: 'Hora' }), timeSel),
       h('div', { class: 'field' }, h('label', { for: 'f-dur', text: 'Duración (min)' }), durIn)),
     durHint,
-    h('div', { class: 'field' }, h('label', { for: 'f-notes', text: 'Notas' }), notesIn, h('div', { class: 'tools' }, tagBtns)),
+    h('div', { class: 'field' }, h('label', { for: 'f-notes', text: 'Notas de esta reserva' }), notesIn, h('div', { class: 'tools' }, tagBtns)),
     editing ? h('div', { class: 'field' }, h('label', { for: 'f-status', text: 'Estado' }), statusSel) : null,
     h('div', { class: 'field' },
       h('span', { class: 'lbl', text: 'Mesa' }),
@@ -796,11 +1025,98 @@ function openResModal(init){
   const footer = [];
   if(editing){ const d = h('button', { class: 'btn danger sp', text: 'Eliminar' }); d.addEventListener('click', () => del(d)); footer.push(d); }
   footer.push(h('button', { class: 'btn', text: 'Cancelar', onclick: closeModal }), saveBtn);
-  openModal({ title: editing ? 'Editar reserva' : 'Nueva reserva', body, footer, wide: true });
+  openModal({ title: walkin ? 'Sentar sin reserva' : (editing ? 'Editar reserva' : 'Nueva reserva'), body, footer, wide: true });
   buildTimes(); buildQuick();
   if(!tablesTouched) autoSuggest();
-  update(); loadDay();
-  if(!editing) nameIn.focus();
+  update(); resolve(); loadDay();
+  if(!editing) (walkin ? nameIn : phoneIn).focus();
+}
+
+/* ---------- clientes ---------- */
+async function loadAllRes(){
+  try { state.allRes = await store.getAllRes(); } catch(e){ state.allRes = []; }
+  if(state.mode === 'clients') renderClients();
+}
+function renderClients(){
+  const ul = $('#cList'); ul.replaceChildren();
+  const raw = $('#cFilter').value, q = normName(raw), qd = raw.replace(/\D/g, '');
+  $('#cCount').textContent = state.customers.length + (state.customers.length === 1 ? ' cliente' : ' clientes');
+  let list = state.customers.slice().sort((a, b) => String(a.name).localeCompare(String(b.name), 'es'));
+  if(q) list = list.filter(c => normName(c.name).includes(q) || String(c.email).includes(q.replace(/\s/g, '')) || (qd.length >= 3 && String(c.phone).replace(/\D/g, '').includes(qd)));
+  if(!list.length){
+    ul.append(h('li', { class: 'empty', text: q ? 'Ningún cliente coincide.' : 'Todavía no hay clientes. Se crean solos al guardar reservas con teléfono y email.' }));
+    return;
+  }
+  list.forEach(c => {
+    const st = statsOf(state.allRes.filter(r => r.customerId === c.id));
+    ul.append(h('li', { class: 'ritem' },
+      h('button', { class: 'cmain', 'aria-label': 'Abrir ficha de ' + c.name, onclick: () => openCustomer(c.id) },
+        h('span', { class: 'l1' },
+          h('span', { class: 'rname', text: c.name }),
+          h('span', { class: 'chip', text: st.visits + (st.visits === 1 ? ' visita' : ' visitas') }),
+          st.noShows ? h('span', { class: 'chip bad', text: st.noShows + (st.noShows === 1 ? ' no vino' : ' no vinieron') }) : null,
+          st.upcoming ? h('span', { class: 'chip st-confirmada', text: st.upcoming + (st.upcoming === 1 ? ' próxima' : ' próximas') }) : null),
+        h('span', { class: 'l2', text: fmtPhone(c.phone) + ' · ' + c.email + (st.last ? ' · última ' + dmy(st.last) : '') }),
+        c.notes ? h('span', { class: 'l2', text: c.notes }) : null)));
+  });
+}
+function openCustomer(id){
+  const c = state.customers.find(x => x.id === id); if(!c) return;
+  const f = { name: c.name, phone: fmtPhone(c.phone), email: c.email, notes: c.notes || '' };
+  let confirmDel = false;
+  const nameIn = h('input', { type: 'text', id: 'c-name', value: f.name, autocomplete: 'off', oninput: e => { f.name = e.target.value; } });
+  const phoneIn = h('input', { type: 'tel', id: 'c-phone', value: f.phone, autocomplete: 'off', inputmode: 'tel', oninput: e => { f.phone = e.target.value; } });
+  const emailIn = h('input', { type: 'email', id: 'c-email', value: f.email, autocomplete: 'off', inputmode: 'email', oninput: e => { f.email = e.target.value; } });
+  const notesIn = h('textarea', { id: 'c-notes', oninput: e => { f.notes = e.target.value; } });
+  notesIn.value = f.notes;
+  const stat = h('p', { class: 'hint', text: 'Cargando historial…' });
+  const hist = h('ul', { class: 'hist' });
+  store.getCustomerRes(id).then(rs => {
+    stat.textContent = statsText(statsOf(rs));
+    hist.replaceChildren();
+    if(!rs.length){ hist.append(h('li', { class: 'hint', text: 'Sin reservas todavía.' })); return; }
+    rs.sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time)).forEach(r => {
+      hist.append(h('li', null,
+        h('b', { text: dmy(r.date) + ' · ' + r.time }),
+        h('span', { text: r.size + ' pers.' }),
+        r.tables && r.tables.length ? h('span', { text: 'Mesa ' + (r.tables.map(t => (state.cfg.tables.find(x => x.id === t) || {}).label).filter(Boolean).join(' + ') || '—') }) : null,
+        h('span', { class: 'chip st-' + r.status, text: STATUS[r.status] || r.status })));
+    });
+  }).catch(() => { stat.textContent = 'No se pudo cargar el historial.'; });
+
+  async function save(){
+    const p = normPhone(f.phone), e = normEmail(f.email);
+    if(!f.name.trim()){ nameIn.focus(); toast('Escribe un nombre', true); return; }
+    if(!validPhone(p)){ phoneIn.focus(); toast('Escribe un teléfono válido', true); return; }
+    if(!validEmail(e)){ emailIn.focus(); toast('Escribe un email válido', true); return; }
+    const dup = state.customers.find(x => x.id !== id && ((p !== c.phone && x.phone === p) || (e !== c.email && x.email === e)));
+    if(dup){ toast('Ya hay otro cliente con ese teléfono o email: ' + dup.name, true); return; }
+    const base = Object.assign({}, c); delete base.id;
+    try {
+      await store.saveCustomer(id, Object.assign(base, { name: f.name.trim(), phone: p, email: e, notes: f.notes.trim(), updatedAt: new Date().toISOString() }));
+      statsCache.clear(); closeModal(); toast('Cliente guardado');
+    } catch(err){ fail(err); }
+  }
+  async function del(btn){
+    if(!confirmDel){ confirmDel = true; btn.textContent = '¿Seguro? Pulsa otra vez'; return; }
+    try { await store.deleteCustomer(id); statsCache.clear(); closeModal(); toast('Cliente eliminado'); } catch(err){ fail(err); }
+  }
+  const delBtn = h('button', { class: 'btn danger sp', text: 'Eliminar cliente' });
+  delBtn.addEventListener('click', () => del(delBtn));
+  openModal({
+    title: 'Ficha de cliente', wide: true,
+    body: [
+      h('div', { class: 'row' },
+        h('div', { class: 'field' }, h('label', { for: 'c-phone', text: 'Teléfono *' }), phoneIn),
+        h('div', { class: 'field' }, h('label', { for: 'c-email', text: 'Email *' }), emailIn)),
+      h('div', { class: 'field' }, h('label', { for: 'c-name', text: 'Nombre *' }), nameIn),
+      h('div', { class: 'field' }, h('label', { for: 'c-notes', text: 'Notas del cliente' }), notesIn),
+      h('div', { class: 'field' }, h('span', { class: 'lbl', text: 'Historial' }), stat, hist)
+    ],
+    footer: [delBtn,
+      h('button', { class: 'btn', text: 'Reservar para este cliente', onclick: () => { closeModal(); openResModal({ customerId: id, name: c.name, phone: c.phone, email: c.email, customerNotes: c.notes || '', time: state.viewTime }); } }),
+      h('button', { class: 'btn primary', text: 'Guardar', onclick: save })]
+  });
 }
 
 /* ---------- ajustes ---------- */
@@ -829,6 +1145,14 @@ function openSettings(){
       h('button', { class: 'btn sm danger', text: 'Quitar', disabled: cfg.shifts.length <= 1, onclick: () => { cfg.shifts.splice(i, 1); drawShifts(); } }))));
   }
   drawRules(); drawShifts();
+  const on = cfg.online;
+  const onChk = h('input', { type: 'checkbox', id: 's-on', checked: !!on.enabled });
+  const onName = h('input', { type: 'text', id: 's-oname', value: on.name || '', placeholder: 'Nombre del local', maxlength: 60 });
+  const onPhone = h('input', { type: 'text', id: 's-ophone', value: on.phone || '', placeholder: 'Para grupos grandes', maxlength: 30 });
+  const onMax = h('input', { type: 'number', id: 's-omax', min: 1, max: 30, value: on.maxSize });
+  const onAdv = h('input', { type: 'number', id: 's-oadv', min: 0, max: 72, step: 0.5, value: on.minAdvanceH });
+  const onDays = h('input', { type: 'number', id: 's-odays', min: 1, max: 365, value: on.maxDaysAhead });
+  const onClosed = h('input', { type: 'text', id: 's-oclosed', value: (on.closedDates || []).join(', '), placeholder: 'AAAA-MM-DD, AAAA-MM-DD' });
   const body = [
     h('div', { class: 'row' },
       h('div', { class: 'field' }, h('label', { for: 's-base', text: 'Duración base de una mesa (min)' }), baseIn),
@@ -837,6 +1161,18 @@ function openSettings(){
       h('div', { class: 'tools' }, h('button', { class: 'btn sm', text: 'Añadir regla', onclick: () => { cfg.durationRules.push({ from: 7, minutes: 120 }); drawRules(); } }))),
     h('div', { class: 'field' }, h('span', { class: 'lbl', text: 'Turnos' }), shiftsBox,
       h('div', { class: 'tools' }, h('button', { class: 'btn sm', text: 'Añadir turno', onclick: () => { cfg.shifts.push({ id: 's' + uid(), name: 'Nuevo turno', start: '18:00', end: '19:30' }); drawShifts(); } }))),
+    h('div', { class: 'field' }, h('span', { class: 'lbl', text: 'Reservas online' }),
+      h('label', { class: 'chk' }, onChk, h('span', { text: 'Aceptar reservas online' })),
+      h('div', { class: 'row' },
+        h('div', { class: 'field' }, h('label', { for: 's-oname', text: 'Nombre que se muestra' }), onName),
+        h('div', { class: 'field' }, h('label', { for: 's-ophone', text: 'Teléfono del local' }), onPhone)),
+      h('div', { class: 'row' },
+        h('div', { class: 'field' }, h('label', { for: 's-omax', text: 'Máx. personas online' }), onMax),
+        h('div', { class: 'field' }, h('label', { for: 's-oadv', text: 'Antelación mínima (horas)' }), onAdv)),
+      h('div', { class: 'row' },
+        h('div', { class: 'field' }, h('label', { for: 's-odays', text: 'Hasta cuántos días vista' }), onDays),
+        h('div', { class: 'field' }, h('label', { for: 's-oclosed', text: 'Días cerrados online' }), onClosed)),
+      h('p', { class: 'hint', text: 'Online solo se usan mesas con «Reservable online» marcado y sus plazas normales (no las sillas extra). Los grupos que necesiten juntar mesas se apuntan a mano.' })),
     h('div', { class: 'row' },
       h('div', { class: 'field' }, h('label', { for: 's-w', text: 'Ancho del plano' }), wIn),
       h('div', { class: 'field' }, h('label', { for: 's-h', text: 'Alto del plano' }), hIn))
@@ -848,6 +1184,9 @@ function openSettings(){
       if(!s.name.trim() || !s.start || !s.end || toMin(s.start) >= toMin(s.end)){ toast('Revisa los turnos: la hora de inicio debe ser anterior a la de fin', true); return; }
     }
     if(cfg.durationRules.some(r => !(r.from >= 1) || !(r.minutes >= 15))){ toast('Revisa las reglas de duración', true); return; }
+    const closed = onClosed.value.split(/[\s,;]+/).filter(Boolean);
+    if(closed.some(d => !/^\d{4}-\d{2}-\d{2}$/.test(d))){ toast('Días cerrados: usa el formato AAAA-MM-DD separados por comas', true); return; }
+    cfg.online = { enabled: onChk.checked, name: onName.value.trim(), phone: onPhone.value.trim(), maxSize: Math.max(1, Math.min(30, +onMax.value || 8)), minAdvanceH: Math.max(0, +onAdv.value || 0), maxDaysAhead: Math.max(1, +onDays.value || 60), closedDates: closed };
     cfg.durationBase = base; cfg.slotStep = +stepSel.value;
     cfg.plan = { w: Math.max(400, +wIn.value || 1040), h: Math.max(300, +hIn.value || 850) };
     cfg.shifts.forEach(s => { s.name = s.name.trim(); });
@@ -864,6 +1203,7 @@ function shiftRes(sh){
   return state.res.filter(r => shiftFor(r.time).id === sh.id).sort((a, b) => toMin(a.time) - toMin(b.time) || a.name.localeCompare(b.name, 'es'));
 }
 async function setStatus(r, st){
+  statsCache.clear();
   const rest = Object.assign({}, r); delete rest.id; rest.status = st; rest.updatedAt = new Date().toISOString();
   try { await store.saveRes(r.id, rest); } catch(e){ fail(e); }
 }
@@ -887,8 +1227,9 @@ function resItem(r){
         h('span', { class: 'rname', text: r.name }),
         h('span', { class: 'chip', text: r.size + (r.size === 1 ? ' persona' : ' personas') }),
         tl ? h('span', { class: 'chip', text: 'Mesa ' + tl }) : h('span', { class: 'chip', text: 'Sin mesa' }),
-        h('span', { class: 'chip st-' + r.status, text: STATUS[r.status] || r.status })),
-      (r.phone || r.notes) ? h('span', { class: 'rnote', text: [r.phone, r.notes].filter(Boolean).join(' · ') }) : null),
+        h('span', { class: 'chip st-' + r.status, text: STATUS[r.status] || r.status }),
+        r.source === 'online' ? h('span', { class: 'chip', text: 'Online' }) : null),
+      (r.phone || r.notes) ? h('span', { class: 'rnote', text: [fmtPhone(r.phone), r.notes].filter(Boolean).join(' · ') }) : null),
     h('div', { class: 'ractions' }, acts));
 }
 
@@ -898,6 +1239,7 @@ function renderHeader(){
   $('#dateLong').textContent = longDate(state.date);
   $('#modeService').setAttribute('aria-pressed', String(state.mode === 'service'));
   $('#modeEdit').setAttribute('aria-pressed', String(state.mode === 'edit'));
+  $('#modeClients').setAttribute('aria-pressed', String(state.mode === 'clients'));
 }
 function renderShiftTabs(){
   const box = $('#shiftTabs'); box.replaceChildren();
@@ -929,11 +1271,11 @@ function renderTablePanel(){
   const status = rs.length ? 'Reservas en este turno: ' + rs.map(r => r.time + ' ' + r.name + (r.status === 'sentada' ? ' (sentado)' : '')).join(' · ')
     : 'Sin reservas en este turno.';
   box.append(h('div', { class: 'tpanel' },
-    h('h3', { text: 'Mesa ' + t.label + ' · ' + t.seats + ' plazas' }),
+    h('h3', { text: 'Mesa ' + t.label + ' · ' + t.seats + ' plazas' + (maxSeats(t) > t.seats ? ' (hasta ' + maxSeats(t) + ')' : '') }),
     h('p', { text: status }),
     h('div', { class: 'tools' },
       h('button', { class: 'btn sm primary', text: 'Reservar esta mesa', onclick: () => openResModal({ time: state.viewTime, tables: [t.id], size: Math.min(t.seats, 4) }) }),
-      h('button', { class: 'btn sm', text: 'Sentar sin reserva', onclick: () => openResModal({ time: state.viewTime, tables: [t.id], size: t.seats, name: 'Sin reserva', status: 'sentada' }) }),
+      h('button', { class: 'btn sm', text: 'Sentar sin reserva', onclick: () => openResModal({ time: state.viewTime, tables: [t.id], size: t.seats, name: 'Sin reserva', status: 'sentada', walkin: true }) }),
       h('button', { class: 'btn sm ghost', text: 'Ver todas', onclick: () => { state.selTable = null; renderLive(); } }))));
 }
 function renderList(){
@@ -959,12 +1301,14 @@ function renderAll(){
   const has = !!state.cfg;
   $('#loading').hidden = state.cfgLoaded;
   $('#emptyState').hidden = !(state.cfgLoaded && !has);
-  $('#mainArea').hidden = !has;
-  $('#shiftTabs').hidden = !has || state.mode === 'edit';
-  $('#btnNew').disabled = !has; $('#btnSettings').disabled = !has;
+  $('#mainArea').hidden = !has || state.mode === 'clients';
+  $('#clientsArea').hidden = !has || state.mode !== 'clients';
+  $('#shiftTabs').hidden = !has || state.mode !== 'service';
+  $('#btnNew').disabled = !has; $('#btnSettings').disabled = !has; $('#btnPublic').disabled = !has;
   if(!has) return;
   if(!state.shiftId || !state.cfg.shifts.some(s => s.id === state.shiftId)) state.shiftId = defaultShiftId();
   if(!state.viewTime) state.viewTime = defaultView();
+  if(state.mode === 'clients'){ renderClients(); return; }
   const edit = state.mode === 'edit';
   $('#timeArea').hidden = edit; $('#editHint').hidden = !edit;
   $('#sService').hidden = edit; $('#sEdit').hidden = !edit;
@@ -1024,7 +1368,9 @@ function renderEdit(){
   if(isTable){
     fields.push(h('div', { class: 'row' },
       h('div', { class: 'field' }, h('label', { for: 'e-label', text: 'Nombre de la mesa' }), h('input', { type: 'text', id: 'e-label', value: it.label, oninput: e => { it.label = e.target.value.slice(0, 6); upd(); } })),
-      h('div', { class: 'field' }, h('label', { for: 'e-seats', text: 'Sitios' }), h('input', { type: 'number', id: 'e-seats', min: 1, max: 30, value: it.seats, oninput: e => { const n = parseInt(e.target.value, 10); if(n >= 1 && n <= 30){ it.seats = n; upd(); } } }))));
+      h('div', { class: 'field' }, h('label', { for: 'e-seats', text: 'Sitios' }), h('input', { type: 'number', id: 'e-seats', min: 1, max: 30, value: it.seats, oninput: e => { const n = parseInt(e.target.value, 10); if(n >= 1 && n <= 30){ it.seats = n; if(it.seatsMax && it.seatsMax <= n) delete it.seatsMax; upd(); } } })),
+      h('label', { class: 'chk' }, h('input', { type: 'checkbox', id: 'e-online', checked: it.online !== false, onchange: e => { if(e.target.checked) delete it.online; else it.online = false; upd(); } }), h('span', { text: 'Reservable online' })),
+      h('div', { class: 'field' }, h('label', { for: 'e-max', text: 'Ampliable hasta' }), h('input', { type: 'number', id: 'e-max', min: 1, max: 30, value: maxSeats(it), oninput: e => { const n = parseInt(e.target.value, 10); if(n >= 1 && n <= 30){ if(n > it.seats) it.seatsMax = n; else delete it.seatsMax; upd(); } } }))));
     const shapeSel = h('select', { id: 'e-shape', onchange: e => {
       it.shape = e.target.value;
       if(it.shape === 'round'){ const d = Math.round((it.w + it.h) / 2); it.w = d; it.h = d; }
@@ -1056,7 +1402,7 @@ function renderEdit(){
 function subscribeDay(){
   if(unsubDay){ unsubDay(); unsubDay = null; }
   state.res = [];
-  unsubDay = store.watchDay(state.date, list => { state.res = list; if(state.cfg) renderLive(); }, () => setBanner('No se pudieron leer las reservas de este día. Recarga la página.'));
+  unsubDay = store.watchDay(state.date, list => { state.res = list; if(state.cfg) renderLive(); if(state.mode === 'clients') loadAllRes(); }, () => setBanner('No se pudieron leer las reservas de este día. Recarga la página.'));
 }
 function goDate(d){
   if(!d || d === state.date) return;
@@ -1071,11 +1417,301 @@ $('#goToday').addEventListener('click', () => goDate(todayStr()));
 $('#dateIn').addEventListener('change', e => goDate(e.target.value));
 $('#modeService').addEventListener('click', () => setMode('service'));
 $('#modeEdit').addEventListener('click', () => setMode('edit'));
-function setMode(m){ state.mode = m; state.sel = null; state.selTable = null; state.pendingDelete = false; renderAll(); }
+$('#modeClients').addEventListener('click', () => setMode('clients'));
+$('#cFilter').addEventListener('input', () => renderClients());
+function setMode(m){ state.mode = m; state.sel = null; state.selTable = null; state.pendingDelete = false; renderAll(); if(m === 'clients') loadAllRes(); }
 $('#btnNew').addEventListener('click', () => state.cfg && openResModal({ time: state.viewTime }));
 $('#btnSettings').addEventListener('click', () => state.cfg && openSettings());
 $('#btnCreateRoom').addEventListener('click', () => { state.cfg = blankCfg(); state.shiftId = defaultShiftId(); state.viewTime = defaultView(); persistCfg(); renderAll(); });
 $('#sFilter').addEventListener('input', e => { state.filter = e.target.value; renderList(); });
+
+/* ---------- panel público de reservas (misma pantalla en la vista previa y en reservar.html) ---------- */
+function mountBooking(root, api, opts){
+  opts = opts || {};
+  const E = (tag, p, ...kids) => {
+    const e = document.createElement(tag);
+    for(const k in (p || {})){
+      const v = p[k]; if(v == null || v === false) continue;
+      if(k === 'text') e.textContent = v;
+      else if(k === 'class') e.className = v;
+      else if(k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), v);
+      else if(k === 'value') e.value = v;
+      else if(k === 'checked') e.checked = true;
+      else e.setAttribute(k, v === true ? '' : v);
+    }
+    kids.flat(Infinity).forEach(c => { if(c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(String(c))); });
+    return e;
+  };
+  const pad = n => String(n).padStart(2, '0');
+  const ymd = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  const addD = (s, n) => { const a = s.split('-').map(Number), d = new Date(a[0], a[1] - 1, a[2] + n); return ymd(d); };
+  const longDate = s => { const a = s.split('-').map(Number), t = new Date(a[0], a[1] - 1, a[2]).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }); return t.charAt(0).toUpperCase() + t.slice(1); };
+  const ERR = {
+    desactivado: 'Ahora mismo no aceptamos reservas online. Llámanos y te atendemos.',
+    tamano: 'Elige cuántas personas sois.',
+    fecha: 'Elige una fecha dentro del plazo permitido.',
+    cerrado: 'Ese día no aceptamos reservas online.',
+    privacidad: 'Acepta el tratamiento de tus datos para poder reservar.',
+    nombre: 'Escribe tu nombre.',
+    telefono: 'Escribe un teléfono válido de 9 dígitos, o con prefijo si es extranjero.',
+    email: 'Escribe un email válido.',
+    hora: 'Esa hora ya no está disponible. Elige otra.',
+    antelacion: 'Esa hora ya no se puede reservar online. Elige otra.',
+    demasiados: 'Demasiados intentos seguidos. Espera un rato o llámanos.',
+    duplicada: 'Ya tienes una reserva ese día en ese turno. Para cambiarla, cancélala con su enlace o llámanos.',
+    limite: 'Ya tienes varias reservas pendientes. Llámanos si necesitas otra.',
+    sin_mesa: 'Justo se ha ocupado esa hora. Elige otra.',
+    no_existe: 'No encontramos esa reserva. Revisa el enlace.',
+    estado: 'Esa reserva ya no está activa.',
+    pasada: 'Esa reserva ya ha pasado.'
+  };
+  let cfg = null;
+  const S = { size: 2, date: ymd(new Date()), time: null, shifts: null, busy: false, msg: '' };
+  const wrap = E('div', { class: 'pub' });
+  root.replaceChildren(wrap);
+
+  function head(sub){
+    return E('header', { class: 'pub-head' }, E('h1', { text: (cfg && cfg.name) || 'Reserva tu mesa' }), sub ? E('p', { class: 'pub-lead', text: sub }) : null);
+  }
+  function phoneNote(prefix){
+    return cfg && cfg.phone ? E('p', { class: 'pub-note' }, prefix + ' ', E('b', { text: cfg.phone })) : null;
+  }
+  function showMsg(box, text, ok){ box.textContent = text || ''; box.className = 'pub-msg' + (ok ? ' ok' : ''); box.hidden = !text; }
+
+  async function start(){
+    wrap.replaceChildren(E('p', { class: 'pub-note', text: 'Cargando…' }));
+    try { cfg = await api.config(); } catch(e){ wrap.replaceChildren(E('p', { class: 'pub-msg', text: 'No se pudo conectar. Revisa tu conexión e inténtalo de nuevo.' })); return; }
+    if(opts.token) return cancelView(opts.token);
+    if(!cfg || !cfg.enabled){ wrap.replaceChildren(head(), E('p', { class: 'pub-msg', text: ERR.desactivado }), phoneNote('Teléfono:')); return; }
+    S.size = Math.min(2, cfg.maxSize);
+    form();
+  }
+
+  /* ----- formulario ----- */
+  function form(){
+    const sizeBox = E('div', { class: 'pub-sizes', role: 'group', 'aria-label': 'Número de personas' });
+    const dateIn = E('input', { type: 'date', id: 'pub-date', value: S.date, min: ymd(new Date()), max: addD(ymd(new Date()), cfg.maxDaysAhead || 60) });
+    const slotsBox = E('div', { class: 'pub-slots', 'aria-live': 'polite' });
+    const dataBox = E('div', { class: 'pub-data', hidden: true });
+    const msg = E('p', { class: 'pub-msg', role: 'alert', hidden: true });
+    const nameIn = E('input', { type: 'text', id: 'pub-name', autocomplete: 'name', maxlength: 80 });
+    const phoneIn = E('input', { type: 'tel', id: 'pub-phone', autocomplete: 'tel', inputmode: 'tel', maxlength: 20 });
+    const mailIn = E('input', { type: 'email', id: 'pub-mail', autocomplete: 'email', inputmode: 'email', maxlength: 120 });
+    const notesIn = E('textarea', { id: 'pub-notes', maxlength: 300, rows: 2, placeholder: 'Alergias, trona, celebración…' });
+    const priv = E('input', { type: 'checkbox', id: 'pub-priv' });
+    const go = E('button', { type: 'submit', class: 'pub-btn', text: 'Confirmar reserva' });
+    const summary = E('p', { class: 'pub-sum' });
+
+    function drawSizes(){
+      sizeBox.replaceChildren();
+      for(let n = 1; n <= cfg.maxSize; n++){
+        sizeBox.append(E('button', { type: 'button', class: 'pub-chip' + (n === S.size ? ' on' : ''), 'aria-pressed': n === S.size ? 'true' : 'false', text: String(n),
+          onclick: () => { S.size = n; S.time = null; drawSizes(); loadSlots(); } }));
+      }
+    }
+    function drawSummary(){
+      summary.textContent = S.time ? S.size + (S.size === 1 ? ' persona' : ' personas') + ' · ' + longDate(S.date) + ' · ' + S.time : '';
+    }
+    async function loadSlots(){
+      S.time = null; dataBox.hidden = true; showMsg(msg, '');
+      if(!S.date){ slotsBox.replaceChildren(); return; }
+      slotsBox.replaceChildren(E('p', { class: 'pub-note', text: 'Buscando mesa…' }));
+      const my = S.date + '|' + S.size; S.key = my;
+      let r;
+      try { r = await api.disponibilidad(S.date, S.size); } catch(e){ r = { ok: false, error: 'red' }; }
+      if(S.key !== my) return;
+      slotsBox.replaceChildren();
+      if(!r.ok){ slotsBox.append(E('p', { class: 'pub-note', text: ERR[r.error] || 'No se pudo consultar. Inténtalo de nuevo.' })); return; }
+      let any = false;
+      r.shifts.forEach(sh => {
+        if(!sh.slots.length) return; any = true;
+        slotsBox.append(E('div', { class: 'pub-shift' }, E('h3', { text: sh.name }),
+          E('div', { class: 'pub-times' }, sh.slots.map(t => E('button', { type: 'button', class: 'pub-chip time' + (t === S.time ? ' on' : ''), text: t, 'aria-pressed': 'false',
+            onclick: ev => { S.time = t; slotsBox.querySelectorAll('.pub-chip').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-pressed', 'false'); }); ev.currentTarget.classList.add('on'); ev.currentTarget.setAttribute('aria-pressed', 'true'); dataBox.hidden = false; drawSummary(); showMsg(msg, ''); } })))));
+      });
+      if(!any) slotsBox.append(E('p', { class: 'pub-note', text: 'No quedan mesas ese día para ' + S.size + (S.size === 1 ? ' persona.' : ' personas.') + ' Prueba otro día.' }), phoneNote('También puedes llamarnos:'));
+    }
+    dateIn.addEventListener('change', () => { S.date = dateIn.value; loadSlots(); });
+
+    async function submit(ev){
+      ev.preventDefault();
+      if(S.busy) return;
+      if(!S.time){ showMsg(msg, 'Elige una hora.'); return; }
+      if(!nameIn.value.trim()){ nameIn.focus(); showMsg(msg, ERR.nombre); return; }
+      if(!phoneIn.value.trim()){ phoneIn.focus(); showMsg(msg, ERR.telefono); return; }
+      if(!mailIn.value.trim()){ mailIn.focus(); showMsg(msg, ERR.email); return; }
+      if(!priv.checked){ priv.focus(); showMsg(msg, ERR.privacidad); return; }
+      S.busy = true; go.disabled = true; go.textContent = 'Reservando…'; showMsg(msg, '');
+      let r;
+      try { r = await api.reservar({ date: S.date, time: S.time, size: S.size, name: nameIn.value, phone: phoneIn.value, email: mailIn.value, notes: notesIn.value, privacy: true }); }
+      catch(e){ r = { ok: false, error: 'red' }; }
+      S.busy = false; go.disabled = false; go.textContent = 'Confirmar reserva';
+      if(!r.ok){
+        showMsg(msg, ERR[r.error] || 'No se pudo completar la reserva. Inténtalo de nuevo.');
+        if(['sin_mesa', 'hora', 'antelacion'].includes(r.error)) loadSlots().then(() => showMsg(msg, ERR[r.error]));
+        return;
+      }
+      done(r);
+    }
+
+    wrap.replaceChildren(
+      head('Elige cuántos sois, el día y la hora. La reserva se confirma al momento.'),
+      E('form', { class: 'pub-form', novalidate: true, onsubmit: submit },
+        E('section', null, E('h2', { text: 'Personas' }), sizeBox, phoneNote('¿Sois más de ' + cfg.maxSize + '? Llámanos al')),
+        E('section', null, E('h2', { text: 'Día' }), dateIn),
+        E('section', null, E('h2', { text: 'Hora' }), slotsBox),
+        dataBox,
+        msg));
+    dataBox.append(
+      E('h2', { text: 'Tus datos' }), summary,
+      E('div', { class: 'pub-field' }, E('label', { for: 'pub-name', text: 'Nombre' }), nameIn),
+      E('div', { class: 'pub-row' },
+        E('div', { class: 'pub-field' }, E('label', { for: 'pub-phone', text: 'Teléfono' }), phoneIn),
+        E('div', { class: 'pub-field' }, E('label', { for: 'pub-mail', text: 'Email' }), mailIn)),
+      E('div', { class: 'pub-field' }, E('label', { for: 'pub-notes', text: 'Comentarios (opcional)' }), notesIn),
+      E('label', { class: 'pub-check', for: 'pub-priv' }, priv, E('span', { text: 'Acepto que ' + ((cfg && cfg.name) || 'el local') + ' guarde mis datos para gestionar esta reserva y contactarme si hace falta. Puedo pedir que los borren cuando quiera.' })),
+      go);
+    drawSizes(); loadSlots();
+  }
+
+  /* ----- reserva hecha ----- */
+  function done(r){
+    const link = opts.cancelUrl ? opts.cancelUrl(r.token) : '';
+    const copyBtn = E('button', { type: 'button', class: 'pub-btn ghost', text: 'Copiar enlace' });
+    copyBtn.addEventListener('click', () => {
+      const ok = () => { copyBtn.textContent = 'Copiado'; };
+      try { navigator.clipboard.writeText(link).then(ok, () => linkBox.select()); } catch(e){ linkBox.select(); }
+    });
+    const linkBox = E('input', { type: 'text', readonly: true, class: 'pub-link', value: link, 'aria-label': 'Enlace para cancelar', onfocus: e => e.target.select() });
+    wrap.replaceChildren(
+      E('header', { class: 'pub-head' }, E('p', { class: 'pub-ok', text: 'Reserva confirmada' }), E('h1', { text: r.name + ', te esperamos' })),
+      E('dl', { class: 'pub-card' },
+        E('div', null, E('dt', { text: 'Día' }), E('dd', { text: longDate(r.date) })),
+        E('div', null, E('dt', { text: 'Hora' }), E('dd', { text: r.time })),
+        E('div', null, E('dt', { text: 'Personas' }), E('dd', { text: String(r.size) }))),
+      E('p', { class: 'pub-note', text: 'Guarda este enlace. Es la única forma de cancelar la reserva por tu cuenta.' }),
+      E('div', { class: 'pub-linkrow' }, linkBox, copyBtn),
+      phoneNote('¿Necesitas cambiarla? Llámanos al'),
+      E('button', { type: 'button', class: 'pub-btn ghost', text: 'Hacer otra reserva', onclick: () => { S.time = null; form(); } }));
+  }
+
+  /* ----- cancelar con enlace ----- */
+  async function cancelView(token){
+    let r;
+    try { r = await api.ver(token); } catch(e){ r = { ok: false, error: 'red' }; }
+    if(!r.ok){ wrap.replaceChildren(head(), E('p', { class: 'pub-msg', text: ERR[r.error] || 'No se pudo cargar la reserva.' }), phoneNote('Teléfono:')); return; }
+    const msg = E('p', { class: 'pub-msg', role: 'alert', hidden: true });
+    const btn = E('button', { type: 'button', class: 'pub-btn danger', text: 'Cancelar mi reserva' });
+    let sure = false;
+    btn.addEventListener('click', async () => {
+      if(!sure){ sure = true; btn.textContent = '¿Seguro? Pulsa otra vez'; return; }
+      btn.disabled = true;
+      let c; try { c = await api.cancelar(token); } catch(e){ c = { ok: false, error: 'red' }; }
+      if(c.ok){ wrap.replaceChildren(head(), E('p', { class: 'pub-ok', text: 'Reserva cancelada' }), E('p', { class: 'pub-note', text: 'Gracias por avisar. Te esperamos otro día.' }), opts.homeUrl ? E('a', { class: 'pub-btn ghost', href: opts.homeUrl, text: 'Hacer una nueva reserva' }) : null); return; }
+      btn.disabled = false; sure = false; btn.textContent = 'Cancelar mi reserva';
+      showMsg(msg, ERR[c.error] || 'No se pudo cancelar. Llámanos.');
+    });
+    const st = r.status === 'cancelada' ? 'Esta reserva ya está cancelada.' : r.status !== 'confirmada' ? 'Esta reserva ya no está activa.' : !r.canCancel ? 'Esta reserva ya ha pasado.' : '';
+    wrap.replaceChildren(head(),
+      E('dl', { class: 'pub-card' },
+        E('div', null, E('dt', { text: 'A nombre de' }), E('dd', { text: r.name })),
+        E('div', null, E('dt', { text: 'Día' }), E('dd', { text: longDate(r.date) })),
+        E('div', null, E('dt', { text: 'Hora' }), E('dd', { text: r.time })),
+        E('div', null, E('dt', { text: 'Personas' }), E('dd', { text: String(r.size) }))),
+      st ? E('p', { class: 'pub-msg', text: st }) : E('div', { class: 'pub-form' }, btn, msg),
+      phoneNote('¿Dudas? Llámanos al'));
+  }
+  start();
+}
+
+/* ---------- vista previa del panel público (usa los datos de este gestor) ---------- */
+const pubLocal = (() => {
+  const mesaLibre = (rows, start, size) => state.cfg.tables
+    .filter(t => t.online !== false && t.seats >= size && t.seats <= size + 2 && !busyTable(t.id, start, durationFor(size), rows))
+    .sort((a, b) => a.seats - b.seats || cmpLabel(a, b))[0] || null;
+  const okSlot = (date, time) => {
+    const m = toMin(time), step = state.cfg.slotStep || 15;
+    return state.cfg.shifts.some(s => m >= toMin(s.start) && m <= toMin(s.end) && (m - toMin(s.start)) % step === 0);
+  };
+  const early = (date, time) => new Date(date + 'T' + time + ':00') < new Date(Date.now() + (+state.cfg.online.minAdvanceH || 0) * 3600000);
+  function check(date, size){
+    const o = state.cfg.online;
+    if(!o.enabled) return 'desactivado';
+    if(!(size >= 1)) return 'tamano';
+    if(size > o.maxSize) return 'grupo_grande';
+    if(!date || date < todayStr() || date > addDays(todayStr(), o.maxDaysAhead)) return 'fecha';
+    if((o.closedDates || []).includes(date)) return 'cerrado';
+    return null;
+  }
+  const rand = () => Array.from({ length: 4 }, uid).join('') + Date.now().toString(36);
+  const find = async token => (await store.getAllRes()).find(r => r.cancelToken && r.cancelToken === token) || null;
+  return {
+    async config(){ const o = state.cfg.online; return Object.assign({}, o, { shifts: sortedShifts().map(s => ({ id: s.id, name: s.name, start: s.start, end: s.end })) }); },
+    async disponibilidad(date, size){
+      const err = check(date, size); if(err) return { ok: false, error: err };
+      const rows = await store.getDay(date), out = [];
+      sortedShifts().forEach(sh => {
+        const slots = slotsFor(sh).filter(t => !early(date, t) && mesaLibre(rows, toMin(t), size));
+        out.push({ id: sh.id, name: sh.name, slots });
+      });
+      return { ok: true, shifts: out };
+    },
+    async reservar(a){
+      const size = +a.size, err = check(a.date, size); if(err) return { ok: false, error: err };
+      const name = String(a.name || '').trim().replace(/\s+/g, ' '), ph = normPhone(a.phone), em = normEmail(a.email);
+      if(!a.privacy) return { ok: false, error: 'privacidad' };
+      if(name.length < 2 || name.length > 80) return { ok: false, error: 'nombre' };
+      if(!validPhone(ph)) return { ok: false, error: 'telefono' };
+      if(!validEmail(em)) return { ok: false, error: 'email' };
+      if(!okSlot(a.date, a.time)) return { ok: false, error: 'hora' };
+      if(early(a.date, a.time)) return { ok: false, error: 'antelacion' };
+      const rows = await store.getDay(a.date), sid = shiftFor(a.time).id;
+      if(rows.some(r => r.status === 'confirmada' && r.shiftId === sid && (r.phone === ph || String(r.email).toLowerCase() === em))) return { ok: false, error: 'duplicada' };
+      const all = await store.getAllRes();
+      if(all.filter(r => r.status === 'confirmada' && r.date >= todayStr() && r.phone === ph).length >= 3) return { ok: false, error: 'limite' };
+      const t = mesaLibre(rows, toMin(a.time), size); if(!t) return { ok: false, error: 'sin_mesa' };
+      const now = new Date().toISOString();
+      let c = state.customers.find(x => x.phone === ph) || state.customers.find(x => x.email === em), cid;
+      if(c){ cid = c.id; }
+      else { cid = store.newCustomerId(); await store.saveCustomer(cid, { name, phone: ph, email: em, notes: '', source: 'online', createdAt: now, updatedAt: now }); }
+      const token = rand(), dur = durationFor(size);
+      await store.saveRes(store.newId(), { date: a.date, shiftId: sid, time: a.time, size, name, phone: ph, email: em, notes: String(a.notes || '').trim().slice(0, 300),
+        tables: [t.id], duration: dur, status: 'confirmada', source: 'online', customerId: cid, cancelToken: token, createdAt: now, updatedAt: now });
+      statsCache.clear();
+      return { ok: true, token, date: a.date, time: a.time, size, name, duration: dur };
+    },
+    async ver(token){
+      const r = await find(token); if(!r) return { ok: false, error: 'no_existe' };
+      return { ok: true, date: r.date, time: r.time, size: r.size, name: r.name, status: r.status, canCancel: r.status === 'confirmada' && new Date(r.date + 'T' + r.time + ':00') > new Date() };
+    },
+    async cancelar(token){
+      const r = await find(token); if(!r) return { ok: false, error: 'no_existe' };
+      if(r.status !== 'confirmada') return { ok: false, error: 'estado' };
+      if(new Date(r.date + 'T' + r.time + ':00') <= new Date()) return { ok: false, error: 'pasada' };
+      const id = r.id, rest = Object.assign({}, r); delete rest.id; rest.status = 'cancelada'; rest.cancelledBy = 'cliente'; rest.updatedAt = new Date().toISOString();
+      await store.saveRes(id, rest); statsCache.clear();
+      return { ok: true };
+    }
+  };
+})();
+function openPublicPreview(){
+  const ov = h('div', { class: 'pubov', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Vista previa del panel online' });
+  const stage = h('div');
+  const link = h('input', { type: 'text', id: 'pv-link', placeholder: 'Pega aquí el enlace de cancelación', 'aria-label': 'Enlace de cancelación', style: 'min-width:0;flex:1;max-width:320px' });
+  const mount = token => mountBooking(stage, pubLocal, { token, cancelUrl: t => new URL('reservar.html?c=' + t, location.href).href, homeUrl: '#' });
+  const close = () => { ov.remove(); document.body.classList.remove('noscroll'); };
+  const bar = h('div', { class: 'pubov-bar' },
+    h('span', { text: 'Vista previa de lo que ven tus clientes. Lo que reserves aquí se guarda de verdad.' }),
+    h('div', { class: 'tools', style: 'flex-wrap:wrap;justify-content:flex-end' },
+      h('button', { class: 'btn sm', text: 'Probar cancelación', onclick: () => { const m = link.value.match(/c=([A-Za-z0-9]+)/) || [null, link.value.trim()]; if(m[1]) mount(m[1]); } }),
+      link,
+      state.cfg.online.enabled ? null : h('button', { class: 'btn sm', text: 'Activar reservas online', onclick: ev => { state.cfg.online.enabled = true; persistCfg(); ev.currentTarget.remove(); mount(); } }),
+      h('button', { class: 'btn sm primary', text: 'Cerrar', onclick: close })));
+  ov.append(bar, stage);
+  document.body.append(ov); document.body.classList.add('noscroll');
+  mount();
+}
+$('#btnPublic').addEventListener('click', () => state.cfg && openPublicPreview());
 
 /* ---------- acceso y arranque ---------- */
 const SB_URL = 'https://wneprqmaueenbeowuykz.supabase.co';
@@ -1143,6 +1779,7 @@ async function startApp(session){
   store = makeSbStore(sb);
   loadTimer = setTimeout(() => setBanner('Tarda en responder la base de datos. Revisa la conexión; los cambios podrían no guardarse.'), 10000);
   subscribeDay();
+  store.watchCustomers(list => { state.customers = list; if(state.mode === 'clients') renderClients(); }, () => setBanner('No se pudieron leer los clientes. Recarga la página.'));
   store.watchConfig((data, meta) => {
     if(!meta || meta.fromCache === false){ clearTimeout(loadTimer); setBanner(''); }
     if(state.cfgLoaded && (dirty || saving || mainPlan.isDragging())) return;

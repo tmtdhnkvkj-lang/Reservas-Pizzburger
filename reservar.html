@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reservar mesa</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#EDF0F4; --surface:#FFFFFF; --fg:#18212F; --muted:#586376; --line:#D3D9E2;
+  --accent:#2A4A99; --accent-fg:#FFFFFF; --free-line:#2F7A4C; --occ:#F7CBC2; --occ-line:#C1432C;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10151D; --surface:#1A212C; --fg:#E8ECF2; --muted:#9BA6B8; --line:#2E3745;
+    --accent:#7C9BE8; --accent-fg:#0E1522; --free-line:#6CC28D; --occ:#4A2620; --occ-line:#E26B52;
+    color-scheme:dark;
+  }
+}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:'Figtree',system-ui,sans-serif}
+[hidden]{display:none!important}
+/* panel público */
+.pub{max-width:520px;margin:0 auto;padding:24px 16px 40px;color:var(--fg);font-family:'Figtree',system-ui,sans-serif;font-size:16px;line-height:1.45;display:grid;gap:22px}
+.pub h1{font-family:'Bricolage Grotesque','Figtree',sans-serif;font-weight:700;font-size:30px;line-height:1.1;margin:0;text-wrap:balance}
+.pub h2{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.pub h3{font-size:15px;margin:0 0 6px}
+.pub-head{display:grid;gap:6px}
+.pub-lead,.pub-note{margin:0;color:var(--muted);font-size:15px}
+.pub-ok{margin:0;color:var(--free-line);font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase}
+.pub-form{display:grid;gap:22px}
+.pub-sizes,.pub-times{display:flex;flex-wrap:wrap;gap:8px}
+.pub-chip{min-width:48px;min-height:46px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;font-weight:600;cursor:pointer;font-variant-numeric:tabular-nums}
+.pub-chip.on{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.pub-chip:focus-visible,.pub-btn:focus-visible,.pub input:focus-visible,.pub textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.pub-shift+.pub-shift{margin-top:14px}
+.pub-data{display:grid;gap:14px}
+.pub-sum{margin:0;font-weight:600}
+.pub-field{display:grid;gap:4px;min-width:0}
+.pub-field label{font-size:13px;font-weight:600;color:var(--muted)}
+.pub input[type=text],.pub input[type=tel],.pub input[type=email],.pub input[type=date],.pub textarea{width:100%;box-sizing:border-box;min-height:46px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit}
+.pub textarea{resize:vertical}
+.pub-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.pub-check{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--muted)}
+.pub-check input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var(--accent)}
+.pub-btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border-radius:10px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:700;cursor:pointer;text-decoration:none}
+.pub-btn.ghost{background:transparent;color:var(--accent)}
+.pub-btn.danger{background:var(--occ-line);border-color:var(--occ-line);color:#fff}
+.pub-btn:disabled{opacity:.6;cursor:default}
+.pub-msg{margin:0;padding:10px 12px;border-radius:10px;background:var(--occ);border:1px solid var(--occ-line);color:var(--fg);font-size:15px}
+.pub-card{margin:0;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);display:grid;gap:10px}
+.pub-card div{display:flex;justify-content:space-between;gap:12px}
+.pub-card dt{color:var(--muted)}
+.pub-card dd{margin:0;font-weight:700;text-align:right}
+.pub-linkrow{display:grid;grid-template-columns:1fr auto;gap:8px}
+.pub-linkrow .pub-link{min-width:0}
+
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+(function(){
+'use strict';
+const SB_URL = 'https://wneprqmaueenbeowuykz.supabase.co';
+const SB_KEY = 'sb_publishable_ZlJgdb_V4c6IFlqQnsdvxA_sLSphozE';
+
+/* ---------- panel público de reservas (misma pantalla en la vista previa y en reservar.html) ---------- */
+function mountBooking(root, api, opts){
+  opts = opts || {};
+  const E = (tag, p, ...kids) => {
+    const e = document.createElement(tag);
+    for(const k in (p || {})){
+      const v = p[k]; if(v == null || v === false) continue;
+      if(k === 'text') e.textContent = v;
+      else if(k === 'class') e.className = v;
+      else if(k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), v);
+      else if(k === 'value') e.value = v;
+      else if(k === 'checked') e.checked = true;
+      else e.setAttribute(k, v === true ? '' : v);
+    }
+    kids.flat(Infinity).forEach(c => { if(c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(String(c))); });
+    return e;
+  };
+  const pad = n => String(n).padStart(2, '0');
+  const ymd = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  const addD = (s, n) => { const a = s.split('-').map(Number), d = new Date(a[0], a[1] - 1, a[2] + n); return ymd(d); };
+  const longDate = s => { const a = s.split('-').map(Number), t = new Date(a[0], a[1] - 1, a[2]).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }); return t.charAt(0).toUpperCase() + t.slice(1); };
+  const ERR = {
+    desactivado: 'Ahora mismo no aceptamos reservas online. Llámanos y te atendemos.',
+    tamano: 'Elige cuántas personas sois.',
+    fecha: 'Elige una fecha dentro del plazo permitido.',
+    cerrado: 'Ese día no aceptamos reservas online.',
+    privacidad: 'Acepta el tratamiento de tus datos para poder reservar.',
+    nombre: 'Escribe tu nombre.',
+    telefono: 'Escribe un teléfono válido de 9 dígitos, o con prefijo si es extranjero.',
+    email: 'Escribe un email válido.',
+    hora: 'Esa hora ya no está disponible. Elige otra.',
+    antelacion: 'Esa hora ya no se puede reservar online. Elige otra.',
+    demasiados: 'Demasiados intentos seguidos. Espera un rato o llámanos.',
+    duplicada: 'Ya tienes una reserva ese día en ese turno. Para cambiarla, cancélala con su enlace o llámanos.',
+    limite: 'Ya tienes varias reservas pendientes. Llámanos si necesitas otra.',
+    sin_mesa: 'Justo se ha ocupado esa hora. Elige otra.',
+    no_existe: 'No encontramos esa reserva. Revisa el enlace.',
+    estado: 'Esa reserva ya no está activa.',
+    pasada: 'Esa reserva ya ha pasado.'
+  };
+  let cfg = null;
+  const S = { size: 2, date: ymd(new Date()), time: null, shifts: null, busy: false, msg: '' };
+  const wrap = E('div', { class: 'pub' });
+  root.replaceChildren(wrap);
+
+  function head(sub){
+    return E('header', { class: 'pub-head' }, E('h1', { text: (cfg && cfg.name) || 'Reserva tu mesa' }), sub ? E('p', { class: 'pub-lead', text: sub }) : null);
+  }
+  function phoneNote(prefix){
+    return cfg && cfg.phone ? E('p', { class: 'pub-note' }, prefix + ' ', E('b', { text: cfg.phone })) : null;
+  }
+  function showMsg(box, text, ok){ box.textContent = text || ''; box.className = 'pub-msg' + (ok ? ' ok' : ''); box.hidden = !text; }
+
+  async function start(){
+    wrap.replaceChildren(E('p', { class: 'pub-note', text: 'Cargando…' }));
+    try { cfg = await api.config(); } catch(e){ wrap.replaceChildren(E('p', { class: 'pub-msg', text: 'No se pudo conectar. Revisa tu conexión e inténtalo de nuevo.' })); return; }
+    if(opts.token) return cancelView(opts.token);
+    if(!cfg || !cfg.enabled){ wrap.replaceChildren(head(), E('p', { class: 'pub-msg', text: ERR.desactivado }), phoneNote('Teléfono:')); return; }
+    S.size = Math.min(2, cfg.maxSize);
+    form();
+  }
+
+  /* ----- formulario ----- */
+  function form(){
+    const sizeBox = E('div', { class: 'pub-sizes', role: 'group', 'aria-label': 'Número de personas' });
+    const dateIn = E('input', { type: 'date', id: 'pub-date', value: S.date, min: ymd(new Date()), max: addD(ymd(new Date()), cfg.maxDaysAhead || 60) });
+    const slotsBox = E('div', { class: 'pub-slots', 'aria-live': 'polite' });
+    const dataBox = E('div', { class: 'pub-data', hidden: true });
+    const msg = E('p', { class: 'pub-msg', role: 'alert', hidden: true });
+    const nameIn = E('input', { type: 'text', id: 'pub-name', autocomplete: 'name', maxlength: 80 });
+    const phoneIn = E('input', { type: 'tel', id: 'pub-phone', autocomplete: 'tel', inputmode: 'tel', maxlength: 20 });
+    const mailIn = E('input', { type: 'email', id: 'pub-mail', autocomplete: 'email', inputmode: 'email', maxlength: 120 });
+    const notesIn = E('textarea', { id: 'pub-notes', maxlength: 300, rows: 2, placeholder: 'Alergias, trona, celebración…' });
+    const priv = E('input', { type: 'checkbox', id: 'pub-priv' });
+    const go = E('button', { type: 'submit', class: 'pub-btn', text: 'Confirmar reserva' });
+    const summary = E('p', { class: 'pub-sum' });
+
+    function drawSizes(){
+      sizeBox.replaceChildren();
+      for(let n = 1; n <= cfg.maxSize; n++){
+        sizeBox.append(E('button', { type: 'button', class: 'pub-chip' + (n === S.size ? ' on' : ''), 'aria-pressed': n === S.size ? 'true' : 'false', text: String(n),
+          onclick: () => { S.size = n; S.time = null; drawSizes(); loadSlots(); } }));
+      }
+    }
+    function drawSummary(){
+      summary.textContent = S.time ? S.size + (S.size === 1 ? ' persona' : ' personas') + ' · ' + longDate(S.date) + ' · ' + S.time : '';
+    }
+    async function loadSlots(){
+      S.time = null; dataBox.hidden = true; showMsg(msg, '');
+      if(!S.date){ slotsBox.replaceChildren(); return; }
+      slotsBox.replaceChildren(E('p', { class: 'pub-note', text: 'Buscando mesa…' }));
+      const my = S.date + '|' + S.size; S.key = my;
+      let r;
+      try { r = await api.disponibilidad(S.date, S.size); } catch(e){ r = { ok: false, error: 'red' }; }
+      if(S.key !== my) return;
+      slotsBox.replaceChildren();
+      if(!r.ok){ slotsBox.append(E('p', { class: 'pub-note', text: ERR[r.error] || 'No se pudo consultar. Inténtalo de nuevo.' })); return; }
+      let any = false;
+      r.shifts.forEach(sh => {
+        if(!sh.slots.length) return; any = true;
+        slotsBox.append(E('div', { class: 'pub-shift' }, E('h3', { text: sh.name }),
+          E('div', { class: 'pub-times' }, sh.slots.map(t => E('button', { type: 'button', class: 'pub-chip time' + (t === S.time ? ' on' : ''), text: t, 'aria-pressed': 'false',
+            onclick: ev => { S.time = t; slotsBox.querySelectorAll('.pub-chip').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-pressed', 'false'); }); ev.currentTarget.classList.add('on'); ev.currentTarget.setAttribute('aria-pressed', 'true'); dataBox.hidden = false; drawSummary(); showMsg(msg, ''); } })))));
+      });
+      if(!any) slotsBox.append(E('p', { class: 'pub-note', text: 'No quedan mesas ese día para ' + S.size + (S.size === 1 ? ' persona.' : ' personas.') + ' Prueba otro día.' }), phoneNote('También puedes llamarnos:'));
+    }
+    dateIn.addEventListener('change', () => { S.date = dateIn.value; loadSlots(); });
+
+    async function submit(ev){
+      ev.preventDefault();
+      if(S.busy) return;
+      if(!S.time){ showMsg(msg, 'Elige una hora.'); return; }
+      if(!nameIn.value.trim()){ nameIn.focus(); showMsg(msg, ERR.nombre); return; }
+      if(!phoneIn.value.trim()){ phoneIn.focus(); showMsg(msg, ERR.telefono); return; }
+      if(!mailIn.value.trim()){ mailIn.focus(); showMsg(msg, ERR.email); return; }
+      if(!priv.checked){ priv.focus(); showMsg(msg, ERR.privacidad); return; }
+      S.busy = true; go.disabled = true; go.textContent = 'Reservando…'; showMsg(msg, '');
+      let r;
+      try { r = await api.reservar({ date: S.date, time: S.time, size: S.size, name: nameIn.value, phone: phoneIn.value, email: mailIn.value, notes: notesIn.value, privacy: true }); }
+      catch(e){ r = { ok: false, error: 'red' }; }
+      S.busy = false; go.disabled = false; go.textContent = 'Confirmar reserva';
+      if(!r.ok){
+        showMsg(msg, ERR[r.error] || 'No se pudo completar la reserva. Inténtalo de nuevo.');
+        if(['sin_mesa', 'hora', 'antelacion'].includes(r.error)) loadSlots().then(() => showMsg(msg, ERR[r.error]));
+        return;
+      }
+      done(r);
+    }
+
+    wrap.replaceChildren(
+      head('Elige cuántos sois, el día y la hora. La reserva se confirma al momento.'),
+      E('form', { class: 'pub-form', novalidate: true, onsubmit: submit },
+        E('section', null, E('h2', { text: 'Personas' }), sizeBox, phoneNote('¿Sois más de ' + cfg.maxSize + '? Llámanos al')),
+        E('section', null, E('h2', { text: 'Día' }), dateIn),
+        E('section', null, E('h2', { text: 'Hora' }), slotsBox),
+        dataBox,
+        msg));
+    dataBox.append(
+      E('h2', { text: 'Tus datos' }), summary,
+      E('div', { class: 'pub-field' }, E('label', { for: 'pub-name', text: 'Nombre' }), nameIn),
+      E('div', { class: 'pub-row' },
+        E('div', { class: 'pub-field' }, E('label', { for: 'pub-phone', text: 'Teléfono' }), phoneIn),
+        E('div', { class: 'pub-field' }, E('label', { for: 'pub-mail', text: 'Email' }), mailIn)),
+      E('div', { class: 'pub-field' }, E('label', { for: 'pub-notes', text: 'Comentarios (opcional)' }), notesIn),
+      E('label', { class: 'pub-check', for: 'pub-priv' }, priv, E('span', { text: 'Acepto que ' + ((cfg && cfg.name) || 'el local') + ' guarde mis datos para gestionar esta reserva y contactarme si hace falta. Puedo pedir que los borren cuando quiera.' })),
+      go);
+    drawSizes(); loadSlots();
+  }
+
+  /* ----- reserva hecha ----- */
+  function done(r){
+    const link = opts.cancelUrl ? opts.cancelUrl(r.token) : '';
+    const copyBtn = E('button', { type: 'button', class: 'pub-btn ghost', text: 'Copiar enlace' });
+    copyBtn.addEventListener('click', () => {
+      const ok = () => { copyBtn.textContent = 'Copiado'; };
+      try { navigator.clipboard.writeText(link).then(ok, () => linkBox.select()); } catch(e){ linkBox.select(); }
+    });
+    const linkBox = E('input', { type: 'text', readonly: true, class: 'pub-link', value: link, 'aria-label': 'Enlace para cancelar', onfocus: e => e.target.select() });
+    wrap.replaceChildren(
+      E('header', { class: 'pub-head' }, E('p', { class: 'pub-ok', text: 'Reserva confirmada' }), E('h1', { text: r.name + ', te esperamos' })),
+      E('dl', { class: 'pub-card' },
+        E('div', null, E('dt', { text: 'Día' }), E('dd', { text: longDate(r.date) })),
+        E('div', null, E('dt', { text: 'Hora' }), E('dd', { text: r.time })),
+        E('div', null, E('dt', { text: 'Personas' }), E('dd', { text: String(r.size) }))),
+      E('p', { class: 'pub-note', text: 'Guarda este enlace. Es la única forma de cancelar la reserva por tu cuenta.' }),
+      E('div', { class: 'pub-linkrow' }, linkBox, copyBtn),
+      phoneNote('¿Necesitas cambiarla? Llámanos al'),
+      E('button', { type: 'button', class: 'pub-btn ghost', text: 'Hacer otra reserva', onclick: () => { S.time = null; form(); } }));
+  }
+
+  /* ----- cancelar con enlace ----- */
+  async function cancelView(token){
+    let r;
+    try { r = await api.ver(token); } catch(e){ r = { ok: false, error: 'red' }; }
+    if(!r.ok){ wrap.replaceChildren(head(), E('p', { class: 'pub-msg', text: ERR[r.error] || 'No se pudo cargar la reserva.' }), phoneNote('Teléfono:')); return; }
+    const msg = E('p', { class: 'pub-msg', role: 'alert', hidden: true });
+    const btn = E('button', { type: 'button', class: 'pub-btn danger', text: 'Cancelar mi reserva' });
+    let sure = false;
+    btn.addEventListener('click', async () => {
+      if(!sure){ sure = true; btn.textContent = '¿Seguro? Pulsa otra vez'; return; }
+      btn.disabled = true;
+      let c; try { c = await api.cancelar(token); } catch(e){ c = { ok: false, error: 'red' }; }
+      if(c.ok){ wrap.replaceChildren(head(), E('p', { class: 'pub-ok', text: 'Reserva cancelada' }), E('p', { class: 'pub-note', text: 'Gracias por avisar. Te esperamos otro día.' }), opts.homeUrl ? E('a', { class: 'pub-btn ghost', href: opts.homeUrl, text: 'Hacer una nueva reserva' }) : null); return; }
+      btn.disabled = false; sure = false; btn.textContent = 'Cancelar mi reserva';
+      showMsg(msg, ERR[c.error] || 'No se pudo cancelar. Llámanos.');
+    });
+    const st = r.status === 'cancelada' ? 'Esta reserva ya está cancelada.' : r.status !== 'confirmada' ? 'Esta reserva ya no está activa.' : !r.canCancel ? 'Esta reserva ya ha pasado.' : '';
+    wrap.replaceChildren(head(),
+      E('dl', { class: 'pub-card' },
+        E('div', null, E('dt', { text: 'A nombre de' }), E('dd', { text: r.name })),
+        E('div', null, E('dt', { text: 'Día' }), E('dd', { text: longDate(r.date) })),
+        E('div', null, E('dt', { text: 'Hora' }), E('dd', { text: r.time })),
+        E('div', null, E('dt', { text: 'Personas' }), E('dd', { text: String(r.size) }))),
+      st ? E('p', { class: 'pub-msg', text: st }) : E('div', { class: 'pub-form' }, btn, msg),
+      phoneNote('¿Dudas? Llámanos al'));
+  }
+  start();
+}
+
+const ERRMAP = { red: 'red' };
+function init(){
+  const root = document.getElementById('app');
+  if(!window.supabase){ root.textContent = 'No se pudo cargar la página. Revisa tu conexión y recarga.'; return; }
+  const sb = window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
+  const rpc = async (fn, args) => {
+    const { data, error } = await sb.rpc(fn, args || {});
+    if(error) throw error;
+    return data;
+  };
+  const api = {
+    config: () => rpc('res_pub_config'),
+    disponibilidad: (date, size) => rpc('res_pub_disponibilidad', { p_date: date, p_size: size }),
+    reservar: a => rpc('res_pub_reservar', { p_date: a.date, p_time: a.time, p_size: a.size, p_name: a.name, p_phone: a.phone, p_email: a.email, p_notes: a.notes || '', p_privacy: !!a.privacy }),
+    ver: t => rpc('res_pub_ver', { p_token: t }),
+    cancelar: t => rpc('res_pub_cancelar', { p_token: t })
+  };
+  const q = new URLSearchParams(location.search), token = (q.get('c') || '').replace(/[^A-Za-z0-9]/g, '');
+  const base = location.origin + location.pathname;
+  mountBooking(root, api, { token: token || null, cancelUrl: t => base + '?c=' + t, homeUrl: base });
+}
+init();
+})();
+</script>
+</body>
+</html>
