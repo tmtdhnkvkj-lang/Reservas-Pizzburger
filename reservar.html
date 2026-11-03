@@ -7,7 +7,6 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
 <style>
 :root{
   --bg:#EDF0F4; --surface:#FFFFFF; --fg:#18212F; --muted:#586376; --line:#D3D9E2;
@@ -24,44 +23,115 @@
 html,body{margin:0}
 body{background:var(--bg);color:var(--fg);font-family:'Figtree',system-ui,sans-serif}
 [hidden]{display:none!important}
-/* panel público */
-.pub{max-width:520px;margin:0 auto;padding:24px 16px 40px;color:var(--fg);font-family:'Figtree',system-ui,sans-serif;font-size:16px;line-height:1.45;display:grid;gap:22px}
-.pub h1{font-family:'Bricolage Grotesque','Figtree',sans-serif;font-weight:700;font-size:30px;line-height:1.1;margin:0;text-wrap:balance}
-.pub h2{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
-.pub h3{font-size:15px;margin:0 0 6px}
+#app{min-height:100vh}
+/* panel público (tarjeta con pasos). Todos los colores salen del tema guardado en Ajustes */
+.pub{--p-accent:#2A4A99;--p-accent-fg:#fff;--p-day:#DCE3F3;--p-day-fg:#111;--p-card:#fff;--p-inner:#F3F4F6;--p-text:#18212F;--p-muted:#586376;--p-off:#B9BFC9;--p-line:#D3D9E2;--p-r:10px;--rc:18px;--p-day-r:50%;--p-font:'Figtree',system-ui,sans-serif;--p-caps:none;
+  max-width:520px;margin:0 auto;padding:20px 12px 40px;color:var(--p-text);font-family:var(--p-font);font-size:16px;line-height:1.45}
+.pub *,.pub *::before,.pub *::after{box-sizing:border-box}
+.pub [hidden]{display:none!important}
+.pub-shell{background:var(--p-card);border-radius:var(--rc);overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,.28)}
+.pub-top{padding:20px 20px 16px;background:var(--p-card)}
+.pub h1{font-family:var(--p-font);font-weight:700;font-size:26px;line-height:1.1;margin:0;text-transform:var(--p-caps);letter-spacing:.02em;text-wrap:balance}
+.pub h2{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:var(--p-caps);color:var(--p-muted);margin:0 0 6px}
+.pub h3{font-size:16px;font-weight:700;margin:0 0 10px;text-align:center;text-decoration:underline;text-underline-offset:4px;text-transform:var(--p-caps);letter-spacing:.03em}
+.pub-body{background:var(--p-inner);padding:18px 16px 22px;display:grid;gap:20px}
+.pub-venue{margin:0;text-align:center;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--p-muted);font-size:14px}
+.pub-note{margin:0;color:var(--p-muted);font-size:15px}
+.pub-ok{margin:0;color:var(--p-accent);font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase}
 .pub-head{display:grid;gap:6px}
-.pub-lead,.pub-note{margin:0;color:var(--muted);font-size:15px}
-.pub-ok{margin:0;color:var(--free-line);font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase}
-.pub-form{display:grid;gap:22px}
-.pub-sizes,.pub-times{display:flex;flex-wrap:wrap;gap:8px}
-.pub-chip{min-width:48px;min-height:46px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;font-weight:600;cursor:pointer;font-variant-numeric:tabular-nums}
-.pub-chip.on{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
-.pub-chip:focus-visible,.pub-btn:focus-visible,.pub input:focus-visible,.pub textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-.pub-shift+.pub-shift{margin-top:14px}
-.pub-data{display:grid;gap:14px}
-.pub-sum{margin:0;font-weight:600}
-.pub-field{display:grid;gap:4px;min-width:0}
-.pub-field label{font-size:13px;font-weight:600;color:var(--muted)}
-.pub input[type=text],.pub input[type=tel],.pub input[type=email],.pub input[type=date],.pub textarea{width:100%;box-sizing:border-box;min-height:46px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit}
+.pub .pub-big{font-size:24px;line-height:1.15;margin:0;color:var(--p-text);letter-spacing:.01em;text-transform:var(--p-caps)}
+/* pasos */
+.pub-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2px;list-style:none;margin:0;padding:0}
+.pub-step{display:flex;justify-content:center;min-width:0}
+.pub-stepbtn{display:grid;justify-items:center;gap:6px;overflow:visible;background:none;border:0;padding:2px;margin:0;font:inherit;color:var(--p-off);min-width:0;width:100%}
+button.pub-stepbtn{cursor:pointer}
+.pub-step .n{width:42px;height:42px;border-radius:50%;border:3px solid var(--p-line);display:grid;place-items:center;font-size:19px;font-weight:600;line-height:1}
+.pub-step .l{font-size:11px;text-align:center;white-space:nowrap;line-height:1.2;letter-spacing:-.01em}
+.pub-step.on .n{border-color:var(--p-text);color:var(--p-text)}
+.pub-step.on .l{color:var(--p-text);font-weight:600}
+.pub-step.done .n{background:var(--p-accent);border-color:var(--p-accent);color:var(--p-accent-fg)}
+.pub-step.done .l{color:var(--p-muted)}
+/* campos */
+.pub-form{display:grid;gap:16px}
+.pub-field{display:grid;gap:5px;min-width:0}
+.pub-field label{font-size:13px;font-weight:600;color:var(--p-muted)}
+.pub input[type=text],.pub input[type=tel],.pub input[type=email],.pub select,.pub textarea{width:100%;min-height:48px;padding:10px 12px;border-radius:var(--p-r);border:1px solid var(--p-line);background:var(--p-card);color:var(--p-text);font:inherit}
+.pub[data-radius=round] input[type=text],.pub[data-radius=round] input[type=tel],.pub[data-radius=round] input[type=email],.pub[data-radius=round] select{border-radius:999px;padding-left:18px}
+.pub[data-radius=round] textarea{border-radius:18px}
 .pub textarea{resize:vertical}
 .pub-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-.pub-check{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--muted)}
-.pub-check input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var(--accent)}
-.pub-btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border-radius:10px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:700;cursor:pointer;text-decoration:none}
-.pub-btn.ghost{background:transparent;color:var(--accent)}
-.pub-btn.danger{background:var(--occ-line);border-color:var(--occ-line);color:#fff}
+.pub-check{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--p-muted)}
+.pub-check input{width:22px;height:22px;margin-top:1px;flex:none;accent-color:var(--p-accent)}
+:is(.pub-time,.pub-day,.pub-nav,.pub-btn,.pub-stepbtn,.pub-link2):focus-visible,.pub :is(input,select,textarea):focus-visible{outline:3px solid var(--p-accent);outline-offset:2px}
+/* info */
+.pub-info{text-align:center;display:grid;gap:2px;padding:0 6px}
+.pub-info h2{margin:0;font-size:15px;color:var(--p-text)}
+.pub-info p{margin:0;color:var(--p-muted);font-size:14.5px;white-space:pre-line}
+/* calendario */
+.pub-cal{background:var(--p-card);border-radius:calc(var(--rc) * .6);padding:14px 10px 12px;display:grid;gap:8px}
+.pub-cal-head{display:grid;grid-template-columns:44px 1fr 44px;align-items:center}
+.pub-cal-title{text-align:center;font-size:16px;text-transform:var(--p-caps);letter-spacing:.03em}
+.pub-nav{width:44px;height:44px;border-radius:50%;border:0;background:transparent;color:var(--p-text);font-size:28px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif}
+.pub-nav:disabled{color:var(--p-off);cursor:default}
+.pub-cal-dow{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-weight:700;font-size:14px;padding-bottom:4px;border-top:1px solid var(--p-line);padding-top:8px}
+.pub-cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px 4px;justify-items:center}
+.pub-day{width:100%;max-width:46px;aspect-ratio:1;border-radius:var(--p-day-r);border:2px solid transparent;display:grid;place-items:center;font:inherit;font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;background:var(--p-day);color:var(--p-day-fg);padding:0;cursor:pointer}
+.pub-day.sel{background:var(--p-accent);color:var(--p-accent-fg);border-color:var(--p-accent)}
+.pub-day.today{border-color:var(--p-accent)}
+.pub-day.off,.pub-day.other{background:transparent;color:var(--p-off);cursor:default;font-weight:500}
+.pub-day.other{opacity:.7}
+.pub-legend{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;font-size:12.5px;color:var(--p-muted);padding-top:4px}
+.pub-legend span{display:inline-flex;align-items:center;gap:6px}
+.pub-legend .dot{width:14px;height:14px;border-radius:50%;display:inline-block;border:1px solid var(--p-line)}
+.pub-legend .dot.sel{background:var(--p-accent);border-color:var(--p-accent)}
+.pub-legend .dot.free{background:var(--p-day);border-color:var(--p-day)}
+.pub-legend .dot.off{background:transparent}
+/* horas */
+.pub-slots{display:grid;gap:20px}
+.pub-times{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pub-time{min-height:54px;border:2px solid var(--p-accent);border-radius:var(--p-r);background:var(--p-accent);color:var(--p-accent-fg);font:inherit;font-size:19px;font-weight:600;font-variant-numeric:tabular-nums;cursor:pointer;display:grid;place-items:center;padding:0 10px}
+.pub-time.on{box-shadow:0 0 0 3px var(--p-card),0 0 0 6px var(--p-accent)}
+.pub-sample .pub-time{min-height:44px;font-size:16px}
+/* resumen */
+.pub-sumbar{display:flex;gap:10px;justify-content:space-between;align-items:center;background:var(--p-card);border-radius:var(--p-r);padding:10px 14px;border:1px solid var(--p-line)}
+.pub-sum{font-weight:600;font-size:15px;min-width:0}
+.pub-note b{white-space:nowrap}
+.pub-sum2{margin:-8px 0 0;color:var(--p-muted);font-size:14px;overflow-wrap:anywhere}
+.pub-link2{background:none;border:0;padding:6px 2px;font:inherit;font-weight:700;color:var(--p-accent);text-decoration:underline;cursor:pointer}
+/* botones */
+.pub-actions{display:grid;grid-template-columns:auto 1fr;gap:10px}
+.pub-btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 22px;border-radius:var(--p-r);border:2px solid var(--p-accent);background:var(--p-accent);color:var(--p-accent-fg);font:inherit;font-size:16px;font-weight:700;letter-spacing:.02em;text-transform:var(--p-caps);cursor:pointer;text-decoration:none}
+.pub-btn.ghost{background:transparent;color:var(--p-text);border-color:var(--p-line)}
+.pub-btn.danger{background:#B3361F;border-color:#B3361F;color:#fff}
 .pub-btn:disabled{opacity:.6;cursor:default}
-.pub-msg{margin:0;padding:10px 12px;border-radius:10px;background:var(--occ);border:1px solid var(--occ-line);color:var(--fg);font-size:15px}
-.pub-card{margin:0;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);display:grid;gap:10px}
+.pub-sample .pub-btn{width:100%}
+/* avisos (colores fijos, siempre legibles) */
+.pub-msg{margin:0;padding:10px 12px;border-radius:var(--p-r);background:#F7CBC2;border:1px solid #C1432C;color:#3A0E06;font-size:15px}
+.pub-warn{padding:14px;border-radius:var(--p-r);border:1px solid #C48610;background:#FFE8B5;color:#3A2A00;display:grid;gap:10px}
+.pub-warn p{margin:0}
+.pub-warn-btns{display:flex;flex-wrap:wrap;gap:8px}
+.pub-warn .pub-btn.ghost{color:#3A2A00;border-color:#C48610}
+/* reserva hecha / cancelar */
+.pub-card{margin:0;padding:14px 16px;border:1px solid var(--p-line);border-radius:var(--p-r);background:var(--p-card);display:grid;gap:10px}
 .pub-card div{display:flex;justify-content:space-between;gap:12px}
-.pub-card dt{color:var(--muted)}
+.pub-card dt{color:var(--p-muted)}
 .pub-card dd{margin:0;font-weight:700;text-align:right}
 .pub-linkrow{display:grid;grid-template-columns:1fr auto;gap:8px}
 .pub-linkrow .pub-link{min-width:0}
+@media (max-width:380px){.pub{padding-inline:8px}.pub-body{padding-inline:12px}.pub-step .n{width:38px;height:38px}}
+@media (prefers-reduced-motion:no-preference){.pub-time,.pub-day,.pub-btn{transition:transform .08s}.pub-time:active,.pub-day:active,.pub-btn:active{transform:scale(.97)}}
 
-.pub-warn{padding:14px;border-radius:12px;border:1px solid var(--res-line);background:var(--res);color:var(--fg);display:grid;gap:10px}
-.pub-warn p{margin:0}
-.pub-warn-btns{display:flex;flex-wrap:wrap;gap:8px}
+/* editor de apariencia (Ajustes) */
+.th-ed{display:grid;gap:16px;min-width:0}
+.th-ed .pub-sample{margin:0;padding:0}
+
+.th-ed select,.th-ed textarea,.th-ed input[type=text]{width:100%;box-sizing:border-box;min-height:42px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit}
+.th-presets{display:flex;flex-wrap:wrap;gap:8px}
+.th-colors{display:grid;gap:8px}
+.th-color{display:flex;align-items:center;gap:12px;font-size:14px}
+.th-color input[type=color]{width:52px;height:40px;padding:2px;border:1px solid var(--line);border-radius:8px;background:var(--surface);flex:none;cursor:pointer}
+.th-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:8px}
+.th-warn{color:#8A4B00;background:#FFF1D6;padding:8px 10px;border-radius:8px}
 </style>
 </head>
 <body>
@@ -73,27 +143,185 @@ body{background:var(--bg);color:var(--fg);font-family:'Figtree',system-ui,sans-s
 const SB_URL = 'https://wneprqmaueenbeowuykz.supabase.co';
 const SB_KEY = 'sb_publishable_ZlJgdb_V4c6IFlqQnsdvxA_sLSphozE';
 
+/* ===== PANEL PÚBLICO: tema, editor de apariencia y pantalla de reservas ===== */
+const TH_FONTS = {
+  'Figtree': 'Figtree:wght@400;500;600;700',
+  'Barlow Condensed': 'Barlow+Condensed:wght@400;500;600;700',
+  'Oswald': 'Oswald:wght@400;500;600;700',
+  'Bricolage Grotesque': 'Bricolage+Grotesque:wght@400;500;600;700',
+  'Poppins': 'Poppins:wght@400;500;600;700',
+  'Playfair Display': 'Playfair+Display:wght@400;500;600;700'
+};
+const TH_DEF = {
+  accent: '#2A4A99', day: '#DCE3F3', card: '#FFFFFF', page: '#EDF0F4', text: '#18212F',
+  radius: 'soft', font: 'Figtree', caps: false,
+  title: 'Reservar mesa', infoTitle: 'Información', info: '',
+  steps: ['Encontrar', 'Tus datos', 'Adicional', 'Confirmación']
+};
+const TH_PRESETS = [
+  { id: 'clasico', name: 'Clásico azul', v: { accent: '#2A4A99', day: '#DCE3F3', card: '#FFFFFF', page: '#EDF0F4', text: '#18212F', radius: 'soft', font: 'Figtree', caps: false } },
+  { id: 'burdeos', name: 'Burdeos y arena', v: { accent: '#7C2139', day: '#A89477', card: '#FFFFFF', page: '#3D0E1B', text: '#1F1A1C', radius: 'square', font: 'Barlow Condensed', caps: true } },
+  { id: 'tomate', name: 'Tomate', v: { accent: '#C8381E', day: '#F3D9B1', card: '#FFFBF5', page: '#2B1A12', text: '#2B1A12', radius: 'round', font: 'Poppins', caps: false } },
+  { id: 'oscuro', name: 'Oscuro', v: { accent: '#E8B04A', day: '#3A3F4B', card: '#1C2028', page: '#0F1218', text: '#ECEFF4', radius: 'soft', font: 'Oswald', caps: true } }
+];
+const thRgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+const thHex = a => '#' + a.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+const thMix = (a, b, t) => { const x = thRgb(a), y = thRgb(b); return thHex(x.map((v, i) => v * t + y[i] * (1 - t))); };
+const thLum = h => { const c = thRgb(h).map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
+const thRatio = (a, b) => { const x = thLum(a), y = thLum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+const thFg = h => thRatio(h, '#FFFFFF') >= thRatio(h, '#111111') ? '#FFFFFF' : '#111111';
+function thNorm(t){
+  const d = Object.assign({}, TH_DEF, { steps: TH_DEF.steps.slice() });
+  if(!t || typeof t !== 'object') return d;
+  ['accent', 'day', 'card', 'page', 'text'].forEach(k => { if(/^#[0-9a-f]{6}$/i.test(t[k] || '')) d[k] = t[k].toUpperCase(); });
+  if(['square', 'soft', 'round'].includes(t.radius)) d.radius = t.radius;
+  if(t.font in TH_FONTS) d.font = t.font;
+  if(typeof t.caps === 'boolean') d.caps = t.caps;
+  ['title', 'infoTitle'].forEach(k => { if(typeof t[k] === 'string' && t[k].trim()) d[k] = t[k].trim().slice(0, 60); });
+  if(typeof t.info === 'string') d.info = t.info.trim().slice(0, 600);
+  if(Array.isArray(t.steps)) d.steps = d.steps.map((s, i) => (typeof t.steps[i] === 'string' && t.steps[i].trim()) ? t.steps[i].trim().slice(0, 20) : s);
+  return d;
+}
+function thLoadFont(name){
+  const id = 'thfont-' + name.replace(/\W+/g, '');
+  if(document.getElementById(id) || !(name in TH_FONTS)) return;
+  const l = document.createElement('link'); l.id = id; l.rel = 'stylesheet';
+  l.href = 'https://fonts.googleapis.com/css2?family=' + TH_FONTS[name] + '&display=swap';
+  document.head.appendChild(l);
+}
+function thApply(el, t){
+  const radii = { square: ['0px', '4px', '50%'], soft: ['10px', '18px', '50%'], round: ['999px', '26px', '50%'] }[t.radius];
+  const v = {
+    '--p-accent': t.accent, '--p-accent-fg': thFg(t.accent), '--p-day': t.day, '--p-day-fg': thFg(t.day),
+    '--p-card': t.card, '--p-inner': thMix(t.text, t.card, 0.05), '--p-text': t.text,
+    '--p-muted': thMix(t.text, t.card, 0.72), '--p-off': thMix(t.text, t.card, 0.3), '--p-line': thMix(t.text, t.card, 0.2),
+    '--p-r': radii[0], '--rc': radii[1], '--p-day-r': radii[2],
+    '--p-font': "'" + t.font + "', system-ui, sans-serif", '--p-caps': t.caps ? 'uppercase' : 'none'
+  };
+  Object.keys(v).forEach(k => el.style.setProperty(k, v[k]));
+  el.dataset.radius = t.radius;
+  thLoadFont(t.font);
+}
+/* avisos de legibilidad del tema (para el editor) */
+function thWarnings(t){
+  const w = [];
+  if(thRatio(t.text, t.card) < 4.5) w.push('El texto casi no se distingue del fondo de la tarjeta. Pon uno claro y otro oscuro.');
+  if(thRatio(t.accent, t.card) < 1.6) w.push('El color principal se parece demasiado al fondo de la tarjeta: las horas casi no se verán.');
+  if(thRatio(t.day, t.card) < 1.15) w.push('Los días libres se parecen demasiado al fondo: no se verá el calendario.');
+  return w;
+}
+
+const thE = (tag, p, ...kids) => {
+  const e = document.createElement(tag);
+  for(const k in (p || {})){
+    const v = p[k]; if(v == null || v === false) continue;
+    if(k === 'text') e.textContent = v;
+    else if(k === 'class') e.className = v;
+    else if(k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), v);
+    else if(k === 'value') e.value = v;
+    else if(k === 'checked') e.checked = true;
+    else e.setAttribute(k, v === true ? '' : v);
+  }
+  kids.flat(Infinity).forEach(c => { if(c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(String(c))); });
+  return e;
+};
+
+/* muestra pequeña que se actualiza en vivo (la usa el editor) */
+function thSample(){
+  const E = thE, box = E('div', { class: 'pub pub-sample' });
+  function draw(t){
+    thApply(box, t);
+    const day = (n, cls) => E('span', { class: 'pub-day ' + (cls || ''), text: String(n) });
+    box.replaceChildren(E('div', { class: 'pub-shell' },
+      E('div', { class: 'pub-top' }, E('h1', { text: t.title })),
+      E('div', { class: 'pub-body' },
+        E('div', { class: 'pub-cal-days', style: 'margin:0' }, day(3, 'off'), day(4, 'sel'), day(5), day(6), day(7, 'today'), day(8, 'off')),
+        E('div', { class: 'pub-times' }, E('span', { class: 'pub-time', text: '14:00' }), E('span', { class: 'pub-time', text: '14:30' })),
+        E('span', { class: 'pub-btn', text: 'Confirmar reserva' }))));
+  }
+  return { el: box, draw };
+}
+
+/* editor de apariencia: devuelve { el, value() }. onChange se llama con cada cambio */
+function thEditor(initial, onChange){
+  const E = thE; let t = thNorm(initial);
+  const root = E('div', { class: 'th-ed' });
+  const warn = E('p', { class: 'hint th-warn', role: 'status' });
+  const sample = thSample();
+  function changed(){ draw(); if(onChange) onChange(thNorm(t)); }
+  const colorRow = (key, label) => {
+    const inp = E('input', { type: 'color', id: 'th-c-' + key, value: t[key], 'aria-label': label });
+    inp.addEventListener('input', () => { t[key] = inp.value.toUpperCase(); changed(); });
+    inp._sync = () => { inp.value = t[key]; };
+    return E('label', { class: 'th-color', for: 'th-c-' + key }, inp, E('span', { text: label }));
+  };
+  const colors = [
+    colorRow('accent', 'Color principal (horas, botones, día elegido)'),
+    colorRow('day', 'Días libres del calendario'),
+    colorRow('card', 'Fondo de la tarjeta'),
+    colorRow('page', 'Fondo de la página'),
+    colorRow('text', 'Color del texto')
+  ];
+  const radiusSel = E('select', { id: 'th-radius' }, [['square', 'Cuadradas'], ['soft', 'Suaves'], ['round', 'Muy redondas']].map(o => E('option', { value: o[0], text: o[1] })));
+  const fontSel = E('select', { id: 'th-font' }, Object.keys(TH_FONTS).map(f => E('option', { value: f, text: f })));
+  const capsChk = E('input', { type: 'checkbox', id: 'th-caps' });
+  const titleIn = E('input', { type: 'text', id: 'th-title', maxlength: 60, placeholder: TH_DEF.title });
+  const infoTitleIn = E('input', { type: 'text', id: 'th-infot', maxlength: 60, placeholder: TH_DEF.infoTitle });
+  const infoIn = E('textarea', { id: 'th-info', maxlength: 600, rows: 4, placeholder: 'Ej.: Se dispone de mesa durante 90 min. Rogamos puntualidad.' });
+  const stepIns = [0, 1, 2, 3].map(i => E('input', { type: 'text', id: 'th-st' + i, maxlength: 20, placeholder: TH_DEF.steps[i] }));
+  function fill(){
+    colors.forEach(l => l.querySelector('input')._sync());
+    radiusSel.value = t.radius; fontSel.value = t.font; capsChk.checked = t.caps;
+    titleIn.value = t.title === TH_DEF.title ? '' : t.title;
+    infoTitleIn.value = t.infoTitle === TH_DEF.infoTitle ? '' : t.infoTitle;
+    infoIn.value = t.info;
+    stepIns.forEach((s, i) => { s.value = t.steps[i] === TH_DEF.steps[i] ? '' : t.steps[i]; });
+  }
+  function draw(){
+    sample.draw(thNorm(t));
+    const w = thWarnings(thNorm(t));
+    warn.textContent = w.join(' ');
+    warn.hidden = !w.length;
+  }
+  radiusSel.addEventListener('change', () => { t.radius = radiusSel.value; changed(); });
+  fontSel.addEventListener('change', () => { t.font = fontSel.value; changed(); });
+  capsChk.addEventListener('change', () => { t.caps = capsChk.checked; changed(); });
+  titleIn.addEventListener('input', () => { t.title = titleIn.value; changed(); });
+  infoTitleIn.addEventListener('input', () => { t.infoTitle = infoTitleIn.value; changed(); });
+  infoIn.addEventListener('input', () => { t.info = infoIn.value; changed(); });
+  stepIns.forEach((s, i) => s.addEventListener('input', () => { t.steps[i] = s.value; changed(); }));
+  const presets = E('div', { class: 'th-presets' }, TH_PRESETS.map(p => E('button', { type: 'button', class: 'btn sm', text: p.name,
+    onclick: () => { t = thNorm(Object.assign({}, t, p.v)); fill(); changed(); } })));
+  const reset = E('button', { type: 'button', class: 'btn sm', text: 'Restaurar apariencia por defecto',
+    onclick: () => { t = thNorm(null); fill(); changed(); } });
+  root.append(
+    E('div', { class: 'field' }, E('span', { class: 'lbl', text: 'Estilos listos (luego puedes retocar cada color)' }), presets),
+    sample.el,
+    warn,
+    E('div', { class: 'field' }, E('span', { class: 'lbl', text: 'Colores' }), E('div', { class: 'th-colors' }, colors)),
+    E('div', { class: 'row' },
+      E('div', { class: 'field' }, E('label', { for: 'th-radius', text: 'Esquinas' }), radiusSel),
+      E('div', { class: 'field' }, E('label', { for: 'th-font', text: 'Tipo de letra' }), fontSel)),
+    E('label', { class: 'chk', for: 'th-caps' }, capsChk, E('span', { text: 'Títulos en MAYÚSCULAS' })),
+    E('div', { class: 'field' }, E('label', { for: 'th-title', text: 'Título de la tarjeta' }), titleIn),
+    E('div', { class: 'field' }, E('label', { for: 'th-infot', text: 'Título del bloque de información' }), infoTitleIn),
+    E('div', { class: 'field' }, E('label', { for: 'th-info', text: 'Texto de información para el cliente (vacío = no se muestra)' }), infoIn),
+    E('details', { class: 'field' }, E('summary', { text: 'Nombres de los 4 pasos' }), E('div', { class: 'th-steps' }, stepIns.map((s, i) => E('div', { class: 'field' }, E('label', { for: 'th-st' + i, text: 'Paso ' + (i + 1) }), s)))),
+    reset);
+  fill(); draw();
+  return { el: root, value: () => thNorm(t) };
+}
+
 /* ---------- panel público de reservas (misma pantalla en la vista previa y en reservar.html) ---------- */
 function mountBooking(root, api, opts){
   opts = opts || {};
-  const E = (tag, p, ...kids) => {
-    const e = document.createElement(tag);
-    for(const k in (p || {})){
-      const v = p[k]; if(v == null || v === false) continue;
-      if(k === 'text') e.textContent = v;
-      else if(k === 'class') e.className = v;
-      else if(k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), v);
-      else if(k === 'value') e.value = v;
-      else if(k === 'checked') e.checked = true;
-      else e.setAttribute(k, v === true ? '' : v);
-    }
-    kids.flat(Infinity).forEach(c => { if(c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(String(c))); });
-    return e;
-  };
+  const E = thE;
   const pad = n => String(n).padStart(2, '0');
   const ymd = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  const parse = s => { const a = s.split('-').map(Number); return new Date(a[0], a[1] - 1, a[2]); };
   const addD = (s, n) => { const a = s.split('-').map(Number), d = new Date(a[0], a[1] - 1, a[2] + n); return ymd(d); };
-  const longDate = s => { const a = s.split('-').map(Number), t = new Date(a[0], a[1] - 1, a[2]).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }); return t.charAt(0).toUpperCase() + t.slice(1); };
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const longDate = s => cap(parse(s).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }));
   const ERR = {
     desactivado: 'Ahora mismo no aceptamos reservas online. Llámanos y te atendemos.',
     tamano: 'Elige cuántas personas sois.',
@@ -116,142 +344,208 @@ function mountBooking(root, api, opts){
     plazo: 'Solo se puede cancelar online hasta {horas} antes. Llámanos y lo gestionamos.'
   };
   const plazoMsg = h => ERR.plazo.replace('{horas}', h + (+h === 1 ? ' hora' : ' horas'));
-  let cfg = null;
-  const S = { size: 2, date: ymd(new Date()), time: null, shifts: null, busy: false, msg: '' };
+  let cfg = null, th = thNorm(opts.theme);
+  const today0 = ymd(new Date());
+  const S = { step: 1, size: 2, date: today0, vy: new Date().getFullYear(), vm: new Date().getMonth(), time: null, busy: false, name: '', phone: '', mail: '', notes: '', priv: false, slotsKey: '', slots: null, slotsErr: '', msg: '', warn: null };
   const wrap = E('div', { class: 'pub' });
   root.replaceChildren(wrap);
-
-  function head(sub){
-    return E('header', { class: 'pub-head' }, E('h1', { text: (cfg && cfg.name) || 'Reserva tu mesa' }), sub ? E('p', { class: 'pub-lead', text: sub }) : null);
+  function paint(){
+    thApply(wrap, th);
+    root.style.background = th.page;
+    if(opts.fullPage){ document.documentElement.style.background = th.page; document.body.style.background = th.page; }
   }
+  paint();
+
+  /* estructura común: tarjeta con título arriba */
+  function shell(...kids){
+    return E('div', { class: 'pub-shell' },
+      E('div', { class: 'pub-top' }, E('h1', { text: th.title })),
+      E('div', { class: 'pub-body' }, kids));
+  }
+  function venue(){ return cfg && cfg.name ? E('p', { class: 'pub-venue', text: cfg.name }) : null; }
   function phoneNote(prefix){
     return cfg && cfg.phone ? E('p', { class: 'pub-note' }, prefix + ' ', E('b', { text: cfg.phone })) : null;
   }
-  function showMsg(box, text, ok){ box.textContent = text || ''; box.className = 'pub-msg' + (ok ? ' ok' : ''); box.hidden = !text; }
+  function msgBox(text){ return E('p', { class: 'pub-msg', role: 'alert', hidden: !text, text: text || '' }); }
 
-  async function start(){
-    wrap.replaceChildren(E('p', { class: 'pub-note', text: 'Cargando…' }));
-    try { cfg = await api.config(); } catch(e){ wrap.replaceChildren(E('p', { class: 'pub-msg', text: 'No se pudo conectar. Revisa tu conexión e inténtalo de nuevo.' })); return; }
-    if(cfg && cfg.msgs) Object.keys(cfg.msgs).forEach(k => { const v = String(cfg.msgs[k] || '').trim(); if(v && k in ERR) ERR[k] = v; });
-    if(opts.token) return cancelView(opts.token);
-    if(!cfg || !cfg.enabled){ wrap.replaceChildren(head(), E('p', { class: 'pub-msg', text: ERR.desactivado }), phoneNote('Teléfono:')); return; }
-    S.size = Math.min(2, cfg.maxSize);
-    form();
+  function steps(){
+    return E('ol', { class: 'pub-steps', 'aria-label': 'Pasos de la reserva' }, th.steps.map((name, i) => {
+      const n = i + 1, st = n === S.step ? 'on' : n < S.step ? 'done' : '';
+      const inner = [E('span', { class: 'n', text: n < S.step ? '✓' : String(n) }), E('span', { class: 'l', text: name })];
+      const canGo = n < S.step && S.step < 4;
+      return E('li', { class: 'pub-step ' + st, 'aria-current': n === S.step ? 'step' : null },
+        canGo ? E('button', { type: 'button', class: 'pub-stepbtn', 'aria-label': 'Volver al paso ' + n + ': ' + name, onclick: () => { S.msg = ''; S.step = n; render(); } }, inner) : E('div', { class: 'pub-stepbtn' }, inner));
+    }));
   }
 
-  /* ----- formulario ----- */
-  function form(){
-    const sizeBox = E('div', { class: 'pub-sizes', role: 'group', 'aria-label': 'Número de personas' });
-    const dateIn = E('input', { type: 'date', id: 'pub-date', value: S.date, min: ymd(new Date()), max: addD(ymd(new Date()), cfg.maxDaysAhead || 60) });
-    const slotsBox = E('div', { class: 'pub-slots', 'aria-live': 'polite' });
-    const dataBox = E('div', { class: 'pub-data', hidden: true });
-    const msg = E('p', { class: 'pub-msg', role: 'alert', hidden: true });
-    const warnBox = E('div', { class: 'pub-warn', role: 'alert', hidden: true });
-    const nameIn = E('input', { type: 'text', id: 'pub-name', autocomplete: 'name', maxlength: 80 });
-    const phoneIn = E('input', { type: 'tel', id: 'pub-phone', autocomplete: 'tel', inputmode: 'tel', maxlength: 20 });
-    const mailIn = E('input', { type: 'email', id: 'pub-mail', autocomplete: 'email', inputmode: 'email', maxlength: 120 });
-    const notesIn = E('textarea', { id: 'pub-notes', maxlength: 300, rows: 2, placeholder: 'Alergias, trona, celebración…' });
-    const priv = E('input', { type: 'checkbox', id: 'pub-priv' });
-    const go = E('button', { type: 'submit', class: 'pub-btn', text: 'Confirmar reserva' });
-    const summary = E('p', { class: 'pub-sum' });
+  async function start(){
+    wrap.replaceChildren(shell(E('p', { class: 'pub-note', text: 'Cargando…' })));
+    try { cfg = await api.config(); } catch(e){ wrap.replaceChildren(shell(E('p', { class: 'pub-msg', text: 'No se pudo conectar. Revisa tu conexión e inténtalo de nuevo.' }))); return; }
+    if(cfg && cfg.msgs) Object.keys(cfg.msgs).forEach(k => { const v = String(cfg.msgs[k] || '').trim(); if(v && k in ERR) ERR[k] = v; });
+    if(!opts.theme && cfg && cfg.theme){ th = thNorm(cfg.theme); paint(); }
+    if(opts.token) return cancelView(opts.token);
+    if(!cfg || !cfg.enabled){ wrap.replaceChildren(shell(venue(), E('p', { class: 'pub-msg', text: ERR.desactivado }), phoneNote('Teléfono:'))); return; }
+    S.size = Math.min(2, cfg.maxSize);
+    render();
+  }
 
-    function drawSizes(){
-      sizeBox.replaceChildren();
-      for(let n = 1; n <= cfg.maxSize; n++){
-        sizeBox.append(E('button', { type: 'button', class: 'pub-chip' + (n === S.size ? ' on' : ''), 'aria-pressed': n === S.size ? 'true' : 'false', text: String(n),
-          onclick: () => { S.size = n; S.time = null; drawSizes(); loadSlots(); } }));
-      }
-    }
-    function drawSummary(){
-      summary.textContent = S.time ? S.size + (S.size === 1 ? ' persona' : ' personas') + ' · ' + longDate(S.date) + ' · ' + S.time : '';
-    }
-    async function loadSlots(){
-      S.time = null; dataBox.hidden = true; showMsg(msg, '');
-      if(!S.date){ slotsBox.replaceChildren(); return; }
-      slotsBox.replaceChildren(E('p', { class: 'pub-note', text: 'Buscando mesa…' }));
-      const my = S.date + '|' + S.size; S.key = my;
-      let r;
-      try { r = await api.disponibilidad(S.date, S.size); } catch(e){ r = { ok: false, error: 'red' }; }
-      if(S.key !== my) return;
-      slotsBox.replaceChildren();
-      if(!r.ok){ slotsBox.append(E('p', { class: 'pub-note', text: ERR[r.error] || 'No se pudo consultar. Inténtalo de nuevo.' })); return; }
-      let any = false;
-      r.shifts.forEach(sh => {
-        if(!sh.slots.length) return; any = true;
-        slotsBox.append(E('div', { class: 'pub-shift' }, E('h3', { text: sh.name }),
-          E('div', { class: 'pub-times' }, sh.slots.map(t => E('button', { type: 'button', class: 'pub-chip time' + (t === S.time ? ' on' : ''), text: t, 'aria-pressed': 'false',
-            onclick: ev => { S.time = t; slotsBox.querySelectorAll('.pub-chip').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-pressed', 'false'); }); ev.currentTarget.classList.add('on'); ev.currentTarget.setAttribute('aria-pressed', 'true'); dataBox.hidden = false; drawSummary(); showMsg(msg, ''); } })))));
-      });
-      if(!any) slotsBox.append(E('p', { class: 'pub-note', text: 'No quedan mesas ese día para ' + S.size + (S.size === 1 ? ' persona.' : ' personas.') + ' Prueba otro día.' }), phoneNote('También puedes llamarnos:'));
-    }
-    dateIn.addEventListener('change', () => { S.date = dateIn.value; loadSlots(); });
+  function render(){
+    if(!cfg || !cfg.enabled || opts.token) return;
+    if(S.step === 1) step1(); else if(S.step === 2) step2(); else if(S.step === 3) step3(); else step4();
+  }
 
+  /* ----- paso 1: personas, día y hora ----- */
+  async function loadSlots(){
+    const key = S.date + '|' + S.size; S.slotsKey = key; S.slots = null; S.slotsErr = ''; S.time = null;
+    render();
+    let r; try { r = await api.disponibilidad(S.date, S.size); } catch(e){ r = { ok: false, error: 'red' }; }
+    if(S.slotsKey !== key) return;
+    if(!r.ok){ S.slotsErr = ERR[r.error] || 'No se pudo consultar. Inténtalo de nuevo.'; S.slots = []; }
+    else S.slots = r.shifts;
+    if(S.step === 1) render();
+  }
+  function calendar(){
+    const max = addD(today0, cfg.maxDaysAhead || 60), closed = new Set(cfg.closedDates || []);
+    const y = S.vy, m = S.vm, lead = (new Date(y, m, 1).getDay() + 6) % 7, dim = new Date(y, m + 1, 0).getDate();
+    const total = Math.ceil((lead + dim) / 7) * 7, cells = [];
+    for(let i = 0; i < total; i++){
+      const d = new Date(y, m, 1 - lead + i), s = ymd(d), inM = d.getMonth() === m;
+      const ok = inM && s >= today0 && s <= max && !closed.has(s);
+      const cls = 'pub-day' + (!inM ? ' other' : !ok ? ' off' : '') + (s === S.date && ok ? ' sel' : '') + (s === today0 && ok && s !== S.date ? ' today' : '');
+      if(!inM){ cells.push(E('span', { class: cls, text: String(d.getDate()), 'aria-hidden': 'true' })); continue; }
+      cells.push(E('button', { type: 'button', class: cls, disabled: !ok, text: String(d.getDate()), 'aria-pressed': s === S.date && ok ? 'true' : 'false',
+        'aria-label': longDate(s) + (closed.has(s) ? ' (cerrado)' : ''),
+        onclick: () => { S.date = s; loadSlots(); } }));
+    }
+    const first = new Date(y, m, 1), nextFirst = new Date(y, m + 1, 1), nowM = new Date();
+    const canPrev = !(y === nowM.getFullYear() && m === nowM.getMonth()), canNext = ymd(nextFirst) <= max;
+    const go = n => { const d = new Date(y, m + n, 1); S.vy = d.getFullYear(); S.vm = d.getMonth(); render(); };
+    return E('div', { class: 'pub-cal' },
+      E('div', { class: 'pub-cal-head' },
+        E('button', { type: 'button', class: 'pub-nav', disabled: !canPrev, 'aria-label': 'Mes anterior', text: '‹', onclick: () => go(-1) }),
+        E('strong', { class: 'pub-cal-title', 'aria-live': 'polite', text: cap(first.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })) }),
+        E('button', { type: 'button', class: 'pub-nav', disabled: !canNext, 'aria-label': 'Mes siguiente', text: '›', onclick: () => go(1) })),
+      E('div', { class: 'pub-cal-dow', 'aria-hidden': 'true' }, ['L', 'M', 'X', 'J', 'V', 'S', 'D'].map(x => E('span', { text: x }))),
+      E('div', { class: 'pub-cal-days' }, cells),
+      E('div', { class: 'pub-legend' },
+        E('span', null, E('i', { class: 'dot sel' }), 'Día elegido'),
+        E('span', null, E('i', { class: 'dot free' }), 'Libre'),
+        E('span', null, E('i', { class: 'dot off' }), 'Cerrado o sin plazo')));
+  }
+  function slotsView(){
+    if(S.slots === null) return E('p', { class: 'pub-note', text: 'Buscando mesa…' });
+    if(S.slotsErr) return E('div', null, E('p', { class: 'pub-note', text: S.slotsErr }), phoneNote('También puedes llamarnos:'));
+    const out = []; let any = false;
+    S.slots.forEach(sh => {
+      if(!sh.slots.length) return; any = true;
+      out.push(E('div', { class: 'pub-shift' }, E('h3', { text: sh.name }),
+        E('div', { class: 'pub-times' }, sh.slots.map(t => E('button', { type: 'button', class: 'pub-time' + (t === S.time ? ' on' : ''), text: t, 'aria-label': 'Reservar a las ' + t,
+          onclick: () => { S.time = t; S.msg = ''; S.step = 2; render(); } })))));
+    });
+    if(!any) out.push(E('p', { class: 'pub-note', text: 'No quedan mesas ese día para ' + S.size + (S.size === 1 ? ' persona.' : ' personas.') + ' Prueba otro día.' }), phoneNote('También puedes llamarnos:'));
+    return E('div', { class: 'pub-slots', 'aria-live': 'polite' }, out);
+  }
+  function step1(){
+    const sel = E('select', { id: 'pub-size', 'aria-label': 'Número de personas' });
+    for(let n = 1; n <= cfg.maxSize; n++) sel.append(E('option', { value: String(n), text: n + (n === 1 ? ' persona' : ' personas'), selected: n === S.size }));
+    sel.addEventListener('change', () => { S.size = +sel.value; loadSlots(); });
+    const info = th.info ? E('div', { class: 'pub-info' }, E('h2', { text: th.infoTitle }), E('p', { text: th.info })) : null;
+    wrap.replaceChildren(shell(venue(), steps(),
+      E('div', { class: 'pub-field' }, E('label', { for: 'pub-size', text: 'Personas' }), sel, phoneNote('¿Sois más de ' + cfg.maxSize + '? Llámanos al')),
+      info,
+      calendar(),
+      slotsView()));
+    const keep = wrap.querySelector('#pub-size'); if(keep && document.activeElement === document.body) { /* sin foco forzado */ }
+  }
+
+  /* ----- paso 2: datos ----- */
+  function summary(){
+    return E('div', { class: 'pub-sumbar' },
+      E('span', { class: 'pub-sum', text: S.size + (S.size === 1 ? ' persona' : ' personas') + ' · ' + longDate(S.date) + ' · ' + S.time }),
+      E('button', { type: 'button', class: 'pub-link2', text: 'Cambiar', onclick: () => { S.msg = ''; S.step = 1; render(); } }));
+  }
+  function field(id, label, input){ return E('div', { class: 'pub-field' }, E('label', { for: id, text: label }), input); }
+  function step2(){
+    const msg = msgBox(S.msg);
+    const nameIn = E('input', { type: 'text', id: 'pub-name', autocomplete: 'name', maxlength: 80, value: S.name });
+    const phoneIn = E('input', { type: 'tel', id: 'pub-phone', autocomplete: 'tel', inputmode: 'tel', maxlength: 20, value: S.phone });
+    const mailIn = E('input', { type: 'email', id: 'pub-mail', autocomplete: 'email', inputmode: 'email', maxlength: 120, value: S.mail });
+    nameIn.addEventListener('input', () => { S.name = nameIn.value; });
+    phoneIn.addEventListener('input', () => { S.phone = phoneIn.value; });
+    mailIn.addEventListener('input', () => { S.mail = mailIn.value; });
+    const show = (el, text) => { el.focus(); msg.textContent = text; msg.hidden = false; };
+    const form = E('form', { class: 'pub-form', novalidate: true, onsubmit: ev => {
+      ev.preventDefault();
+      if(!nameIn.value.trim()) return show(nameIn, ERR.nombre);
+      if(!phoneIn.value.trim()) return show(phoneIn, ERR.telefono);
+      if(!mailIn.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mailIn.value.trim())) return show(mailIn, ERR.email);
+      S.msg = ''; S.step = 3; render();
+    } },
+      field('pub-name', 'Nombre', nameIn),
+      E('div', { class: 'pub-row' }, field('pub-phone', 'Teléfono', phoneIn), field('pub-mail', 'Email', mailIn)),
+      msg,
+      E('div', { class: 'pub-actions' }, E('button', { type: 'button', class: 'pub-btn ghost', text: 'Atrás', onclick: () => { S.msg = ''; S.step = 1; render(); } }), E('button', { type: 'submit', class: 'pub-btn', text: 'Siguiente' })));
+    wrap.replaceChildren(shell(venue(), steps(), summary(), form));
+  }
+
+  /* ----- paso 3: comentarios, privacidad y confirmar ----- */
+  function step3(){
+    const msg = msgBox(S.msg);
+    const warnBox = E('div', { class: 'pub-warn', role: 'alert', hidden: !S.warn });
+    const notesIn = E('textarea', { id: 'pub-notes', maxlength: 300, rows: 3, placeholder: 'Alergias, trona, celebración…', value: S.notes });
+    const priv = E('input', { type: 'checkbox', id: 'pub-priv', checked: S.priv });
+    const go = E('button', { type: 'submit', class: 'pub-btn', text: 'Confirmar reserva', disabled: S.busy });
+    notesIn.addEventListener('input', () => { S.notes = notesIn.value; });
+    priv.addEventListener('change', () => { S.priv = priv.checked; });
     function showWarn(ex){
+      S.warn = ex;
       warnBox.replaceChildren(
         E('p', { text: ERR.duplicada_aviso.replace('{hora}', ex.time).replace('{personas}', ex.size + (+ex.size === 1 ? ' persona' : ' personas')) }),
         E('div', { class: 'pub-warn-btns' },
-          E('button', { type: 'button', class: 'pub-btn', text: 'Sí, hacer otra', onclick: () => { warnBox.hidden = true; send(true); } }),
-          E('button', { type: 'button', class: 'pub-btn ghost', text: 'No, dejarlo así', onclick: () => { warnBox.hidden = true; } })));
+          E('button', { type: 'button', class: 'pub-btn', text: 'Sí, hacer otra', onclick: () => { S.warn = null; warnBox.hidden = true; send(true); } }),
+          E('button', { type: 'button', class: 'pub-btn ghost', text: 'No, dejarlo así', onclick: () => { S.warn = null; warnBox.hidden = true; } })));
       warnBox.hidden = false;
     }
     async function send(confirmar){
       if(S.busy) return;
-      S.busy = true; go.disabled = true; go.textContent = 'Reservando…'; showMsg(msg, ''); warnBox.hidden = true;
+      S.busy = true; go.disabled = true; go.textContent = 'Reservando…'; msg.hidden = true; warnBox.hidden = true;
       let r;
-      try { r = await api.reservar({ date: S.date, time: S.time, size: S.size, name: nameIn.value, phone: phoneIn.value, email: mailIn.value, notes: notesIn.value, privacy: true, confirmar: !!confirmar }); }
+      try { r = await api.reservar({ date: S.date, time: S.time, size: S.size, name: S.name, phone: S.phone, email: S.mail, notes: S.notes, privacy: true, confirmar: !!confirmar }); }
       catch(e){ r = { ok: false, error: 'red' }; }
       S.busy = false; go.disabled = false; go.textContent = 'Confirmar reserva';
       if(!r.ok){
         if(r.error === 'duplicada_aviso' && r.existing){ showWarn(r.existing); return; }
-        showMsg(msg, ERR[r.error] || 'No se pudo completar la reserva. Inténtalo de nuevo.');
-        if(['sin_mesa', 'hora', 'antelacion'].includes(r.error)) loadSlots().then(() => showMsg(msg, ERR[r.error]));
-        return;
+        const text = ERR[r.error] || 'No se pudo completar la reserva. Inténtalo de nuevo.';
+        if(['sin_mesa', 'hora', 'antelacion', 'fecha', 'cerrado', 'tamano'].includes(r.error)){ S.msg = text; S.step = 1; loadSlots(); return; }
+        if(['nombre', 'telefono', 'email'].includes(r.error)){ S.msg = text; S.step = 2; render(); return; }
+        msg.textContent = text; msg.hidden = false; return;
       }
-      done(r);
+      S.result = r; S.step = 4; render();
     }
-    function submit(ev){
-      ev.preventDefault();
-      if(S.busy) return;
-      if(!S.time){ showMsg(msg, 'Elige una hora.'); return; }
-      if(!nameIn.value.trim()){ nameIn.focus(); showMsg(msg, ERR.nombre); return; }
-      if(!phoneIn.value.trim()){ phoneIn.focus(); showMsg(msg, ERR.telefono); return; }
-      if(!mailIn.value.trim()){ mailIn.focus(); showMsg(msg, ERR.email); return; }
-      if(!priv.checked){ priv.focus(); showMsg(msg, ERR.privacidad); return; }
+    const form = E('form', { class: 'pub-form', novalidate: true, onsubmit: ev => {
+      ev.preventDefault(); if(S.busy) return;
+      if(!priv.checked){ priv.focus(); msg.textContent = ERR.privacidad; msg.hidden = false; return; }
       send(false);
-    }
-
-    wrap.replaceChildren(
-      head('Elige cuántos sois, el día y la hora. La reserva se confirma al momento.'),
-      E('form', { class: 'pub-form', novalidate: true, onsubmit: submit },
-        E('section', null, E('h2', { text: 'Personas' }), sizeBox, phoneNote('¿Sois más de ' + cfg.maxSize + '? Llámanos al')),
-        E('section', null, E('h2', { text: 'Día' }), dateIn),
-        E('section', null, E('h2', { text: 'Hora' }), slotsBox),
-        dataBox,
-        warnBox,
-        msg));
-    dataBox.append(
-      E('h2', { text: 'Tus datos' }), summary,
-      E('div', { class: 'pub-field' }, E('label', { for: 'pub-name', text: 'Nombre' }), nameIn),
-      E('div', { class: 'pub-row' },
-        E('div', { class: 'pub-field' }, E('label', { for: 'pub-phone', text: 'Teléfono' }), phoneIn),
-        E('div', { class: 'pub-field' }, E('label', { for: 'pub-mail', text: 'Email' }), mailIn)),
-      E('div', { class: 'pub-field' }, E('label', { for: 'pub-notes', text: 'Comentarios (opcional)' }), notesIn),
+    } },
+      field('pub-notes', 'Comentarios (opcional)', notesIn),
       E('label', { class: 'pub-check', for: 'pub-priv' }, priv, E('span', { text: 'Acepto que ' + ((cfg && cfg.name) || 'el local') + ' guarde mis datos para gestionar esta reserva y contactarme si hace falta. Puedo pedir que los borren cuando quiera.' })),
-      go);
-    drawSizes(); loadSlots();
+      warnBox, msg,
+      E('div', { class: 'pub-actions' }, E('button', { type: 'button', class: 'pub-btn ghost', text: 'Atrás', onclick: () => { S.msg = ''; S.step = 2; render(); } }), go));
+    wrap.replaceChildren(shell(venue(), steps(), summary(), E('p', { class: 'pub-sum2', text: S.name + ' · ' + S.phone + ' · ' + S.mail }), form));
+    if(S.warn) showWarn(S.warn);
   }
 
-  /* ----- reserva hecha ----- */
-  function done(r){
-    const link = opts.cancelUrl ? opts.cancelUrl(r.token) : '';
+  /* ----- paso 4: reserva hecha ----- */
+  function step4(){
+    const r = S.result, link = opts.cancelUrl ? opts.cancelUrl(r.token) : '';
     const copyBtn = E('button', { type: 'button', class: 'pub-btn ghost', text: 'Copiar enlace' });
+    const linkBox = E('input', { type: 'text', readonly: true, class: 'pub-link', id: 'pub-link', value: link, 'aria-label': 'Enlace para cancelar', onfocus: e => e.target.select() });
     copyBtn.addEventListener('click', () => {
       const ok = () => { copyBtn.textContent = 'Copiado'; };
       try { navigator.clipboard.writeText(link).then(ok, () => linkBox.select()); } catch(e){ linkBox.select(); }
     });
-    const linkBox = E('input', { type: 'text', readonly: true, class: 'pub-link', value: link, 'aria-label': 'Enlace para cancelar', onfocus: e => e.target.select() });
-    wrap.replaceChildren(
-      E('header', { class: 'pub-head' }, E('p', { class: 'pub-ok', text: 'Reserva confirmada' }), E('h1', { text: r.name + ', te esperamos' })),
+    wrap.replaceChildren(shell(venue(), steps(),
+      E('div', { class: 'pub-head' }, E('p', { class: 'pub-ok', text: 'Reserva confirmada' }), E('h2', { class: 'pub-big', text: r.name + ', te esperamos' })),
       E('dl', { class: 'pub-card' },
         E('div', null, E('dt', { text: 'Día' }), E('dd', { text: longDate(r.date) })),
         E('div', null, E('dt', { text: 'Hora' }), E('dd', { text: r.time })),
@@ -259,38 +553,39 @@ function mountBooking(root, api, opts){
       E('p', { class: 'pub-note', text: 'Guarda este enlace. Es la única forma de cancelar la reserva por tu cuenta.' }),
       E('div', { class: 'pub-linkrow' }, linkBox, copyBtn),
       phoneNote('¿Necesitas cambiarla? Llámanos al'),
-      E('button', { type: 'button', class: 'pub-btn ghost', text: 'Hacer otra reserva', onclick: () => { S.time = null; form(); } }));
+      E('button', { type: 'button', class: 'pub-btn ghost', text: 'Hacer otra reserva', onclick: () => { S.time = null; S.step = 1; S.priv = false; S.notes = ''; loadSlots(); } })));
   }
 
   /* ----- cancelar con enlace ----- */
   async function cancelView(token){
     let r;
     try { r = await api.ver(token); } catch(e){ r = { ok: false, error: 'red' }; }
-    if(!r.ok){ wrap.replaceChildren(head(), E('p', { class: 'pub-msg', text: ERR[r.error] || 'No se pudo cargar la reserva.' }), phoneNote('Teléfono:')); return; }
-    const msg = E('p', { class: 'pub-msg', role: 'alert', hidden: true });
+    if(!r.ok){ wrap.replaceChildren(shell(venue(), E('p', { class: 'pub-msg', text: ERR[r.error] || 'No se pudo cargar la reserva.' }), phoneNote('Teléfono:'))); return; }
+    const msg = msgBox('');
     const btn = E('button', { type: 'button', class: 'pub-btn danger', text: 'Cancelar mi reserva' });
     let sure = false;
     btn.addEventListener('click', async () => {
       if(!sure){ sure = true; btn.textContent = '¿Seguro? Pulsa otra vez'; return; }
       btn.disabled = true;
       let c; try { c = await api.cancelar(token); } catch(e){ c = { ok: false, error: 'red' }; }
-      if(c.error === 'plazo'){ btn.disabled = false; sure = false; btn.textContent = 'Cancelar mi reserva'; showMsg(msg, plazoMsg(c.cancelMinH)); return; }
-      if(c.ok){ wrap.replaceChildren(head(), E('p', { class: 'pub-ok', text: 'Reserva cancelada' }), E('p', { class: 'pub-note', text: 'Gracias por avisar. Te esperamos otro día.' }), opts.homeUrl ? E('a', { class: 'pub-btn ghost', href: opts.homeUrl, text: 'Hacer una nueva reserva' }) : null); return; }
+      if(c.error === 'plazo'){ btn.disabled = false; sure = false; btn.textContent = 'Cancelar mi reserva'; msg.textContent = plazoMsg(c.cancelMinH); msg.hidden = false; return; }
+      if(c.ok){ wrap.replaceChildren(shell(venue(), E('p', { class: 'pub-ok', text: 'Reserva cancelada' }), E('p', { class: 'pub-note', text: 'Gracias por avisar. Te esperamos otro día.' }), opts.homeUrl ? E('a', { class: 'pub-btn ghost', href: opts.homeUrl, text: 'Hacer una nueva reserva' }) : null)); return; }
       btn.disabled = false; sure = false; btn.textContent = 'Cancelar mi reserva';
-      showMsg(msg, ERR[c.error] || 'No se pudo cancelar. Llámanos.');
+      msg.textContent = ERR[c.error] || 'No se pudo cancelar. Llámanos.'; msg.hidden = false;
     });
     const started = new Date(r.date + 'T' + r.time + ':00') <= new Date();
     const st = r.status === 'cancelada' ? 'Esta reserva ya está cancelada.' : r.status !== 'confirmada' ? 'Esta reserva ya no está activa.' : started ? 'Esta reserva ya ha pasado.' : !r.canCancel ? plazoMsg(r.cancelMinH || 0) : '';
-    wrap.replaceChildren(head(),
+    wrap.replaceChildren(shell(venue(),
       E('dl', { class: 'pub-card' },
         E('div', null, E('dt', { text: 'A nombre de' }), E('dd', { text: r.name })),
         E('div', null, E('dt', { text: 'Día' }), E('dd', { text: longDate(r.date) })),
         E('div', null, E('dt', { text: 'Hora' }), E('dd', { text: r.time })),
         E('div', null, E('dt', { text: 'Personas' }), E('dd', { text: String(r.size) }))),
       st ? E('p', { class: 'pub-msg', text: st }) : E('div', { class: 'pub-form' }, btn, msg),
-      phoneNote('¿Dudas? Llámanos al'));
+      phoneNote('¿Dudas? Llámanos al')));
   }
-  start();
+  start().then(() => { if(cfg && cfg.enabled && !opts.token) loadSlots(); });
+  return { applyTheme(t){ th = thNorm(t); paint(); render(); } };
 }
 
 const ERRMAP = { red: 'red' };
@@ -312,7 +607,7 @@ function init(){
   };
   const q = new URLSearchParams(location.search), token = (q.get('c') || '').replace(/[^A-Za-z0-9]/g, '');
   const base = location.origin + location.pathname;
-  mountBooking(root, api, { token: token || null, cancelUrl: t => base + '?c=' + t, homeUrl: base });
+  mountBooking(root, api, { token: token || null, cancelUrl: t => base + '?c=' + t, homeUrl: base, fullPage: true });
 }
 init();
 })();
