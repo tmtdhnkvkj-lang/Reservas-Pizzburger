@@ -203,6 +203,9 @@ body.noscroll{overflow:hidden}
 .pub-btn.danger{background:var(--occ-line);border-color:var(--occ-line);color:#fff}
 .pub-btn:disabled{opacity:.6;cursor:default}
 .pub-msg{margin:0;padding:10px 12px;border-radius:10px;background:var(--occ);border:1px solid var(--occ-line);color:var(--fg);font-size:15px}
+.pub-warn{padding:14px;border-radius:12px;border:1px solid var(--res-line);background:var(--res);color:var(--fg);display:grid;gap:10px}
+.pub-warn p{margin:0}
+.pub-warn-btns{display:flex;flex-wrap:wrap;gap:8px}
 .pub-card{margin:0;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);display:grid;gap:10px}
 .pub-card div{display:flex;justify-content:space-between;gap:12px}
 .pub-card dt{color:var(--muted)}
@@ -404,7 +407,7 @@ function normCfg(c){
   out.decor = Array.isArray(x.decor) ? x.decor : [];
   out.shifts = Array.isArray(x.shifts) && x.shifts.length ? x.shifts : blankCfg().shifts;
   out.durationRules = Array.isArray(x.durationRules) ? x.durationRules : [];
-  out.online = Object.assign({ enabled: false, name: '', phone: '', maxSize: 8, minAdvanceH: 2, maxDaysAhead: 60, closedDates: [] }, x.online || {});
+  out.online = Object.assign({ enabled: false, name: '', phone: '', maxSize: 8, minAdvanceH: 2, maxDaysAhead: 60, closedDates: [], dupMode: 'block', maxPending: 3, cancelMinH: 0 }, x.online || {});
   return out;
 }
 
@@ -1152,6 +1155,10 @@ function openSettings(){
   const onMax = h('input', { type: 'number', id: 's-omax', min: 1, max: 30, value: on.maxSize });
   const onAdv = h('input', { type: 'number', id: 's-oadv', min: 0, max: 72, step: 0.5, value: on.minAdvanceH });
   const onDays = h('input', { type: 'number', id: 's-odays', min: 1, max: 365, value: on.maxDaysAhead });
+  const onDup = h('select', { id: 's-odup' }, [['block', 'No dejar (avisa de que ya tiene reserva)'], ['warn', 'Dejar, pero avisando antes'], ['allow', 'Dejar sin avisar']].map(o => h('option', { value: o[0], text: o[1] })));
+  onDup.value = on.dupMode || 'block';
+  const onPend = h('input', { type: 'number', id: 's-opend', min: 0, max: 50, value: on.maxPending });
+  const onCancel = h('input', { type: 'number', id: 's-ocancel', min: 0, max: 72, step: 0.5, value: on.cancelMinH });
   const onClosed = h('input', { type: 'text', id: 's-oclosed', value: (on.closedDates || []).join(', '), placeholder: 'AAAA-MM-DD, AAAA-MM-DD' });
   const body = [
     h('div', { class: 'row' },
@@ -1172,6 +1179,10 @@ function openSettings(){
       h('div', { class: 'row' },
         h('div', { class: 'field' }, h('label', { for: 's-odays', text: 'Hasta cuántos días vista' }), onDays),
         h('div', { class: 'field' }, h('label', { for: 's-oclosed', text: 'Días cerrados online' }), onClosed)),
+      h('div', { class: 'field' }, h('label', { for: 's-odup', text: 'Si el cliente repite reserva el mismo día y turno' }), onDup),
+      h('div', { class: 'row' },
+        h('div', { class: 'field' }, h('label', { for: 's-opend', text: 'Máx. reservas pendientes por teléfono (0 = sin límite)' }), onPend),
+        h('div', { class: 'field' }, h('label', { for: 's-ocancel', text: 'Cancelar online hasta (horas antes, 0 = hasta la hora)' }), onCancel)),
       h('p', { class: 'hint', text: 'Online solo se usan mesas con «Reservable online» marcado y sus plazas normales (no las sillas extra). Los grupos que necesiten juntar mesas se apuntan a mano.' })),
     h('div', { class: 'row' },
       h('div', { class: 'field' }, h('label', { for: 's-w', text: 'Ancho del plano' }), wIn),
@@ -1186,7 +1197,7 @@ function openSettings(){
     if(cfg.durationRules.some(r => !(r.from >= 1) || !(r.minutes >= 15))){ toast('Revisa las reglas de duración', true); return; }
     const closed = onClosed.value.split(/[\s,;]+/).filter(Boolean);
     if(closed.some(d => !/^\d{4}-\d{2}-\d{2}$/.test(d))){ toast('Días cerrados: usa el formato AAAA-MM-DD separados por comas', true); return; }
-    cfg.online = { enabled: onChk.checked, name: onName.value.trim(), phone: onPhone.value.trim(), maxSize: Math.max(1, Math.min(30, +onMax.value || 8)), minAdvanceH: Math.max(0, +onAdv.value || 0), maxDaysAhead: Math.max(1, +onDays.value || 60), closedDates: closed };
+    cfg.online = { enabled: onChk.checked, name: onName.value.trim(), phone: onPhone.value.trim(), maxSize: Math.max(1, Math.min(30, +onMax.value || 8)), minAdvanceH: Math.max(0, +onAdv.value || 0), maxDaysAhead: Math.max(1, +onDays.value || 60), closedDates: closed, dupMode: onDup.value, maxPending: Math.max(0, Math.min(50, parseInt(onPend.value, 10) || 0)), cancelMinH: Math.max(0, +onCancel.value || 0) };
     cfg.durationBase = base; cfg.slotStep = +stepSel.value;
     cfg.plan = { w: Math.max(400, +wIn.value || 1040), h: Math.max(300, +hIn.value || 850) };
     cfg.shifts.forEach(s => { s.name = s.name.trim(); });
@@ -1465,6 +1476,7 @@ function mountBooking(root, api, opts){
     estado: 'Esa reserva ya no está activa.',
     pasada: 'Esa reserva ya ha pasado.'
   };
+  const plazoMsg = h => 'Solo se puede cancelar online hasta ' + h + (+h === 1 ? ' hora' : ' horas') + ' antes. Llámanos y lo gestionamos.';
   let cfg = null;
   const S = { size: 2, date: ymd(new Date()), time: null, shifts: null, busy: false, msg: '' };
   const wrap = E('div', { class: 'pub' });
@@ -1494,6 +1506,7 @@ function mountBooking(root, api, opts){
     const slotsBox = E('div', { class: 'pub-slots', 'aria-live': 'polite' });
     const dataBox = E('div', { class: 'pub-data', hidden: true });
     const msg = E('p', { class: 'pub-msg', role: 'alert', hidden: true });
+    const warnBox = E('div', { class: 'pub-warn', role: 'alert', hidden: true });
     const nameIn = E('input', { type: 'text', id: 'pub-name', autocomplete: 'name', maxlength: 80 });
     const phoneIn = E('input', { type: 'tel', id: 'pub-phone', autocomplete: 'tel', inputmode: 'tel', maxlength: 20 });
     const mailIn = E('input', { type: 'email', id: 'pub-mail', autocomplete: 'email', inputmode: 'email', maxlength: 120 });
@@ -1533,7 +1546,30 @@ function mountBooking(root, api, opts){
     }
     dateIn.addEventListener('change', () => { S.date = dateIn.value; loadSlots(); });
 
-    async function submit(ev){
+    function showWarn(ex){
+      warnBox.replaceChildren(
+        E('p', { text: 'Ya tienes una reserva ese día a las ' + ex.time + ' (' + ex.size + (+ex.size === 1 ? ' persona' : ' personas') + '). ¿Quieres hacer otra además?' }),
+        E('div', { class: 'pub-warn-btns' },
+          E('button', { type: 'button', class: 'pub-btn', text: 'Sí, hacer otra', onclick: () => { warnBox.hidden = true; send(true); } }),
+          E('button', { type: 'button', class: 'pub-btn ghost', text: 'No, dejarlo así', onclick: () => { warnBox.hidden = true; } })));
+      warnBox.hidden = false;
+    }
+    async function send(confirmar){
+      if(S.busy) return;
+      S.busy = true; go.disabled = true; go.textContent = 'Reservando…'; showMsg(msg, ''); warnBox.hidden = true;
+      let r;
+      try { r = await api.reservar({ date: S.date, time: S.time, size: S.size, name: nameIn.value, phone: phoneIn.value, email: mailIn.value, notes: notesIn.value, privacy: true, confirmar: !!confirmar }); }
+      catch(e){ r = { ok: false, error: 'red' }; }
+      S.busy = false; go.disabled = false; go.textContent = 'Confirmar reserva';
+      if(!r.ok){
+        if(r.error === 'duplicada_aviso' && r.existing){ showWarn(r.existing); return; }
+        showMsg(msg, ERR[r.error] || 'No se pudo completar la reserva. Inténtalo de nuevo.');
+        if(['sin_mesa', 'hora', 'antelacion'].includes(r.error)) loadSlots().then(() => showMsg(msg, ERR[r.error]));
+        return;
+      }
+      done(r);
+    }
+    function submit(ev){
       ev.preventDefault();
       if(S.busy) return;
       if(!S.time){ showMsg(msg, 'Elige una hora.'); return; }
@@ -1541,17 +1577,7 @@ function mountBooking(root, api, opts){
       if(!phoneIn.value.trim()){ phoneIn.focus(); showMsg(msg, ERR.telefono); return; }
       if(!mailIn.value.trim()){ mailIn.focus(); showMsg(msg, ERR.email); return; }
       if(!priv.checked){ priv.focus(); showMsg(msg, ERR.privacidad); return; }
-      S.busy = true; go.disabled = true; go.textContent = 'Reservando…'; showMsg(msg, '');
-      let r;
-      try { r = await api.reservar({ date: S.date, time: S.time, size: S.size, name: nameIn.value, phone: phoneIn.value, email: mailIn.value, notes: notesIn.value, privacy: true }); }
-      catch(e){ r = { ok: false, error: 'red' }; }
-      S.busy = false; go.disabled = false; go.textContent = 'Confirmar reserva';
-      if(!r.ok){
-        showMsg(msg, ERR[r.error] || 'No se pudo completar la reserva. Inténtalo de nuevo.');
-        if(['sin_mesa', 'hora', 'antelacion'].includes(r.error)) loadSlots().then(() => showMsg(msg, ERR[r.error]));
-        return;
-      }
-      done(r);
+      send(false);
     }
 
     wrap.replaceChildren(
@@ -1561,6 +1587,7 @@ function mountBooking(root, api, opts){
         E('section', null, E('h2', { text: 'Día' }), dateIn),
         E('section', null, E('h2', { text: 'Hora' }), slotsBox),
         dataBox,
+        warnBox,
         msg));
     dataBox.append(
       E('h2', { text: 'Tus datos' }), summary,
@@ -1607,11 +1634,13 @@ function mountBooking(root, api, opts){
       if(!sure){ sure = true; btn.textContent = '¿Seguro? Pulsa otra vez'; return; }
       btn.disabled = true;
       let c; try { c = await api.cancelar(token); } catch(e){ c = { ok: false, error: 'red' }; }
+      if(c.error === 'plazo'){ btn.disabled = false; sure = false; btn.textContent = 'Cancelar mi reserva'; showMsg(msg, plazoMsg(c.cancelMinH)); return; }
       if(c.ok){ wrap.replaceChildren(head(), E('p', { class: 'pub-ok', text: 'Reserva cancelada' }), E('p', { class: 'pub-note', text: 'Gracias por avisar. Te esperamos otro día.' }), opts.homeUrl ? E('a', { class: 'pub-btn ghost', href: opts.homeUrl, text: 'Hacer una nueva reserva' }) : null); return; }
       btn.disabled = false; sure = false; btn.textContent = 'Cancelar mi reserva';
       showMsg(msg, ERR[c.error] || 'No se pudo cancelar. Llámanos.');
     });
-    const st = r.status === 'cancelada' ? 'Esta reserva ya está cancelada.' : r.status !== 'confirmada' ? 'Esta reserva ya no está activa.' : !r.canCancel ? 'Esta reserva ya ha pasado.' : '';
+    const started = new Date(r.date + 'T' + r.time + ':00') <= new Date();
+    const st = r.status === 'cancelada' ? 'Esta reserva ya está cancelada.' : r.status !== 'confirmada' ? 'Esta reserva ya no está activa.' : started ? 'Esta reserva ya ha pasado.' : !r.canCancel ? plazoMsg(r.cancelMinH || 0) : '';
     wrap.replaceChildren(head(),
       E('dl', { class: 'pub-card' },
         E('div', null, E('dt', { text: 'A nombre de' }), E('dd', { text: r.name })),
@@ -1666,9 +1695,13 @@ const pubLocal = (() => {
       if(!okSlot(a.date, a.time)) return { ok: false, error: 'hora' };
       if(early(a.date, a.time)) return { ok: false, error: 'antelacion' };
       const rows = await store.getDay(a.date), sid = shiftFor(a.time).id;
-      if(rows.some(r => r.status === 'confirmada' && r.shiftId === sid && (r.phone === ph || String(r.email).toLowerCase() === em))) return { ok: false, error: 'duplicada' };
+      const o = state.cfg.online, dup = rows.filter(r => r.status === 'confirmada' && r.shiftId === sid && (r.phone === ph || String(r.email).toLowerCase() === em)).sort((x, y) => x.time.localeCompare(y.time))[0];
+      if(dup && o.dupMode !== 'allow'){
+        if(o.dupMode === 'warn'){ if(!a.confirmar) return { ok: false, error: 'duplicada_aviso', existing: { time: dup.time, size: dup.size } }; }
+        else return { ok: false, error: 'duplicada' };
+      }
       const all = await store.getAllRes();
-      if(all.filter(r => r.status === 'confirmada' && r.date >= todayStr() && r.phone === ph).length >= 3) return { ok: false, error: 'limite' };
+      if(o.maxPending > 0 && all.filter(r => r.status === 'confirmada' && r.date >= todayStr() && r.phone === ph).length >= o.maxPending) return { ok: false, error: 'limite' };
       const t = mesaLibre(rows, toMin(a.time), size); if(!t) return { ok: false, error: 'sin_mesa' };
       const now = new Date().toISOString();
       let c = state.customers.find(x => x.phone === ph) || state.customers.find(x => x.email === em), cid;
@@ -1682,12 +1715,15 @@ const pubLocal = (() => {
     },
     async ver(token){
       const r = await find(token); if(!r) return { ok: false, error: 'no_existe' };
-      return { ok: true, date: r.date, time: r.time, size: r.size, name: r.name, status: r.status, canCancel: r.status === 'confirmada' && new Date(r.date + 'T' + r.time + ':00') > new Date() };
+      const lim = +state.cfg.online.cancelMinH || 0;
+      return { ok: true, date: r.date, time: r.time, size: r.size, name: r.name, status: r.status, cancelMinH: lim, canCancel: r.status === 'confirmada' && new Date(new Date(r.date + 'T' + r.time + ':00').getTime() - lim * 3600000) > new Date() };
     },
     async cancelar(token){
       const r = await find(token); if(!r) return { ok: false, error: 'no_existe' };
       if(r.status !== 'confirmada') return { ok: false, error: 'estado' };
       if(new Date(r.date + 'T' + r.time + ':00') <= new Date()) return { ok: false, error: 'pasada' };
+      const lim = +state.cfg.online.cancelMinH || 0;
+      if(new Date(new Date(r.date + 'T' + r.time + ':00').getTime() - lim * 3600000) <= new Date()) return { ok: false, error: 'plazo', cancelMinH: lim };
       const id = r.id, rest = Object.assign({}, r); delete rest.id; rest.status = 'cancelada'; rest.cancelledBy = 'cliente'; rest.updatedAt = new Date().toISOString();
       await store.saveRes(id, rest); statsCache.clear();
       return { ok: true };
