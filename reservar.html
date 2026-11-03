@@ -111,9 +111,11 @@ function mountBooking(root, api, opts){
     sin_mesa: 'Justo se ha ocupado esa hora. Elige otra.',
     no_existe: 'No encontramos esa reserva. Revisa el enlace.',
     estado: 'Esa reserva ya no está activa.',
-    pasada: 'Esa reserva ya ha pasado.'
+    pasada: 'Esa reserva ya ha pasado.',
+    duplicada_aviso: 'Ya tienes una reserva ese día a las {hora} ({personas}). ¿Quieres hacer otra además?',
+    plazo: 'Solo se puede cancelar online hasta {horas} antes. Llámanos y lo gestionamos.'
   };
-  const plazoMsg = h => 'Solo se puede cancelar online hasta ' + h + (+h === 1 ? ' hora' : ' horas') + ' antes. Llámanos y lo gestionamos.';
+  const plazoMsg = h => ERR.plazo.replace('{horas}', h + (+h === 1 ? ' hora' : ' horas'));
   let cfg = null;
   const S = { size: 2, date: ymd(new Date()), time: null, shifts: null, busy: false, msg: '' };
   const wrap = E('div', { class: 'pub' });
@@ -130,6 +132,7 @@ function mountBooking(root, api, opts){
   async function start(){
     wrap.replaceChildren(E('p', { class: 'pub-note', text: 'Cargando…' }));
     try { cfg = await api.config(); } catch(e){ wrap.replaceChildren(E('p', { class: 'pub-msg', text: 'No se pudo conectar. Revisa tu conexión e inténtalo de nuevo.' })); return; }
+    if(cfg && cfg.msgs) Object.keys(cfg.msgs).forEach(k => { const v = String(cfg.msgs[k] || '').trim(); if(v && k in ERR) ERR[k] = v; });
     if(opts.token) return cancelView(opts.token);
     if(!cfg || !cfg.enabled){ wrap.replaceChildren(head(), E('p', { class: 'pub-msg', text: ERR.desactivado }), phoneNote('Teléfono:')); return; }
     S.size = Math.min(2, cfg.maxSize);
@@ -185,7 +188,7 @@ function mountBooking(root, api, opts){
 
     function showWarn(ex){
       warnBox.replaceChildren(
-        E('p', { text: 'Ya tienes una reserva ese día a las ' + ex.time + ' (' + ex.size + (+ex.size === 1 ? ' persona' : ' personas') + '). ¿Quieres hacer otra además?' }),
+        E('p', { text: ERR.duplicada_aviso.replace('{hora}', ex.time).replace('{personas}', ex.size + (+ex.size === 1 ? ' persona' : ' personas')) }),
         E('div', { class: 'pub-warn-btns' },
           E('button', { type: 'button', class: 'pub-btn', text: 'Sí, hacer otra', onclick: () => { warnBox.hidden = true; send(true); } }),
           E('button', { type: 'button', class: 'pub-btn ghost', text: 'No, dejarlo así', onclick: () => { warnBox.hidden = true; } })));
