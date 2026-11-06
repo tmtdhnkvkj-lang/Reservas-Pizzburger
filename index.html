@@ -152,6 +152,22 @@ textarea{resize:vertical;min-height:68px}
 .tpanel{border:1px solid var(--accent);background:var(--accent-soft);border-radius:12px;padding:12px;display:grid;gap:8px}
 .tpanel h3{font-size:18px}
 .tpanel p{margin:0;color:var(--muted);font-size:13px}
+.thead{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tclose{display:none}
+.tpanel .tres{display:none}
+@media (max-width:900px){
+  #sTable:not(:empty){position:fixed;left:max(8px,env(safe-area-inset-left,0px));right:max(8px,env(safe-area-inset-right,0px));bottom:calc(68px + env(safe-area-inset-bottom,0px));z-index:30;max-height:52vh;overflow:auto;border-radius:14px;box-shadow:var(--shadow-lg)}
+  #sTable .tpanel{background:var(--surface);padding:10px 12px;gap:6px}
+  #sTable .tpanel h3{font-size:16px}
+  .tclose{display:inline-flex;min-height:32px;width:36px;padding:0;justify-content:center;flex:none}
+  .tpanel.has-res .tstat{display:none}
+  .tpanel .tres{display:grid;gap:8px;max-height:none}
+  .tpanel .tools .btn.ghost{display:none}
+  .tpanel.has-res .tools .btn.primary{display:none}
+  .tpanel .tools{gap:6px}
+  body.has-sheet .content{padding-bottom:320px}
+  #plan{max-height:44vh}
+}
 
 /* ---- reservas ---- */
 .list{list-style:none;margin:0;padding:0;display:grid;gap:8px;grid-auto-rows:max-content}
@@ -862,7 +878,7 @@ const mainPlan = makePlan($('#plan'), { get: () => ({
     }
     return { cls: 't-free', l2: seatsLabel(t), aria: 'Mesa ' + t.label + ' sin reservas en el turno, ' + t.seats + ' plazas' };
   },
-  onTable: t => { state.selTable = state.selTable === t.id ? null : t.id; renderLive(); },
+  onTable: t => { state.selTable = state.selTable === t.id ? null : t.id; renderLive(); if(state.selTable && window.matchMedia('(max-width:900px)').matches) requestAnimationFrame(() => $('#plan').scrollIntoView({ block: 'start', behavior: 'smooth' })); },
   onBg: () => { if(state.selTable){ state.selTable = null; renderLive(); } },
   onSelect: s => { state.sel = s; state.pendingDelete = false; mainPlan.render(); renderEdit(); },
   onCommit: () => { persistCfg(); }
@@ -1435,14 +1451,18 @@ function renderStats(){
 }
 function renderTablePanel(){
   const box = $('#sTable'); box.replaceChildren();
+  document.body.classList.toggle('has-sheet', !!state.selTable);
   const t = state.cfg.tables.find(x => x.id === state.selTable);
-  if(!t){ state.selTable = null; return; }
+  if(!t){ state.selTable = null; document.body.classList.remove('has-sheet'); return; }
   const rs = tableShiftRes(t.id);
   const status = rs.length ? 'Reservas en este turno: ' + rs.map(r => r.time + ' ' + r.name + (r.status === 'sentada' ? ' (sentado)' : '')).join(' · ')
     : 'Sin reservas en este turno.';
-  box.append(h('div', { class: 'tpanel' },
-    h('h3', { text: 'Mesa ' + t.label + ' · ' + t.seats + ' plazas' + (maxSeats(t) > t.seats ? ' (hasta ' + maxSeats(t) + ')' : '') }),
-    h('p', { text: status }),
+  box.append(h('div', { class: 'tpanel' + (rs.length ? ' has-res' : '') },
+    h('div', { class: 'thead' },
+      h('h3', { text: 'Mesa ' + t.label + ' · ' + t.seats + ' plazas' + (maxSeats(t) > t.seats ? ' (hasta ' + maxSeats(t) + ')' : '') }),
+      h('button', { class: 'btn sm ghost tclose', 'aria-label': 'Cerrar la mesa', text: '✕', onclick: () => { state.selTable = null; renderLive(); } })),
+    h('p', { class: 'tstat', text: status }),
+    rs.length ? h('ul', { class: 'list tres' }, rs.map(resItem)) : null,
     h('div', { class: 'tools' },
       h('button', { class: 'btn sm primary', text: 'Reservar esta mesa', onclick: () => openResModal({ time: state.viewTime, tables: [t.id], size: Math.min(t.seats, 4) }) }),
       h('button', { class: 'btn sm', text: 'Sentar sin reserva', onclick: () => openResModal({ time: state.viewTime, tables: [t.id], size: t.seats, name: 'Sin reserva', status: 'sentada', walkin: true }) }),
