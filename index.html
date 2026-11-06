@@ -3,77 +3,117 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Plano de reservas</title>
+<title>Reservas Pizzburger</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
 <style>
-/* Composición: cabecera con fecha y modo, pestañas de turno, plano de sala a la izquierda y lista del turno a la derecha. */
+/* Composición: menú lateral oscuro con las secciones, cabecera con título y fecha, turnos como pestañas, plano a la izquierda y lista del turno a la derecha. En móvil el menú pasa a barra inferior. */
 :root{
-  --bg:#EDF0F4; --surface:#FFFFFF; --surface-2:#F4F6F9; --fg:#18212F; --muted:#586376; --line:#D3D9E2;
-  --accent:#2A4A99; --accent-fg:#FFFFFF; --accent-soft:#E2E8F7;
-  --floor:#DCE2E9; --floor-grid:#C9D1DB; --wall:#B38746; --door:#8A5A2B; --plant:#3E8F5A; --chair:#98A3B4;
+  --bg:#F2F3F7; --surface:#FFFFFF; --surface-2:#F6F7FA; --fg:#161A23; --muted:#5B6476; --line:#E3E6EC; --line-2:#CBD0DB;
+  --accent:#3446C9; --accent-fg:#FFFFFF; --accent-soft:#E8EBFB;
+  --nav-bg:#13161E; --nav-fg:#D3D8E3; --nav-muted:#8089A0; --nav-hover:#1D2230; --nav-on:#2A3150; --nav-on-fg:#FFFFFF; --nav-line:#232837;
+  --floor:#E8EBF1; --floor-grid:#D8DCE5; --wall:#B38746; --door:#8A5A2B; --plant:#3E8F5A; --chair:#A3ACBC;
   --free:#E3F2E8; --free-line:#4B9867; --res:#FFE8B5; --res-line:#C48610; --occ:#F7CBC2; --occ-line:#C1432C;
   --danger:#B3361F; --danger-soft:#FBE4DF; --ok:#2C7A4B; --warn-soft:#FFF1CF;
+  --shadow:0 1px 2px rgba(19,22,30,.05),0 6px 18px rgba(19,22,30,.05);
+  --shadow-lg:0 24px 70px rgba(10,12,20,.30);
   --ff-display:'Bricolage Grotesque','Avenir Next','Segoe UI',system-ui,sans-serif;
   --ff-body:'Figtree','Segoe UI',system-ui,-apple-system,sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0F141C; --surface:#171E29; --surface-2:#1D2633; --fg:#E6EAF1; --muted:#9AA5B7; --line:#2C3747;
-    --accent:#8CA9F2; --accent-fg:#0E1420; --accent-soft:#1F2D4D;
-    --floor:#212A37; --floor-grid:#2A3545; --wall:#9A7440; --door:#B07E45; --plant:#4FA672; --chair:#5B677B;
+    --bg:#0D0F15; --surface:#161A23; --surface-2:#1B2030; --fg:#E8EBF2; --muted:#97A0B3; --line:#262C3B; --line-2:#363E52;
+    --accent:#8D9BFF; --accent-fg:#0C1030; --accent-soft:#202647;
+    --nav-bg:#090B10; --nav-fg:#C9CEDA; --nav-muted:#7A8398; --nav-hover:#151926; --nav-on:#232A47; --nav-on-fg:#FFFFFF; --nav-line:#1A1F2C;
+    --floor:#1C2230; --floor-grid:#262E40; --wall:#9A7440; --door:#B07E45; --plant:#4FA672; --chair:#5B677B;
     --free:#1C3326; --free-line:#5FB27E; --res:#3A2F12; --res-line:#E0A83A; --occ:#44211B; --occ-line:#E5755E;
     --danger:#F08A75; --danger-soft:#43211B; --ok:#6CC28C; --warn-soft:#3A2F12;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25);
+    --shadow-lg:0 24px 70px rgba(0,0,0,.6);
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0F141C; --surface:#171E29; --surface-2:#1D2633; --fg:#E6EAF1; --muted:#9AA5B7; --line:#2C3747;
-  --accent:#8CA9F2; --accent-fg:#0E1420; --accent-soft:#1F2D4D;
-  --floor:#212A37; --floor-grid:#2A3545; --wall:#9A7440; --door:#B07E45; --plant:#4FA672; --chair:#5B677B;
+  --bg:#0D0F15; --surface:#161A23; --surface-2:#1B2030; --fg:#E8EBF2; --muted:#97A0B3; --line:#262C3B; --line-2:#363E52;
+  --accent:#8D9BFF; --accent-fg:#0C1030; --accent-soft:#202647;
+  --nav-bg:#090B10; --nav-fg:#C9CEDA; --nav-muted:#7A8398; --nav-hover:#151926; --nav-on:#232A47; --nav-on-fg:#FFFFFF; --nav-line:#1A1F2C;
+  --floor:#1C2230; --floor-grid:#262E40; --wall:#9A7440; --door:#B07E45; --plant:#4FA672; --chair:#5B677B;
   --free:#1C3326; --free-line:#5FB27E; --res:#3A2F12; --res-line:#E0A83A; --occ:#44211B; --occ-line:#E5755E;
   --danger:#F08A75; --danger-soft:#43211B; --ok:#6CC28C; --warn-soft:#3A2F12;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25);
+  --shadow-lg:0 24px 70px rgba(0,0,0,.6);
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--fg);font-family:var(--ff-body);font-size:15px;line-height:1.4;
-  padding-block:16px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--ff-body);font-size:15px;line-height:1.4}
 button,input,select,textarea{font:inherit;color:inherit}
 h1,h2,h3{font-family:var(--ff-display);margin:0;letter-spacing:-.01em}
-.app{max-width:1440px;margin:0 auto;display:grid;gap:14px}
-.top{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between}
-.brand h1{font-size:28px;line-height:1.1}
-.brand p{margin:2px 0 0;color:var(--muted)}
-.group{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 13px;cursor:pointer;font-weight:600;min-height:38px;line-height:1.1}
-.btn:hover{border-color:var(--muted)}
-.btn.primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
-.btn.primary:hover{filter:brightness(1.08)}
-.btn.danger{color:var(--danger);border-color:var(--danger)}
-.btn.sm{padding:5px 9px;min-height:30px;font-size:13px}
-.btn.ghost{background:transparent}
-.btn[disabled]{opacity:.5;cursor:not-allowed}
-.btn.icon{width:38px;padding:0;font-size:20px}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-input[type=text],input[type=tel],input[type=number],input[type=date],input[type=time],select,textarea{
-  width:100%;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-height:38px}
-textarea{resize:vertical;min-height:64px}
+
+/* ---- estructura: menú + contenido ---- */
+.shell{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:100vh}
+.nav{position:sticky;top:0;height:100vh;background:var(--nav-bg);color:var(--nav-fg);display:flex;flex-direction:column;gap:22px;padding:20px 12px 16px;z-index:20}
+.brandbar{display:flex;align-items:center;gap:11px;padding:2px 8px 4px}
+.logo{width:34px;height:34px;border-radius:10px;background:var(--nav-on);display:grid;place-items:center;flex:none;color:#fff}
+.brandbar b{display:block;font-family:var(--ff-display);font-size:18px;line-height:1.1;color:#fff}
+.brandbar small{display:block;color:var(--nav-muted);font-size:12.5px}
+.navgroup{display:grid;gap:3px;align-content:start}
+.navlabel{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--nav-muted);padding:0 10px 4px}
+.navfoot{margin-top:auto;display:grid;gap:3px;border-top:1px solid var(--nav-line);padding-top:12px}
+.navbtn{display:flex;align-items:center;gap:11px;width:100%;border:0;background:transparent;color:var(--nav-fg);padding:10px 10px;border-radius:10px;cursor:pointer;font-weight:600;text-align:left;min-height:42px}
+.navbtn svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.navbtn:hover{background:var(--nav-hover)}
+.navbtn[aria-pressed="true"]{background:var(--nav-on);color:var(--nav-on-fg)}
+.navbtn[disabled]{opacity:.45;cursor:not-allowed}
+.navbtn:focus-visible{outline-color:#fff}
+.content{min-width:0;padding-block:24px 56px;padding-left:max(28px,env(safe-area-inset-left,0px));padding-right:max(28px,env(safe-area-inset-right,0px));display:grid;gap:18px;align-content:start;max-width:1800px;width:100%;margin-inline:auto}
+.topbar{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:flex-end;justify-content:space-between}
+.heading h1{font-size:30px;line-height:1.08}
+.heading p{margin:4px 0 0;color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.datebar{display:flex;gap:6px;align-items:center}
 .datebar input[type=date]{width:auto;font-weight:600}
-.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--surface)}
-.seg button{border:0;background:transparent;padding:8px 14px;cursor:pointer;font-weight:600;min-height:36px}
-.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
-.status{color:var(--muted);font-size:13px;min-width:90px;text-align:right}
+.status{color:var(--muted);font-size:13px;min-width:84px;text-align:right}
 .status.err{color:var(--danger)}
-.shifts{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
-.shift{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 14px;cursor:pointer;text-align:left;min-width:150px}
+
+/* ---- botones y campos ---- */
+.btn{border:1px solid var(--line-2);background:var(--surface);border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:600;min-height:40px;line-height:1.1}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.08);background:var(--accent)}
+.btn.danger{color:var(--danger);border-color:var(--danger)}
+.btn.sm{padding:5px 10px;min-height:32px;font-size:13px;border-radius:8px}
+.btn.ghost{background:transparent;border-color:transparent}
+.btn.ghost:hover{background:var(--surface-2)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.btn.icon{width:40px;padding:0;font-size:20px}
+input[type=text],input[type=tel],input[type=email],input[type=password],input[type=number],input[type=date],input[type=time],select,textarea{
+  width:100%;background:var(--surface);border:1px solid var(--line-2);border-radius:10px;padding:8px 11px;min-height:40px}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+textarea{resize:vertical;min-height:68px}
+.field{display:grid;gap:5px;min-width:0}
+.field>label,.lbl{font-size:13px;font-weight:600;color:var(--muted)}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.tools{display:flex;flex-wrap:wrap;gap:6px}
+.hint{font-size:13px;color:var(--muted);margin:0}
+.chk{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500}
+.chk input{width:18px;height:18px;accent-color:var(--accent)}
+
+/* ---- turnos ---- */
+.shifts{display:flex;gap:10px;overflow-x:auto;padding-bottom:2px}
+.shift{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 16px;cursor:pointer;text-align:left;min-width:190px;box-shadow:var(--shadow)}
 .shift b{display:block;font-family:var(--ff-display);font-size:17px}
 .shift span{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
-.shift[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
-.main{display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:16px;align-items:start}
-@media (max-width:1020px){.main{grid-template-columns:minmax(0,1fr)}}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}
-.plan{width:100%;height:auto;display:block;border-radius:8px;user-select:none;-webkit-user-select:none}
+.shift:hover{border-color:var(--line-2)}
+.shift[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);box-shadow:none}
+
+/* ---- tarjetas, plano y panel ---- */
+.main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start}
+@media (max-width:1180px){.main{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;min-width:0;box-shadow:var(--shadow)}
+.plan{width:100%;height:auto;display:block;border-radius:12px;user-select:none;-webkit-user-select:none}
 .plan.edit{touch-action:none}
 .floor{fill:var(--floor)}
 .gridline{fill:none;stroke:var(--floor-grid);stroke-width:.7}
@@ -98,271 +138,286 @@ textarea{resize:vertical;min-height:64px}
 .tbl .ts{font-size:10.5px;font-weight:500;opacity:.82}
 .t-picked text{fill:var(--accent-fg)}
 .timebar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-top:12px}
-.timebar .tv{font-family:var(--ff-display);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;min-width:68px}
-.timebar input[type=range]{flex:1;min-width:160px;accent-color:var(--accent)}
-.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:13px;color:var(--muted)}
-.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;border:1.5px solid}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:6px;vertical-align:-1px;border:1.5px solid}
 .lg-free{background:var(--free);border-color:var(--free-line)!important}
 .lg-res{background:var(--res);border-color:var(--res-line)!important}
 .lg-occ{background:var(--occ);border-color:var(--occ-line)!important}
-.side{display:grid;gap:12px;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;align-content:start}
-@media (max-width:1020px){.side{position:static;max-height:none}}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.stat{background:var(--surface-2);border-radius:9px;padding:8px 10px}
-.stat b{display:block;font-family:var(--ff-display);font-size:24px;font-variant-numeric:tabular-nums;line-height:1.1}
+.side{display:grid;gap:14px;position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto;align-content:start}
+@media (max-width:1180px){.side{position:static;max-height:none}}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.stat{background:var(--surface-2);border-radius:12px;padding:10px 12px}
+.stat b{display:block;font-family:var(--ff-display);font-size:26px;font-variant-numeric:tabular-nums;line-height:1.1}
 .stat span{font-size:12px;color:var(--muted)}
-.tpanel{border:1px solid var(--accent);background:var(--accent-soft);border-radius:10px;padding:10px;display:grid;gap:8px}
+.tpanel{border:1px solid var(--accent);background:var(--accent-soft);border-radius:12px;padding:12px;display:grid;gap:8px}
 .tpanel h3{font-size:18px}
 .tpanel p{margin:0;color:var(--muted);font-size:13px}
-.list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.ritem{border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden}
+
+/* ---- reservas ---- */
+.list{list-style:none;margin:0;padding:0;display:grid;gap:8px;grid-auto-rows:max-content}
+.ritem{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.ritem:hover{border-color:var(--line-2)}
 .ritem.off{opacity:.62}
 .ritem.off .rname{text-decoration:line-through}
-.rmain{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 12px;width:100%;text-align:left;background:transparent;border:0;padding:10px 12px 6px;cursor:pointer}
-.rtime{font-family:var(--ff-display);font-weight:700;font-size:20px;font-variant-numeric:tabular-nums;grid-row:span 2}
+.rmain{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 14px;width:100%;text-align:left;background:transparent;border:0;padding:12px 14px 6px;cursor:pointer}
+.rtime{font-family:var(--ff-display);font-weight:700;font-size:21px;font-variant-numeric:tabular-nums;grid-row:span 2}
 .rline{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;min-width:0}
 .rname{font-weight:700;overflow-wrap:anywhere}
-.chip{display:inline-block;border-radius:6px;padding:1px 7px;font-size:12px;font-weight:600;background:var(--surface-2);border:1px solid var(--line);white-space:nowrap}
+.chip{display:inline-block;border-radius:999px;padding:1px 9px;font-size:12px;font-weight:600;background:var(--surface-2);border:1px solid var(--line);white-space:nowrap}
 .chip.st-sentada{background:var(--occ);border-color:var(--occ-line)}
 .chip.st-confirmada{background:var(--res);border-color:var(--res-line)}
 .chip.st-terminada{background:var(--free);border-color:var(--free-line)}
+.chip.bad{background:var(--occ);border-color:var(--occ-line)}
+.chip.demo{background:var(--warn-soft);border-color:var(--res-line)}
 .rnote{grid-column:2;color:var(--muted);font-size:13px;overflow-wrap:anywhere}
-.ractions{display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 10px}
-.empty{color:var(--muted);padding:14px;text-align:center;border:1px dashed var(--line);border-radius:10px}
+.ractions{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 12px}
+.empty{color:var(--muted);padding:16px;text-align:center;border:1px dashed var(--line-2);border-radius:12px}
 .hero{display:grid;gap:12px;justify-items:start;padding:28px}
 .hero p{margin:0;color:var(--muted);max-width:56ch}
-.field{display:grid;gap:4px;min-width:0}
-.field>label,.lbl{font-size:13px;font-weight:600;color:var(--muted)}
-.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
-.tools{display:flex;flex-wrap:wrap;gap:6px}
-.hint{font-size:13px;color:var(--muted);margin:0}
-.warn{background:var(--warn-soft);border:1px solid var(--res-line);border-radius:8px;padding:8px 10px;font-size:14px}
+.warn{background:var(--warn-soft);border:1px solid var(--res-line);border-radius:10px;padding:8px 11px;font-size:14px}
 .warn.bad{background:var(--danger-soft);border-color:var(--danger)}
-.banner{background:var(--warn-soft);border:1px solid var(--res-line);border-radius:10px;padding:10px 14px}
+.banner{background:var(--warn-soft);border:1px solid var(--res-line);border-radius:12px;padding:10px 14px}
+.match{border:1px solid var(--line);background:var(--surface-2);border-radius:12px;padding:10px 12px;display:grid;gap:8px;font-size:14px}
+.match.ok{border-color:var(--free-line);background:var(--free)}
+.match.warnbox{border-color:var(--res-line);background:var(--warn-soft)}
+.cand{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center}
+.cmain{display:grid;gap:4px;width:100%;text-align:left;background:transparent;border:0;padding:12px 14px;cursor:pointer}
+.cmain .l1{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.cmain .l2{color:var(--muted);font-size:13px;overflow-wrap:anywhere}
+.hist{list-style:none;margin:0;padding:0;display:grid;gap:6px;max-height:220px;overflow:auto}
+.hist li{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:14px;border-bottom:1px solid var(--line);padding-bottom:6px}
+
+/* ---- ventanas ---- */
 .overlay{position:fixed;inset:0;background:rgba(10,14,22,.55);display:flex;align-items:flex-start;justify-content:center;
   padding:max(16px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));overflow:auto;z-index:50}
-.modal{background:var(--surface);border:1px solid var(--line);border-radius:14px;width:100%;max-width:560px;margin:auto 0;display:flex;flex-direction:column}
+.modal{background:var(--surface);border:1px solid var(--line);border-radius:20px;width:100%;max-width:560px;margin:auto 0;display:flex;flex-direction:column;box-shadow:var(--shadow-lg)}
 .modal.wide{max-width:760px}
-.mhead{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
-.mhead h2{font-size:21px}
-.mbody{padding:16px;display:grid;gap:14px}
-.mfoot{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;padding:12px 16px;border-top:1px solid var(--line)}
+.mhead{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.mhead h2{font-size:22px}
+.mbody{padding:20px;display:grid;gap:16px}
+.mfoot{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;padding:14px 20px;border-top:1px solid var(--line)}
 .mfoot .sp{margin-right:auto}
 .stepper{display:flex;gap:6px;align-items:center}
 .stepper input{text-align:center;width:72px}
 .quick{display:flex;flex-wrap:wrap;gap:6px}
 .quick button{min-width:38px}
 .quick button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
-.minipl{border:1px solid var(--line);border-radius:10px;padding:6px;background:var(--surface-2)}
+.minipl{border:1px solid var(--line);border-radius:12px;padding:6px;background:var(--surface-2)}
 .minipl .plan{max-height:52vh}
 .rules{display:grid;gap:8px}
 .rrow{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}
 .srow{display:grid;grid-template-columns:1.3fr 1fr 1fr auto;gap:8px;align-items:end}
 @media (max-width:520px){.srow{grid-template-columns:1fr 1fr}.srow .field:first-child{grid-column:1/-1}}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:max(20px,env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;z-index:80;max-width:90vw}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:max(20px,env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:12px;font-weight:600;z-index:80;max-width:90vw;box-shadow:var(--shadow-lg)}
 .toast.err{background:var(--danger);color:#fff}
 body.noscroll{overflow:hidden}
-@media (prefers-reduced-motion:no-preference){.tbody{transition:fill .15s}}
-.match{border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:10px;display:grid;gap:8px;font-size:14px}
-.match.ok{border-color:var(--free-line);background:var(--free)}
-.match.warnbox{border-color:var(--res-line);background:var(--warn-soft)}
-.cand{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center}
-.cmain{display:grid;gap:4px;width:100%;text-align:left;background:transparent;border:0;padding:10px 12px;cursor:pointer}
-.cmain .l1{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
-.cmain .l2{color:var(--muted);font-size:13px;overflow-wrap:anywhere}
-.chip.bad{background:var(--occ);border-color:var(--occ-line)}
-.hist{list-style:none;margin:0;padding:0;display:grid;gap:6px;max-height:220px;overflow:auto}
-.hist li{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:14px;border-bottom:1px solid var(--line);padding-bottom:6px}
-.chk{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500}
-.chk input{width:18px;height:18px;accent-color:var(--accent)}
-/* panel público (tarjeta con pasos). Todos los colores salen del tema guardado en Ajustes */
-.pub{--p-accent:#2A4A99;--p-accent-fg:#fff;--p-day:#DCE3F3;--p-day-fg:#111;--p-card:#fff;--p-inner:#F3F4F6;--p-text:#18212F;--p-muted:#586376;--p-off:#B9BFC9;--p-line:#D3D9E2;--p-r:10px;--rc:18px;--p-day-r:50%;--p-font:'Figtree',system-ui,sans-serif;--p-caps:none;
-  max-width:520px;margin:0 auto;padding:20px 12px 40px;color:var(--p-text);font-family:var(--p-font);font-size:16px;line-height:1.45}
-.pub *,.pub *::before,.pub *::after{box-sizing:border-box}
-.pub [hidden]{display:none!important}
-.pub-shell{background:var(--p-card);border-radius:var(--rc);overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,.28)}
-.pub-top{padding:20px 20px 16px;background:var(--p-card)}
-.pub h1{font-family:var(--p-font);font-weight:700;font-size:26px;line-height:1.1;margin:0;text-transform:var(--p-caps);letter-spacing:.02em;text-wrap:balance}
-.pub h2{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:var(--p-caps);color:var(--p-muted);margin:0 0 6px}
-.pub h3{font-size:16px;font-weight:700;margin:0 0 10px;text-align:center;text-decoration:underline;text-underline-offset:4px;text-transform:var(--p-caps);letter-spacing:.03em}
-.pub-body{background:var(--p-inner);padding:18px 16px 22px;display:grid;gap:20px}
-.pub-venue{margin:0;text-align:center;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--p-muted);font-size:14px}
-.pub-note{margin:0;color:var(--p-muted);font-size:15px}
-.pub-ok{margin:0;color:var(--p-accent);font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+@media (prefers-reduced-motion:no-preference){.tbody{transition:fill .15s}.navbtn,.btn,.shift{transition:background .12s,border-color .12s}}
+
+/* ---- móvil: el menú pasa a barra inferior ---- */
+@media (max-width:900px){
+  .shell{display:block}
+  .nav{position:fixed;inset:auto 0 0 0;height:auto;flex-direction:row;gap:0;padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px));border-top:1px solid var(--nav-line)}
+  .brandbar,.navlabel{display:none}
+  .navgroup,.navfoot{display:contents}
+  .navfoot{border:0;padding:0;margin:0}
+  .navbtn{flex:1 1 0;min-width:0;flex-direction:column;gap:3px;justify-content:center;padding:6px 2px;font-size:10.5px;min-height:50px;text-align:center}
+  .content{padding-top:18px;padding-bottom:96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .heading h1{font-size:26px}
+  .toast{bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+}
+
+/* ---- escritorio y piezas nuevas ---- */
+.panel{display:grid;gap:14px}
+.subbar{display:grid;gap:12px}
+.sec{margin:0;font-family:var(--ff-body);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:start}
+.col{display:grid;gap:16px;min-width:0;align-content:start}
+.col .sec:not(:first-child){border-top:1px solid var(--line);padding-top:16px;margin-top:4px}
+.col.sticky{position:sticky;top:8px}
+.modal.xwide{max-width:1120px}
+.chead{display:none}
+.c-name{display:grid;gap:2px;min-width:0}
+.c-chips{display:flex;flex-wrap:wrap;gap:4px}
+@media (max-width:900px){
+  .cols{grid-template-columns:minmax(0,1fr);gap:16px}
+  .col.sticky{position:static}
+  .stat{padding:8px 9px}
+  .stat b{font-size:21px}
+  .stat span{font-size:11px;line-height:1.2;display:block}
+}
+@media (min-width:901px){
+  .chead,.cmain{display:grid;grid-template-columns:minmax(140px,1.1fr) 120px minmax(170px,1.3fr) minmax(230px,1.7fr) 100px;gap:16px;align-items:center}
+  .chead{padding:6px 18px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);position:sticky;top:0;background:var(--surface);z-index:1}
+  .cmain{padding:12px 18px}
+  .navgroup+.navgroup{border-top:1px solid var(--nav-line);padding-top:12px}
+}
+@media (min-width:901px) and (max-width:1399px){
+  .shell{grid-template-columns:72px minmax(0,1fr)}
+  .nav{padding-inline:10px}
+  .brandbar{justify-content:center;padding:2px 0 4px}
+  .brandbar>div,.navlabel{display:none}
+  .navbtn{position:relative;justify-content:center;padding:10px}
+  .navbtn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+}
+@media (min-width:1181px){
+  .content{display:flex;flex-direction:column;height:max(100vh,740px);padding-block:22px;padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}
+  .subbar{grid-template-columns:minmax(0,1fr) auto;align-items:stretch;gap:16px}
+  .subbar .stats{grid-template-columns:repeat(4,minmax(112px,1fr));gap:12px}
+  .subbar .stat{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);padding:8px 16px}
+  .main{flex:1 1 0;min-height:0;grid-template-columns:minmax(0,1fr) clamp(340px,27vw,440px);align-items:stretch}
+  .main>.card{display:flex;flex-direction:column;min-height:0}
+  .main .plan{flex:1 1 0;min-height:0}
+  .side{position:static;max-height:none;min-height:0;display:grid;grid-template-rows:minmax(0,1fr);overflow:visible}
+  #sService{overflow:hidden;grid-template-rows:auto auto minmax(0,1fr)}
+  #sEdit{overflow:auto;align-content:start}
+  #sList{overflow:auto;min-height:0;align-content:start}
+  #clientsArea{flex:1 1 0;min-height:0;grid-template-rows:auto minmax(0,1fr)}
+  #cList{overflow:auto;min-height:0;align-content:start}
+}
+
+@media (min-width:1181px) and (max-height:860px){
+  .content{padding-block:14px;gap:12px}
+  .heading h1{font-size:26px}
+  .heading p{margin:2px 0 0;font-size:14px}
+  .subbar .stat{padding:6px 14px}
+  .subbar .stat b{font-size:22px}
+  .shift{padding:8px 14px}
+  .card{padding:14px}
+}
+
+/* ---- panel público (vista previa y reservar.html) ---- */
+.pub{max-width:520px;margin:0 auto;padding:24px 16px 40px;color:var(--fg);font-family:'Figtree',system-ui,sans-serif;font-size:16px;line-height:1.45;display:grid;gap:22px}
+.pub h1{font-family:'Bricolage Grotesque','Figtree',sans-serif;font-weight:700;font-size:30px;line-height:1.1;margin:0;text-wrap:balance}
+.pub h2{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.pub h3{font-size:15px;margin:0 0 6px}
 .pub-head{display:grid;gap:6px}
-.pub .pub-big{font-size:24px;line-height:1.15;margin:0;color:var(--p-text);letter-spacing:.01em;text-transform:var(--p-caps)}
-/* pasos */
-.pub-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2px;list-style:none;margin:0;padding:0}
-.pub-step{display:flex;justify-content:center;min-width:0}
-.pub-stepbtn{display:grid;justify-items:center;gap:6px;overflow:visible;background:none;border:0;padding:2px;margin:0;font:inherit;color:var(--p-off);min-width:0;width:100%}
-button.pub-stepbtn{cursor:pointer}
-.pub-step .n{width:42px;height:42px;border-radius:50%;border:3px solid var(--p-line);display:grid;place-items:center;font-size:19px;font-weight:600;line-height:1}
-.pub-step .l{font-size:11px;text-align:center;white-space:nowrap;line-height:1.2;letter-spacing:-.01em}
-.pub-step.on .n{border-color:var(--p-text);color:var(--p-text)}
-.pub-step.on .l{color:var(--p-text);font-weight:600}
-.pub-step.done .n{background:var(--p-accent);border-color:var(--p-accent);color:var(--p-accent-fg)}
-.pub-step.done .l{color:var(--p-muted)}
-/* campos */
-.pub-form{display:grid;gap:16px}
-.pub-field{display:grid;gap:5px;min-width:0}
-.pub-field label{font-size:13px;font-weight:600;color:var(--p-muted)}
-.pub input[type=text],.pub input[type=tel],.pub input[type=email],.pub select,.pub textarea{width:100%;min-height:48px;padding:10px 12px;border-radius:var(--p-r);border:1px solid var(--p-line);background:var(--p-card);color:var(--p-text);font:inherit}
-.pub[data-radius=round] input[type=text],.pub[data-radius=round] input[type=tel],.pub[data-radius=round] input[type=email],.pub[data-radius=round] select{border-radius:999px;padding-left:18px}
-.pub[data-radius=round] textarea{border-radius:18px}
+.pub-lead,.pub-note{margin:0;color:var(--muted);font-size:15px}
+.pub-ok{margin:0;color:var(--free-line);font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase}
+.pub-form{display:grid;gap:22px}
+.pub-sizes,.pub-times{display:flex;flex-wrap:wrap;gap:8px}
+.pub-chip{min-width:48px;min-height:46px;padding:0 14px;border-radius:10px;border:1px solid var(--line-2);background:var(--surface);color:var(--fg);font:inherit;font-weight:600;cursor:pointer;font-variant-numeric:tabular-nums}
+.pub-chip.on{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.pub-chip:focus-visible,.pub-btn:focus-visible,.pub input:focus-visible,.pub textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.pub-shift+.pub-shift{margin-top:14px}
+.pub-data{display:grid;gap:14px}
+.pub-sum{margin:0;font-weight:600}
+.pub-field{display:grid;gap:4px;min-width:0}
+.pub-field label{font-size:13px;font-weight:600;color:var(--muted)}
+.pub input[type=text],.pub input[type=tel],.pub input[type=email],.pub input[type=date],.pub textarea{width:100%;box-sizing:border-box;min-height:46px;padding:10px 12px;border-radius:10px;border:1px solid var(--line-2);background:var(--surface);color:var(--fg);font:inherit}
 .pub textarea{resize:vertical}
 .pub-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-.pub-check{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--p-muted)}
-.pub-check input{width:22px;height:22px;margin-top:1px;flex:none;accent-color:var(--p-accent)}
-:is(.pub-time,.pub-day,.pub-nav,.pub-btn,.pub-stepbtn,.pub-link2):focus-visible,.pub :is(input,select,textarea):focus-visible{outline:3px solid var(--p-accent);outline-offset:2px}
-/* info */
-.pub-info{text-align:center;display:grid;gap:2px;padding:0 6px}
-.pub-info h2{margin:0;font-size:15px;color:var(--p-text)}
-.pub-info p{margin:0;color:var(--p-muted);font-size:14.5px;white-space:pre-line}
-/* calendario */
-.pub-cal{background:var(--p-card);border-radius:calc(var(--rc) * .6);padding:14px 10px 12px;display:grid;gap:8px}
-.pub-cal-head{display:grid;grid-template-columns:44px 1fr 44px;align-items:center}
-.pub-cal-title{text-align:center;font-size:16px;text-transform:var(--p-caps);letter-spacing:.03em}
-.pub-nav{width:44px;height:44px;border-radius:50%;border:0;background:transparent;color:var(--p-text);font-size:28px;line-height:1;cursor:pointer;font-family:system-ui,sans-serif}
-.pub-nav:disabled{color:var(--p-off);cursor:default}
-.pub-cal-dow{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-weight:700;font-size:14px;padding-bottom:4px;border-top:1px solid var(--p-line);padding-top:8px}
-.pub-cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px 4px;justify-items:center}
-.pub-day{width:100%;max-width:46px;aspect-ratio:1;border-radius:var(--p-day-r);border:2px solid transparent;display:grid;place-items:center;font:inherit;font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;background:var(--p-day);color:var(--p-day-fg);padding:0;cursor:pointer}
-.pub-day.sel{background:var(--p-accent);color:var(--p-accent-fg);border-color:var(--p-accent)}
-.pub-day.today{border-color:var(--p-accent)}
-.pub-day.off,.pub-day.other{background:transparent;color:var(--p-off);cursor:default;font-weight:500}
-.pub-day.other{opacity:.7}
-.pub-legend{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;font-size:12.5px;color:var(--p-muted);padding-top:4px}
-.pub-legend span{display:inline-flex;align-items:center;gap:6px}
-.pub-legend .dot{width:14px;height:14px;border-radius:50%;display:inline-block;border:1px solid var(--p-line)}
-.pub-legend .dot.sel{background:var(--p-accent);border-color:var(--p-accent)}
-.pub-legend .dot.free{background:var(--p-day);border-color:var(--p-day)}
-.pub-legend .dot.off{background:transparent}
-/* horas */
-.pub-slots{display:grid;gap:20px}
-.pub-times{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.pub-time{min-height:54px;border:2px solid var(--p-accent);border-radius:var(--p-r);background:var(--p-accent);color:var(--p-accent-fg);font:inherit;font-size:19px;font-weight:600;font-variant-numeric:tabular-nums;cursor:pointer;display:grid;place-items:center;padding:0 10px}
-.pub-time.on{box-shadow:0 0 0 3px var(--p-card),0 0 0 6px var(--p-accent)}
-.pub-sample .pub-time{min-height:44px;font-size:16px}
-/* resumen */
-.pub-sumbar{display:flex;gap:10px;justify-content:space-between;align-items:center;background:var(--p-card);border-radius:var(--p-r);padding:10px 14px;border:1px solid var(--p-line)}
-.pub-sum{font-weight:600;font-size:15px;min-width:0}
-.pub-note b{white-space:nowrap}
-.pub-sum2{margin:-8px 0 0;color:var(--p-muted);font-size:14px;overflow-wrap:anywhere}
-.pub-link2{background:none;border:0;padding:6px 2px;font:inherit;font-weight:700;color:var(--p-accent);text-decoration:underline;cursor:pointer}
-/* botones */
-.pub-actions{display:grid;grid-template-columns:auto 1fr;gap:10px}
-.pub-btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 22px;border-radius:var(--p-r);border:2px solid var(--p-accent);background:var(--p-accent);color:var(--p-accent-fg);font:inherit;font-size:16px;font-weight:700;letter-spacing:.02em;text-transform:var(--p-caps);cursor:pointer;text-decoration:none}
-.pub-btn.ghost{background:transparent;color:var(--p-text);border-color:var(--p-line)}
-.pub-btn.danger{background:#B3361F;border-color:#B3361F;color:#fff}
+.pub-check{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--muted)}
+.pub-check input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var(--accent)}
+.pub-btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border-radius:10px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:700;cursor:pointer;text-decoration:none}
+.pub-btn.ghost{background:transparent;color:var(--accent)}
+.pub-btn.danger{background:var(--occ-line);border-color:var(--occ-line);color:#fff}
 .pub-btn:disabled{opacity:.6;cursor:default}
-.pub-sample .pub-btn{width:100%}
-/* avisos (colores fijos, siempre legibles) */
-.pub-msg{margin:0;padding:10px 12px;border-radius:var(--p-r);background:#F7CBC2;border:1px solid #C1432C;color:#3A0E06;font-size:15px}
-.pub-warn{padding:14px;border-radius:var(--p-r);border:1px solid #C48610;background:#FFE8B5;color:#3A2A00;display:grid;gap:10px}
+.pub-msg{margin:0;padding:10px 12px;border-radius:10px;background:var(--occ);border:1px solid var(--occ-line);color:var(--fg);font-size:15px}
+.pub-warn{padding:14px;border-radius:12px;border:1px solid var(--res-line);background:var(--res);color:var(--fg);display:grid;gap:10px}
 .pub-warn p{margin:0}
 .pub-warn-btns{display:flex;flex-wrap:wrap;gap:8px}
-.pub-warn .pub-btn.ghost{color:#3A2A00;border-color:#C48610}
-/* reserva hecha / cancelar */
-.pub-card{margin:0;padding:14px 16px;border:1px solid var(--p-line);border-radius:var(--p-r);background:var(--p-card);display:grid;gap:10px}
+.pub-card{margin:0;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);display:grid;gap:10px}
 .pub-card div{display:flex;justify-content:space-between;gap:12px}
-.pub-card dt{color:var(--p-muted)}
+.pub-card dt{color:var(--muted)}
 .pub-card dd{margin:0;font-weight:700;text-align:right}
 .pub-linkrow{display:grid;grid-template-columns:1fr auto;gap:8px}
 .pub-linkrow .pub-link{min-width:0}
-@media (max-width:380px){.pub{padding-inline:8px}.pub-body{padding-inline:12px}.pub-step .n{width:38px;height:38px}}
-@media (prefers-reduced-motion:no-preference){.pub-time,.pub-day,.pub-btn{transition:transform .08s}.pub-time:active,.pub-day:active,.pub-btn:active{transform:scale(.97)}}
-
-/* editor de apariencia (Ajustes) */
-.th-ed{display:grid;gap:16px;min-width:0}
-.th-ed .pub-sample{margin:0;padding:0}
-
-.th-ed select,.th-ed textarea,.th-ed input[type=text]{width:100%;box-sizing:border-box;min-height:42px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit}
-.th-presets{display:flex;flex-wrap:wrap;gap:8px}
-.th-colors{display:grid;gap:8px}
-.th-color{display:flex;align-items:center;gap:12px;font-size:14px}
-.th-color input[type=color]{width:52px;height:40px;padding:2px;border:1px solid var(--line);border-radius:8px;background:var(--surface);flex:none;cursor:pointer}
-.th-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:8px}
-.th-warn{color:#8A4B00;background:#FFF1D6;padding:8px 10px;border-radius:8px}
 .pubov{position:fixed;inset:0;z-index:60;background:var(--bg);overflow:auto}
-.pubov-bar{position:sticky;top:0;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--accent-soft);border-bottom:1px solid var(--line);font-size:14px}
+.pubov-bar{position:sticky;top:0;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--accent-soft);border-bottom:1px solid var(--line);font-size:14px;z-index:2}
 .pubov-bar span{min-width:0}
 .pubov-bar{flex-wrap:wrap}
 .pubov-bar .tools input{flex:1 1 100%;max-width:none!important}
 
 [hidden]{display:none!important}
-html{color-scheme:light}
-body{margin:0}
 </style>
 </head>
 <body>
 
-<div class="app" id="app">
-  <header class="top">
-    <div class="brand">
-      <h1>Reservas</h1>
-      <p id="dateLong">&nbsp;</p>
+<div class="shell" id="app">
+  <nav class="nav" aria-label="Secciones">
+    <div class="brandbar">
+      <span class="logo" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2M12 19.4v2M2.6 12h2M19.4 12h2"/></svg></span>
+      <div><b>Pizzburger</b><small>Reservas</small></div>
     </div>
-    <div class="group datebar">
-      <button class="btn icon" id="prevDay" aria-label="Día anterior">‹</button>
-      <input type="date" id="dateIn" aria-label="Fecha">
-      <button class="btn icon" id="nextDay" aria-label="Día siguiente">›</button>
-      <button class="btn" id="goToday">Hoy</button>
+    <div class="navgroup">
+      <span class="navlabel">Sala</span>
+      <button class="navbtn" id="modeService" aria-pressed="true" title="Servicio"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg><span>Servicio</span></button>
+      <button class="navbtn" id="modeEdit" aria-pressed="false" title="Editar sala"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.8"/></svg><span>Editar sala</span></button>
+      <button class="navbtn" id="modeClients" aria-pressed="false" title="Clientes"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5a3 3 0 010 6M18 14c2 .6 3 2.5 3 6"/></svg><span>Clientes</span></button>
     </div>
-    <div class="group">
-      <div class="seg" role="group" aria-label="Modo">
-        <button id="modeService" aria-pressed="true">Servicio</button>
-        <button id="modeEdit" aria-pressed="false">Editar sala</button>
-        <button id="modeClients" aria-pressed="false">Clientes</button>
+    <div class="navgroup">
+      <span class="navlabel">Configuración</span>
+      <button class="navbtn" id="btnPublic" title="Panel online"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg><span>Panel online</span></button>
+      <button class="navbtn" id="btnSettings" title="Ajustes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M19 7h1M4 17h1M11 17h9"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg><span>Ajustes</span></button>
+    </div>
+    <div class="navfoot">
+      <button class="navbtn" id="btnTheme" title="Tema claro u oscuro" aria-label="Cambiar entre tema claro y oscuro"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/></svg><span>Tema</span></button>
+      <button class="navbtn" id="btnLogout" title="Salir" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H6a2 2 0 00-2 2v12a2 2 0 002 2h4M15 8l4 4-4 4M19 12H9"/></svg><span>Salir</span></button>
+    </div>
+  </nav>
+
+  <main class="content">
+    <header class="topbar">
+      <div class="heading">
+        <h1 id="pageTitle">Servicio</h1>
+        <p id="dateLong">&nbsp;</p>
       </div>
-      <span class="status" id="saveStatus" aria-live="polite"></span>
-      <button class="btn" id="btnPublic">Panel online</button>
-      <button class="btn" id="btnSettings">Ajustes</button>
-      <button class="btn" id="btnLogout" hidden>Salir</button>
-      <button class="btn primary" id="btnNew">Nueva reserva</button>
-    </div>
-  </header>
-
-  <div id="banner" hidden></div>
-  <div class="shifts" id="shiftTabs" role="group" aria-label="Turnos"></div>
-
-  <div class="card hero" id="emptyState" hidden>
-    <h2>Todavía no hay plano de sala</h2>
-    <p>Crea una sala vacía y colocas las mesas tú mismo en «Editar sala»: arrastras, cambias los sitios de cada una y ajustas paredes, puertas y plantas.</p>
-    <button class="btn primary" id="btnCreateRoom">Crear sala vacía</button>
-  </div>
-  <div class="card hero" id="loading"><p>Cargando el plano…</p></div>
-
-  <section class="card" id="clientsArea" hidden style="display:grid;gap:12px">
-    <div class="row" style="align-items:end">
-      <div class="field"><label for="cFilter">Buscar cliente</label><input type="text" id="cFilter" placeholder="Nombre, teléfono o email" autocomplete="off"></div>
-      <p class="hint" id="cCount"></p>
-    </div>
-    <ul class="list" id="cList"></ul>
-  </section>
-
-  <div class="main" id="mainArea" hidden>
-    <section class="card" aria-label="Plano de sala">
-      <svg id="plan" class="plan" role="group" aria-label="Plano de mesas"></svg>
-      <div id="timeArea">
-        <div class="legend" aria-hidden="true">
-          <span><i class="lg-free"></i>Sin reservas en el turno</span>
-          <span><i class="lg-res"></i>Con reserva</span>
-          <span><i class="lg-occ"></i>Cliente sentado</span>
+      <div class="actions">
+        <div class="datebar" id="dateBar">
+          <button class="btn icon" id="prevDay" aria-label="Día anterior">‹</button>
+          <input type="date" id="dateIn" aria-label="Fecha">
+          <button class="btn icon" id="nextDay" aria-label="Día siguiente">›</button>
+          <button class="btn" id="goToday">Hoy</button>
         </div>
+        <span class="status" id="saveStatus" aria-live="polite"></span>
+        <button class="btn primary" id="btnNew">Nueva reserva</button>
       </div>
-      <p class="hint" id="editHint" hidden style="margin-top:10px">Arrastra mesas, paredes y puertas para colocarlas. Los cambios se guardan solos.</p>
+    </header>
+
+    <div id="banner" hidden></div>
+    <div class="subbar" id="subbar">
+      <div class="shifts" id="shiftTabs" role="group" aria-label="Turnos"></div>
+      <div class="stats" id="sStats"></div>
+    </div>
+
+    <div class="card hero" id="emptyState" hidden>
+      <h2>Todavía no hay plano de sala</h2>
+      <p>Crea una sala vacía y colocas las mesas tú mismo en «Editar sala»: arrastras, cambias los sitios de cada una y ajustas paredes, puertas y plantas.</p>
+      <button class="btn primary" id="btnCreateRoom">Crear sala vacía</button>
+    </div>
+    <div class="card hero" id="loading"><p>Cargando el plano…</p></div>
+
+    <section class="card panel" id="clientsArea" hidden>
+      <div class="row" style="align-items:end">
+        <div class="field"><label for="cFilter">Buscar cliente</label><input type="text" id="cFilter" placeholder="Nombre, teléfono o email" autocomplete="off"></div>
+        <p class="hint" id="cCount"></p>
+      </div>
+      <ul class="list" id="cList"></ul>
     </section>
 
-    <aside class="side" id="side">
-      <div id="sService" class="card" style="display:grid;gap:12px">
-        <div class="stats" id="sStats"></div>
-        <div id="sTable"></div>
-        <div class="field"><label for="sFilter">Buscar en este turno</label><input type="text" id="sFilter" placeholder="Nombre, teléfono o nota" autocomplete="off"></div>
-        <ul class="list" id="sList"></ul>
-      </div>
-      <div id="sEdit" class="card" style="display:grid;gap:14px" hidden></div>
-    </aside>
-  </div>
+    <div class="main" id="mainArea" hidden>
+      <section class="card" aria-label="Plano de sala">
+        <svg id="plan" class="plan" role="group" aria-label="Plano de mesas"></svg>
+        <div id="timeArea">
+          <div class="legend" aria-hidden="true">
+            <span><i class="lg-free"></i>Sin reservas en el turno</span>
+            <span><i class="lg-res"></i>Con reserva</span>
+            <span><i class="lg-occ"></i>Cliente sentado</span>
+          </div>
+        </div>
+        <p class="hint" id="editHint" hidden style="margin-top:12px">Arrastra mesas, paredes y puertas para colocarlas. Los cambios se guardan solos.</p>
+      </section>
+
+      <aside class="side" id="side">
+        <div id="sService" class="card panel">
+          <div id="sTable"></div>
+          <div class="field"><label for="sFilter">Buscar en este turno</label><input type="text" id="sFilter" placeholder="Nombre, teléfono o nota" autocomplete="off"></div>
+          <ul class="list" id="sList"></ul>
+        </div>
+        <div id="sEdit" class="card panel" hidden></div>
+      </aside>
+    </div>
+  </main>
 </div>
 <div id="authRoot"></div>
 <div id="modalRoot"></div>
@@ -478,7 +533,7 @@ function normCfg(c){
   out.decor = Array.isArray(x.decor) ? x.decor : [];
   out.shifts = Array.isArray(x.shifts) && x.shifts.length ? x.shifts : blankCfg().shifts;
   out.durationRules = Array.isArray(x.durationRules) ? x.durationRules : [];
-  out.online = Object.assign({ enabled: false, name: '', phone: '', maxSize: 8, minAdvanceH: 2, maxDaysAhead: 60, closedDates: [], dupMode: 'block', maxPending: 3, cancelMinH: 0, spamPhone: 6, spamIp: 20, msgs: {}, theme: {} }, x.online || {});
+  out.online = Object.assign({ enabled: false, name: '', phone: '', maxSize: 8, minAdvanceH: 2, maxDaysAhead: 60, closedDates: [], dupMode: 'block', maxPending: 3, cancelMinH: 0, spamPhone: 6, spamIp: 20, msgs: {} }, x.online || {});
   return out;
 }
 
@@ -822,7 +877,7 @@ function closeModal(){
 function openModal(o){
   closeModal();
   const ov = h('div', { class: 'overlay', onmousedown: e => { if(e.target === ov) closeModal(); } },
-    h('div', { class: 'modal' + (o.wide ? ' wide' : ''), role: 'dialog', 'aria-modal': 'true', 'aria-label': o.title },
+    h('div', { class: 'modal' + (o.xwide ? ' xwide' : o.wide ? ' wide' : ''), role: 'dialog', 'aria-modal': 'true', 'aria-label': o.title },
       h('div', { class: 'mhead' }, h('h2', { text: o.title }), h('button', { class: 'btn icon ghost', 'aria-label': 'Cerrar', text: '×', onclick: closeModal })),
       h('div', { class: 'mbody' }, o.body),
       o.footer ? h('div', { class: 'mfoot' }, o.footer) : null));
@@ -855,12 +910,12 @@ function openResModal(init){
     if(!f.customerNotes) f.customerNotes = linked.notes || '';
   }
   f.phone = fmtPhone(f.phone || '');
-  const cr = { choice: linked ? linked.id : null, keep: !!linked, auto: false, forced: false };
+  const cr = { choice: linked ? linked.id : null, keep: !!linked, auto: false, forced: false, upd: !!linked };
   let durTouched = editing || init.duration != null, tablesTouched = editing || (f.tables && f.tables.length > 0), dayList = [], saving = false, confirmDel = false;
 
   const nameIn = h('input', { type: 'text', id: 'f-name', value: f.name, autocomplete: 'off' });
   const phoneIn = h('input', { type: 'tel', id: 'f-phone', value: f.phone, autocomplete: 'off', inputmode: 'tel', placeholder: '612 34 56 78', 'aria-required': 'true' });
-  const emailIn = h('input', { type: 'email', id: 'f-email', value: f.email, autocomplete: 'off', inputmode: 'email', placeholder: 'nombre@correo.com', 'aria-required': 'true' });
+  const emailIn = h('input', { type: 'email', id: 'f-email', value: f.email, autocomplete: 'off', inputmode: 'email', placeholder: 'nombre@correo.com (opcional)' });
   const cNotesIn = h('textarea', { id: 'f-cnotes', placeholder: 'Alergias, mesa preferida, costumbres…' });
   cNotesIn.value = f.customerNotes;
   const matchBox = h('div', { 'aria-live': 'polite' });
@@ -904,16 +959,17 @@ function openResModal(init){
     const chosenExists = cr.choice && cr.choice !== 'new' && state.customers.some(c => c.id === cr.choice);
     if(!chosenExists && !(cr.choice === 'new' && cr.forced)){
       cr.choice = null; cr.auto = false;
-      if(!cands.length){ if(okP && okE) cr.choice = 'new'; }
+      if(!cands.length){ if(okP && (okE || !f.email.trim())) cr.choice = 'new'; }
       else if(cands.length === 1){
         const c = cands[0];
-        const consistent = (!okP || c.phone === p) && (!okE || c.email === e) && (!f.name.trim() || normName(c.name) === normName(f.name));
-        if(consistent){ cr.choice = c.id; cr.auto = true; autofill(c); }
+        const byPhone = okP && c.phone === p;
+        const consistent = byPhone || ((!okP || c.phone === p) && (!okE || c.email === e) && (!f.name.trim() || normName(c.name) === normName(f.name)));
+        if(consistent){ cr.choice = c.id; cr.auto = true; cr.upd = false; cr.via = byPhone ? 'su teléfono' : 'su email'; autofill(c); }
       }
     }
     renderMatch(cands);
   }
-  function choose(c){ cr.choice = c.id; cr.auto = false; cr.forced = false; autofill(c); resolve(); }
+  function choose(c){ cr.choice = c.id; cr.auto = false; cr.forced = false; cr.upd = true; autofill(c); resolve(); }
   function renderMatch(cands){
     matchBox.replaceChildren();
     if(cr.choice && cr.choice !== 'new'){
@@ -921,8 +977,12 @@ function openResModal(init){
       if(c){
         const line = h('span', { class: 'hint', text: 'Cargando historial…' });
         custStats(c.id).then(st => { line.textContent = statsText(st); });
+        const typedMail = normEmail(f.email);
+        const diffs = [f.name.trim() && normName(f.name) !== normName(c.name) ? 'nombre' : null, validEmail(typedMail) && typedMail !== c.email ? 'email' : null].filter(Boolean);
         matchBox.append(h('div', { class: 'match ok' },
           h('b', { text: 'Cliente existente: ' + c.name }), line,
+          cr.auto ? h('span', { class: 'hint', text: 'Reconocido por ' + (cr.via || 'su teléfono') + '.' }) : null,
+          diffs.length ? h('label', { class: 'chk' }, h('input', { type: 'checkbox', id: 'f-upd', checked: cr.upd, onchange: ev => { cr.upd = ev.target.checked; } }), h('span', { text: 'Has escrito otro ' + diffs.join(' y ') + '. Marca para actualizar la ficha de ' + c.name + '; si no, solo cambia esta reserva.' })) : null,
           cr.keep ? null : h('div', { class: 'tools' }, h('button', { type: 'button', class: 'btn sm', text: 'No es esta persona', onclick: () => { cr.choice = 'new'; cr.forced = true; cr.auto = false; resolve(); } }))));
         return;
       }
@@ -938,14 +998,14 @@ function openResModal(init){
         custStats(c.id).then(st => { line.textContent = statsText(st); });
         const differs = f.name.trim() && normName(f.name) !== normName(c.name);
         box.append(h('div', { class: 'cand' },
-          h('div', null, h('b', { text: c.name }), ' · ' + fmtPhone(c.phone) + ' · ' + c.email, h('br'), line),
+          h('div', null, h('b', { text: c.name }), ' · ' + fmtPhone(c.phone) + (c.email ? ' · ' + c.email : ''), h('br'), line),
           h('button', { type: 'button', class: 'btn sm', text: differs ? 'Es ella o él (cambiar nombre)' : 'Es esta persona', onclick: () => choose(c) })));
       });
       box.append(h('div', { class: 'tools' }, h('button', { type: 'button', class: 'btn sm', text: 'Es una persona nueva', onclick: () => { cr.choice = 'new'; cr.forced = true; cr.auto = false; resolve(); } })));
       matchBox.append(box);
       return;
     }
-    matchBox.append(h('p', { class: 'hint', text: 'Escribe teléfono y email. Si ya es cliente, se reconoce solo.' }));
+    matchBox.append(h('p', { class: 'hint', text: 'Escribe el teléfono (el email es opcional). Si ya es cliente, se reconoce solo.' }));
   }
   function contactChanged(){
     if(!cr.keep){ cr.choice = null; cr.forced = false; cr.auto = false; }
@@ -970,7 +1030,7 @@ function openResModal(init){
   }
   function buildQuick(){
     quick.replaceChildren();
-    [1, 2, 3, 4, 5, 6, 8, 10].forEach(n => quick.append(h('button', { type: 'button', class: 'btn sm', 'aria-pressed': String(+f.size === n), text: String(n), onclick: () => setSize(n) })));
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].forEach(n => quick.append(h('button', { type: 'button', class: 'btn sm', 'aria-pressed': String(+f.size === n), text: String(n), onclick: () => setSize(n) })));
   }
   function setSize(n){
     f.size = Math.max(1, Math.min(60, n)); sizeIn.value = f.size;
@@ -1018,7 +1078,7 @@ function openResModal(init){
     if(!f.name.trim()){ nameIn.focus(); toast('Escribe un nombre para la reserva', true); return; }
     if(!walkin){
       if(!validPhone(p)){ phoneIn.focus(); toast('Escribe un teléfono válido: 9 dígitos, o con prefijo si es extranjero', true); return; }
-      if(!validEmail(e)){ emailIn.focus(); toast('Escribe un email válido', true); return; }
+      if(e && !validEmail(e)){ emailIn.focus(); toast('Ese email no es válido: corrígelo o déjalo vacío', true); return; }
       if(!cr.choice){ toast('Elige si es un cliente existente o uno nuevo', true); return; }
     }
     if(!(+f.size >= 1)){ sizeIn.focus(); return; }
@@ -1031,7 +1091,8 @@ function openResModal(init){
         customerId = ex ? ex.id : store.newCustomerId();
         const base = ex ? Object.assign({}, ex) : { createdAt: now };
         delete base.id;
-        await store.saveCustomer(customerId, Object.assign(base, { name: f.name.trim(), phone: p, email: e, notes: (f.customerNotes || '').trim(), updatedAt: now }));
+        const keepFicha = ex && !cr.upd;
+        await store.saveCustomer(customerId, Object.assign(base, { name: keepFicha ? ex.name : f.name.trim(), phone: p, email: (keepFicha ? ex.email : e) || (ex && ex.email) || e || '', notes: (f.customerNotes || '').trim(), updatedAt: now }));
       }
       const id = f.id || store.newId();
       const obj = {
@@ -1066,40 +1127,42 @@ function openResModal(init){
     notesIn.value = v ? v + ' · ' + tg : tg; f.notes = notesIn.value;
   } }));
 
-  const body = [
-    walkin ? null : h('div', { class: 'row' },
-      h('div', { class: 'field' }, h('label', { for: 'f-phone', text: 'Teléfono *' }), phoneIn),
-      h('div', { class: 'field' }, h('label', { for: 'f-email', text: 'Email *' }), emailIn)),
-    h('div', { class: 'field' }, h('label', { for: 'f-name', text: 'Nombre' + (walkin ? '' : ' *') }), nameIn),
-    walkin ? null : matchBox,
-    walkin ? null : h('div', { class: 'field' }, h('label', { for: 'f-cnotes', text: 'Notas del cliente' }), cNotesIn,
-      h('p', { class: 'hint', text: 'Se guardan en su ficha y salen solas en sus próximas reservas.' })),
-    h('div', { class: 'field' }, h('label', { for: 'f-size', text: 'Comensales' }),
-      h('div', { class: 'stepper' },
-        h('button', { type: 'button', class: 'btn icon', 'aria-label': 'Uno menos', text: '−', onclick: () => setSize(+f.size - 1) }),
-        sizeIn,
-        h('button', { type: 'button', class: 'btn icon', 'aria-label': 'Uno más', text: '+', onclick: () => setSize(+f.size + 1) })),
-      quick),
-    h('div', { class: 'row' },
-      h('div', { class: 'field' }, h('label', { for: 'f-date', text: 'Fecha' }), dateIn),
-      h('div', { class: 'field' }, h('label', { for: 'f-time', text: 'Hora' }), timeSel),
-      h('div', { class: 'field' }, h('label', { for: 'f-dur', text: 'Duración (min)' }), durIn)),
-    durHint,
-    h('div', { class: 'field' }, h('label', { for: 'f-notes', text: 'Notas de esta reserva' }), notesIn, h('div', { class: 'tools' }, tagBtns)),
-    editing ? h('div', { class: 'field' }, h('label', { for: 'f-status', text: 'Estado' }), statusSel) : null,
-    h('div', { class: 'field' },
-      h('span', { class: 'lbl', text: 'Mesa' }),
+  const body = [h('div', { class: 'cols' },
+    h('div', { class: 'col' },
+      h('h3', { class: 'sec', text: walkin ? 'Datos' : 'Cliente' }),
+      walkin ? null : h('div', { class: 'row' },
+        h('div', { class: 'field' }, h('label', { for: 'f-phone', text: 'Teléfono *' }), phoneIn),
+        h('div', { class: 'field' }, h('label', { for: 'f-email', text: 'Email (opcional)' }), emailIn)),
+      h('div', { class: 'field' }, h('label', { for: 'f-name', text: 'Nombre' + (walkin ? '' : ' *') }), nameIn),
+      walkin ? null : matchBox,
+      walkin ? null : h('div', { class: 'field' }, h('label', { for: 'f-cnotes', text: 'Notas del cliente' }), cNotesIn,
+        h('p', { class: 'hint', text: 'Se guardan en su ficha y salen solas en sus próximas reservas.' })),
+      h('h3', { class: 'sec', text: 'Reserva' }),
+      h('div', { class: 'field' }, h('label', { for: 'f-size', text: 'Comensales' }),
+        h('div', { class: 'stepper' },
+          h('button', { type: 'button', class: 'btn icon', 'aria-label': 'Uno menos', text: '−', onclick: () => setSize(+f.size - 1) }),
+          sizeIn,
+          h('button', { type: 'button', class: 'btn icon', 'aria-label': 'Uno más', text: '+', onclick: () => setSize(+f.size + 1) })),
+        quick),
+      h('div', { class: 'row' },
+        h('div', { class: 'field' }, h('label', { for: 'f-date', text: 'Fecha' }), dateIn),
+        h('div', { class: 'field' }, h('label', { for: 'f-time', text: 'Hora' }), timeSel),
+        h('div', { class: 'field' }, h('label', { for: 'f-dur', text: 'Duración (min)' }), durIn)),
+      durHint,
+      h('div', { class: 'field' }, h('label', { for: 'f-notes', text: 'Notas de esta reserva' }), notesIn, h('div', { class: 'tools' }, tagBtns)),
+      editing ? h('div', { class: 'field' }, h('label', { for: 'f-status', text: 'Estado' }), statusSel) : null),
+    h('div', { class: 'col sticky' },
+      h('h3', { class: 'sec', text: 'Mesa' }),
       tInfo,
       h('div', { class: 'minipl' }, miniSvg),
       h('div', { class: 'tools' },
         h('button', { type: 'button', class: 'btn sm', text: 'Sugerir mesa', onclick: () => { tablesTouched = false; autoSuggest(); update(); if(!f.tables.length) toast('No hay mesa libre a esa hora', true); } }),
-        h('button', { type: 'button', class: 'btn sm', text: 'Quitar mesas', onclick: () => { tablesTouched = true; f.tables = []; update(); } }))),
-    warn
-  ];
+        h('button', { type: 'button', class: 'btn sm', text: 'Quitar mesas', onclick: () => { tablesTouched = true; f.tables = []; update(); } })),
+      warn))];
   const footer = [];
   if(editing){ const d = h('button', { class: 'btn danger sp', text: 'Eliminar' }); d.addEventListener('click', () => del(d)); footer.push(d); }
   footer.push(h('button', { class: 'btn', text: 'Cancelar', onclick: closeModal }), saveBtn);
-  openModal({ title: walkin ? 'Sentar sin reserva' : (editing ? 'Editar reserva' : 'Nueva reserva'), body, footer, wide: true });
+  openModal({ title: walkin ? 'Sentar sin reserva' : (editing ? 'Editar reserva' : 'Nueva reserva'), body, footer, wide: true, xwide: true });
   buildTimes(); buildQuick();
   if(!tablesTouched) autoSuggest();
   update(); resolve(); loadDay();
@@ -1121,17 +1184,19 @@ function renderClients(){
     ul.append(h('li', { class: 'empty', text: q ? 'Ningún cliente coincide.' : 'Todavía no hay clientes. Se crean solos al guardar reservas con teléfono y email.' }));
     return;
   }
+  ul.append(h('li', { class: 'chead', 'aria-hidden': 'true' }, h('span', { text: 'Cliente' }), h('span', { text: 'Teléfono' }), h('span', { text: 'Email' }), h('span', { text: 'Historial' }), h('span', { text: 'Última visita' })));
   list.forEach(c => {
     const st = statsOf(state.allRes.filter(r => r.customerId === c.id));
     ul.append(h('li', { class: 'ritem' },
       h('button', { class: 'cmain', 'aria-label': 'Abrir ficha de ' + c.name, onclick: () => openCustomer(c.id) },
-        h('span', { class: 'l1' },
-          h('span', { class: 'rname', text: c.name }),
+        h('span', { class: 'c-name' }, h('span', { class: 'rname', text: c.name }), c.notes ? h('small', { class: 'l2', text: c.notes }) : null),
+        h('span', { class: 'l2', text: fmtPhone(c.phone) }),
+        h('span', { class: 'l2', text: c.email || '—' }),
+        h('span', { class: 'c-chips' },
           h('span', { class: 'chip', text: st.visits + (st.visits === 1 ? ' visita' : ' visitas') }),
           st.noShows ? h('span', { class: 'chip bad', text: st.noShows + (st.noShows === 1 ? ' no vino' : ' no vinieron') }) : null,
           st.upcoming ? h('span', { class: 'chip st-confirmada', text: st.upcoming + (st.upcoming === 1 ? ' próxima' : ' próximas') }) : null),
-        h('span', { class: 'l2', text: fmtPhone(c.phone) + ' · ' + c.email + (st.last ? ' · última ' + dmy(st.last) : '') }),
-        c.notes ? h('span', { class: 'l2', text: c.notes }) : null)));
+        h('span', { class: 'l2', text: st.last ? dmy(st.last) : 'Sin visitas' }))));
   });
 }
 function openCustomer(id){
@@ -1162,8 +1227,8 @@ function openCustomer(id){
     const p = normPhone(f.phone), e = normEmail(f.email);
     if(!f.name.trim()){ nameIn.focus(); toast('Escribe un nombre', true); return; }
     if(!validPhone(p)){ phoneIn.focus(); toast('Escribe un teléfono válido', true); return; }
-    if(!validEmail(e)){ emailIn.focus(); toast('Escribe un email válido', true); return; }
-    const dup = state.customers.find(x => x.id !== id && ((p !== c.phone && x.phone === p) || (e !== c.email && x.email === e)));
+    if(e && !validEmail(e)){ emailIn.focus(); toast('Ese email no es válido: corrígelo o déjalo vacío', true); return; }
+    const dup = state.customers.find(x => x.id !== id && ((p !== c.phone && x.phone === p) || (e && e !== c.email && x.email === e)));
     if(dup){ toast('Ya hay otro cliente con ese teléfono o email: ' + dup.name, true); return; }
     const base = Object.assign({}, c); delete base.id;
     try {
@@ -1182,7 +1247,7 @@ function openCustomer(id){
     body: [
       h('div', { class: 'row' },
         h('div', { class: 'field' }, h('label', { for: 'c-phone', text: 'Teléfono *' }), phoneIn),
-        h('div', { class: 'field' }, h('label', { for: 'c-email', text: 'Email *' }), emailIn)),
+        h('div', { class: 'field' }, h('label', { for: 'c-email', text: 'Email (opcional)' }), emailIn)),
       h('div', { class: 'field' }, h('label', { for: 'c-name', text: 'Nombre *' }), nameIn),
       h('div', { class: 'field' }, h('label', { for: 'c-notes', text: 'Notas del cliente' }), notesIn),
       h('div', { class: 'field' }, h('span', { class: 'lbl', text: 'Historial' }), stat, hist)
@@ -1244,9 +1309,8 @@ function openSettings(){
   ];
   const onMsgs = {};
   MSGDEF.forEach(m => { onMsgs[m[0]] = h('input', { type: 'text', id: 's-om-' + m[0], maxlength: 200, placeholder: m[2], value: (on.msgs && on.msgs[m[0]]) || '' }); });
-  const themeEd = thEditor(on.theme, null);
   const onClosed = h('input', { type: 'text', id: 's-oclosed', value: (on.closedDates || []).join(', '), placeholder: 'AAAA-MM-DD, AAAA-MM-DD' });
-  const body = [
+  const parts = [
     h('div', { class: 'row' },
       h('div', { class: 'field' }, h('label', { for: 's-base', text: 'Duración base de una mesa (min)' }), baseIn),
       h('div', { class: 'field' }, h('label', { for: 's-step', text: 'Intervalo de horas' }), stepSel)),
@@ -1274,7 +1338,6 @@ function openSettings(){
         h('div', { class: 'field' }, h('label', { for: 's-ospi', text: 'Anti-spam: reservas por hora y conexión/IP (0 = sin límite)' }), onSpI)),
       h('details', { class: 'field' }, h('summary', { text: 'Textos de los avisos al cliente (vacío = texto por defecto)' }),
         ...MSGDEF.map(m => h('div', { class: 'field' }, h('label', { for: 's-om-' + m[0], text: m[1] }), onMsgs[m[0]]))),
-      h('details', { class: 'field' }, h('summary', { text: 'Apariencia del panel de clientes (colores, letra, textos)' }), themeEd.el),
       h('p', { class: 'hint', text: 'Online solo se usan mesas con «Reservable online» marcado y sus plazas normales (no las sillas extra). Los grupos que necesiten juntar mesas se apuntan a mano.' })),
     h('div', { class: 'row' },
       h('div', { class: 'field' }, h('label', { for: 's-w', text: 'Ancho del plano' }), wIn),
@@ -1289,7 +1352,7 @@ function openSettings(){
     if(cfg.durationRules.some(r => !(r.from >= 1) || !(r.minutes >= 15))){ toast('Revisa las reglas de duración', true); return; }
     const closed = onClosed.value.split(/[\s,;]+/).filter(Boolean);
     if(closed.some(d => !/^\d{4}-\d{2}-\d{2}$/.test(d))){ toast('Días cerrados: usa el formato AAAA-MM-DD separados por comas', true); return; }
-    cfg.online = { enabled: onChk.checked, name: onName.value.trim(), phone: onPhone.value.trim(), maxSize: Math.max(1, Math.min(30, +onMax.value || 8)), minAdvanceH: Math.max(0, +onAdv.value || 0), maxDaysAhead: Math.max(1, +onDays.value || 60), closedDates: closed, dupMode: onDup.value, maxPending: Math.max(0, Math.min(50, parseInt(onPend.value, 10) || 0)), cancelMinH: Math.max(0, +onCancel.value || 0), spamPhone: Math.max(0, Math.min(100, parseInt(onSpP.value, 10) || 0)), spamIp: Math.max(0, Math.min(500, parseInt(onSpI.value, 10) || 0)), msgs: Object.fromEntries(MSGDEF.map(m => [m[0], onMsgs[m[0]].value.trim()]).filter(e => e[1])), theme: themeEd.value() };
+    cfg.online = { enabled: onChk.checked, name: onName.value.trim(), phone: onPhone.value.trim(), maxSize: Math.max(1, Math.min(30, +onMax.value || 8)), minAdvanceH: Math.max(0, +onAdv.value || 0), maxDaysAhead: Math.max(1, +onDays.value || 60), closedDates: closed, dupMode: onDup.value, maxPending: Math.max(0, Math.min(50, parseInt(onPend.value, 10) || 0)), cancelMinH: Math.max(0, +onCancel.value || 0), spamPhone: Math.max(0, Math.min(100, parseInt(onSpP.value, 10) || 0)), spamIp: Math.max(0, Math.min(500, parseInt(onSpI.value, 10) || 0)), msgs: Object.fromEntries(MSGDEF.map(m => [m[0], onMsgs[m[0]].value.trim()]).filter(e => e[1])) };
     cfg.durationBase = base; cfg.slotStep = +stepSel.value;
     cfg.plan = { w: Math.max(400, +wIn.value || 1040), h: Math.max(300, +hIn.value || 850) };
     cfg.shifts.forEach(s => { s.name = s.name.trim(); });
@@ -1298,7 +1361,8 @@ function openSettings(){
     state.viewTime = defaultView();
     persistCfg(); closeModal(); renderAll(); toast('Ajustes guardados');
   } })];
-  openModal({ title: 'Ajustes', body, footer });
+  const body = [h('div', { class: 'cols' }, h('div', { class: 'col' }, parts[0], parts[1], parts[2], parts[4]), h('div', { class: 'col' }, parts[3]))];
+  openModal({ title: 'Ajustes', body, footer, xwide: true });
 }
 
 /* ---------- lista del turno ---------- */
@@ -1337,9 +1401,12 @@ function resItem(r){
 }
 
 /* ---------- render ---------- */
+const TITLES = { service: 'Servicio', edit: 'Editar sala', clients: 'Clientes' };
 function renderHeader(){
   $('#dateIn').value = state.date;
-  $('#dateLong').textContent = longDate(state.date);
+  $('#pageTitle').textContent = TITLES[state.mode] || 'Reservas';
+  $('#dateLong').textContent = state.mode === 'clients' ? 'Fichas de todos tus clientes' : longDate(state.date);
+  $('#dateBar').hidden = state.mode === 'clients';
   $('#modeService').setAttribute('aria-pressed', String(state.mode === 'service'));
   $('#modeEdit').setAttribute('aria-pressed', String(state.mode === 'edit'));
   $('#modeClients').setAttribute('aria-pressed', String(state.mode === 'clients'));
@@ -1363,7 +1430,7 @@ function renderStats(){
   const all = shiftRes(sh), live = all.filter(r => !['cancelada', 'no-show'].includes(r.status));
   const freeCount = state.cfg.tables.filter(t => !tableShiftRes(t.id).length).length;
   const box = $('#sStats'); box.replaceChildren();
-  [[live.length, 'Reservas'], [live.reduce((a, r) => a + (+r.size || 0), 0), 'Comensales'], [freeCount + '/' + state.cfg.tables.length, 'Mesas sin reserva']]
+  [[live.length, 'Reservas'], [live.reduce((a, r) => a + (+r.size || 0), 0), 'Comensales'], [all.filter(r => r.status === 'sentada').length, 'Sentados ahora'], [freeCount + '/' + state.cfg.tables.length, 'Mesas sin reserva']]
     .forEach(([v, l]) => box.append(h('div', { class: 'stat' }, h('b', { text: String(v) }), h('span', { text: l }))));
 }
 function renderTablePanel(){
@@ -1406,7 +1473,7 @@ function renderAll(){
   $('#emptyState').hidden = !(state.cfgLoaded && !has);
   $('#mainArea').hidden = !has || state.mode === 'clients';
   $('#clientsArea').hidden = !has || state.mode !== 'clients';
-  $('#shiftTabs').hidden = !has || state.mode !== 'service';
+  $('#subbar').hidden = !has || state.mode !== 'service';
   $('#btnNew').disabled = !has; $('#btnSettings').disabled = !has; $('#btnPublic').disabled = !has;
   if(!has) return;
   if(!state.shiftId || !state.cfg.shifts.some(s => s.id === state.shiftId)) state.shiftId = defaultShiftId();
@@ -1528,185 +1595,39 @@ $('#btnSettings').addEventListener('click', () => state.cfg && openSettings());
 $('#btnCreateRoom').addEventListener('click', () => { state.cfg = blankCfg(); state.shiftId = defaultShiftId(); state.viewTime = defaultView(); persistCfg(); renderAll(); });
 $('#sFilter').addEventListener('input', e => { state.filter = e.target.value; renderList(); });
 
-/* ===== PANEL PÚBLICO: tema, editor de apariencia y pantalla de reservas ===== */
-const TH_FONTS = {
-  'Figtree': 'Figtree:wght@400;500;600;700',
-  'Barlow Condensed': 'Barlow+Condensed:wght@400;500;600;700',
-  'Oswald': 'Oswald:wght@400;500;600;700',
-  'Bricolage Grotesque': 'Bricolage+Grotesque:wght@400;500;600;700',
-  'Poppins': 'Poppins:wght@400;500;600;700',
-  'Playfair Display': 'Playfair+Display:wght@400;500;600;700'
-};
-const TH_DEF = {
-  accent: '#2A4A99', day: '#DCE3F3', card: '#FFFFFF', page: '#EDF0F4', text: '#18212F',
-  radius: 'soft', font: 'Figtree', caps: false,
-  title: 'Reservar mesa', infoTitle: 'Información', info: '',
-  steps: ['Encontrar', 'Tus datos', 'Adicional', 'Confirmación']
-};
-const TH_PRESETS = [
-  { id: 'clasico', name: 'Clásico azul', v: { accent: '#2A4A99', day: '#DCE3F3', card: '#FFFFFF', page: '#EDF0F4', text: '#18212F', radius: 'soft', font: 'Figtree', caps: false } },
-  { id: 'burdeos', name: 'Burdeos y arena', v: { accent: '#7C2139', day: '#A89477', card: '#FFFFFF', page: '#3D0E1B', text: '#1F1A1C', radius: 'square', font: 'Barlow Condensed', caps: true } },
-  { id: 'tomate', name: 'Tomate', v: { accent: '#C8381E', day: '#F3D9B1', card: '#FFFBF5', page: '#2B1A12', text: '#2B1A12', radius: 'round', font: 'Poppins', caps: false } },
-  { id: 'oscuro', name: 'Oscuro', v: { accent: '#E8B04A', day: '#3A3F4B', card: '#1C2028', page: '#0F1218', text: '#ECEFF4', radius: 'soft', font: 'Oswald', caps: true } }
-];
-const thRgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
-const thHex = a => '#' + a.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
-const thMix = (a, b, t) => { const x = thRgb(a), y = thRgb(b); return thHex(x.map((v, i) => v * t + y[i] * (1 - t))); };
-const thLum = h => { const c = thRgb(h).map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
-const thRatio = (a, b) => { const x = thLum(a), y = thLum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
-const thFg = h => thRatio(h, '#FFFFFF') >= thRatio(h, '#111111') ? '#FFFFFF' : '#111111';
-function thNorm(t){
-  const d = Object.assign({}, TH_DEF, { steps: TH_DEF.steps.slice() });
-  if(!t || typeof t !== 'object') return d;
-  ['accent', 'day', 'card', 'page', 'text'].forEach(k => { if(/^#[0-9a-f]{6}$/i.test(t[k] || '')) d[k] = t[k].toUpperCase(); });
-  if(['square', 'soft', 'round'].includes(t.radius)) d.radius = t.radius;
-  if(t.font in TH_FONTS) d.font = t.font;
-  if(typeof t.caps === 'boolean') d.caps = t.caps;
-  ['title', 'infoTitle'].forEach(k => { if(typeof t[k] === 'string' && t[k].trim()) d[k] = t[k].trim().slice(0, 60); });
-  if(typeof t.info === 'string') d.info = t.info.trim().slice(0, 600);
-  if(Array.isArray(t.steps)) d.steps = d.steps.map((s, i) => (typeof t.steps[i] === 'string' && t.steps[i].trim()) ? t.steps[i].trim().slice(0, 20) : s);
-  return d;
-}
-function thLoadFont(name){
-  const id = 'thfont-' + name.replace(/\W+/g, '');
-  if(document.getElementById(id) || !(name in TH_FONTS)) return;
-  const l = document.createElement('link'); l.id = id; l.rel = 'stylesheet';
-  l.href = 'https://fonts.googleapis.com/css2?family=' + TH_FONTS[name] + '&display=swap';
-  document.head.appendChild(l);
-}
-function thApply(el, t){
-  const radii = { square: ['0px', '4px', '50%'], soft: ['10px', '18px', '50%'], round: ['999px', '26px', '50%'] }[t.radius];
-  const v = {
-    '--p-accent': t.accent, '--p-accent-fg': thFg(t.accent), '--p-day': t.day, '--p-day-fg': thFg(t.day),
-    '--p-card': t.card, '--p-inner': thMix(t.text, t.card, 0.05), '--p-text': t.text,
-    '--p-muted': thMix(t.text, t.card, 0.72), '--p-off': thMix(t.text, t.card, 0.3), '--p-line': thMix(t.text, t.card, 0.2),
-    '--p-r': radii[0], '--rc': radii[1], '--p-day-r': radii[2],
-    '--p-font': "'" + t.font + "', system-ui, sans-serif", '--p-caps': t.caps ? 'uppercase' : 'none'
-  };
-  Object.keys(v).forEach(k => el.style.setProperty(k, v[k]));
-  el.dataset.radius = t.radius;
-  thLoadFont(t.font);
-}
-/* avisos de legibilidad del tema (para el editor) */
-function thWarnings(t){
-  const w = [];
-  if(thRatio(t.text, t.card) < 4.5) w.push('El texto casi no se distingue del fondo de la tarjeta. Pon uno claro y otro oscuro.');
-  if(thRatio(t.accent, t.card) < 1.6) w.push('El color principal se parece demasiado al fondo de la tarjeta: las horas casi no se verán.');
-  if(thRatio(t.day, t.card) < 1.15) w.push('Los días libres se parecen demasiado al fondo: no se verá el calendario.');
-  return w;
-}
-
-const thE = (tag, p, ...kids) => {
-  const e = document.createElement(tag);
-  for(const k in (p || {})){
-    const v = p[k]; if(v == null || v === false) continue;
-    if(k === 'text') e.textContent = v;
-    else if(k === 'class') e.className = v;
-    else if(k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), v);
-    else if(k === 'value') e.value = v;
-    else if(k === 'checked') e.checked = true;
-    else e.setAttribute(k, v === true ? '' : v);
-  }
-  kids.flat(Infinity).forEach(c => { if(c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(String(c))); });
-  return e;
-};
-
-/* muestra pequeña que se actualiza en vivo (la usa el editor) */
-function thSample(){
-  const E = thE, box = E('div', { class: 'pub pub-sample' });
-  function draw(t){
-    thApply(box, t);
-    const day = (n, cls) => E('span', { class: 'pub-day ' + (cls || ''), text: String(n) });
-    box.replaceChildren(E('div', { class: 'pub-shell' },
-      E('div', { class: 'pub-top' }, E('h1', { text: t.title })),
-      E('div', { class: 'pub-body' },
-        E('div', { class: 'pub-cal-days', style: 'margin:0' }, day(3, 'off'), day(4, 'sel'), day(5), day(6), day(7, 'today'), day(8, 'off')),
-        E('div', { class: 'pub-times' }, E('span', { class: 'pub-time', text: '14:00' }), E('span', { class: 'pub-time', text: '14:30' })),
-        E('span', { class: 'pub-btn', text: 'Confirmar reserva' }))));
-  }
-  return { el: box, draw };
-}
-
-/* editor de apariencia: devuelve { el, value() }. onChange se llama con cada cambio */
-function thEditor(initial, onChange){
-  const E = thE; let t = thNorm(initial);
-  const root = E('div', { class: 'th-ed' });
-  const warn = E('p', { class: 'hint th-warn', role: 'status' });
-  const sample = thSample();
-  function changed(){ draw(); if(onChange) onChange(thNorm(t)); }
-  const colorRow = (key, label) => {
-    const inp = E('input', { type: 'color', id: 'th-c-' + key, value: t[key], 'aria-label': label });
-    inp.addEventListener('input', () => { t[key] = inp.value.toUpperCase(); changed(); });
-    inp._sync = () => { inp.value = t[key]; };
-    return E('label', { class: 'th-color', for: 'th-c-' + key }, inp, E('span', { text: label }));
-  };
-  const colors = [
-    colorRow('accent', 'Color principal (horas, botones, día elegido)'),
-    colorRow('day', 'Días libres del calendario'),
-    colorRow('card', 'Fondo de la tarjeta'),
-    colorRow('page', 'Fondo de la página'),
-    colorRow('text', 'Color del texto')
-  ];
-  const radiusSel = E('select', { id: 'th-radius' }, [['square', 'Cuadradas'], ['soft', 'Suaves'], ['round', 'Muy redondas']].map(o => E('option', { value: o[0], text: o[1] })));
-  const fontSel = E('select', { id: 'th-font' }, Object.keys(TH_FONTS).map(f => E('option', { value: f, text: f })));
-  const capsChk = E('input', { type: 'checkbox', id: 'th-caps' });
-  const titleIn = E('input', { type: 'text', id: 'th-title', maxlength: 60, placeholder: TH_DEF.title });
-  const infoTitleIn = E('input', { type: 'text', id: 'th-infot', maxlength: 60, placeholder: TH_DEF.infoTitle });
-  const infoIn = E('textarea', { id: 'th-info', maxlength: 600, rows: 4, placeholder: 'Ej.: Se dispone de mesa durante 90 min. Rogamos puntualidad.' });
-  const stepIns = [0, 1, 2, 3].map(i => E('input', { type: 'text', id: 'th-st' + i, maxlength: 20, placeholder: TH_DEF.steps[i] }));
-  function fill(){
-    colors.forEach(l => l.querySelector('input')._sync());
-    radiusSel.value = t.radius; fontSel.value = t.font; capsChk.checked = t.caps;
-    titleIn.value = t.title === TH_DEF.title ? '' : t.title;
-    infoTitleIn.value = t.infoTitle === TH_DEF.infoTitle ? '' : t.infoTitle;
-    infoIn.value = t.info;
-    stepIns.forEach((s, i) => { s.value = t.steps[i] === TH_DEF.steps[i] ? '' : t.steps[i]; });
-  }
-  function draw(){
-    sample.draw(thNorm(t));
-    const w = thWarnings(thNorm(t));
-    warn.textContent = w.join(' ');
-    warn.hidden = !w.length;
-  }
-  radiusSel.addEventListener('change', () => { t.radius = radiusSel.value; changed(); });
-  fontSel.addEventListener('change', () => { t.font = fontSel.value; changed(); });
-  capsChk.addEventListener('change', () => { t.caps = capsChk.checked; changed(); });
-  titleIn.addEventListener('input', () => { t.title = titleIn.value; changed(); });
-  infoTitleIn.addEventListener('input', () => { t.infoTitle = infoTitleIn.value; changed(); });
-  infoIn.addEventListener('input', () => { t.info = infoIn.value; changed(); });
-  stepIns.forEach((s, i) => s.addEventListener('input', () => { t.steps[i] = s.value; changed(); }));
-  const presets = E('div', { class: 'th-presets' }, TH_PRESETS.map(p => E('button', { type: 'button', class: 'btn sm', text: p.name,
-    onclick: () => { t = thNorm(Object.assign({}, t, p.v)); fill(); changed(); } })));
-  const reset = E('button', { type: 'button', class: 'btn sm', text: 'Restaurar apariencia por defecto',
-    onclick: () => { t = thNorm(null); fill(); changed(); } });
-  root.append(
-    E('div', { class: 'field' }, E('span', { class: 'lbl', text: 'Estilos listos (luego puedes retocar cada color)' }), presets),
-    sample.el,
-    warn,
-    E('div', { class: 'field' }, E('span', { class: 'lbl', text: 'Colores' }), E('div', { class: 'th-colors' }, colors)),
-    E('div', { class: 'row' },
-      E('div', { class: 'field' }, E('label', { for: 'th-radius', text: 'Esquinas' }), radiusSel),
-      E('div', { class: 'field' }, E('label', { for: 'th-font', text: 'Tipo de letra' }), fontSel)),
-    E('label', { class: 'chk', for: 'th-caps' }, capsChk, E('span', { text: 'Títulos en MAYÚSCULAS' })),
-    E('div', { class: 'field' }, E('label', { for: 'th-title', text: 'Título de la tarjeta' }), titleIn),
-    E('div', { class: 'field' }, E('label', { for: 'th-infot', text: 'Título del bloque de información' }), infoTitleIn),
-    E('div', { class: 'field' }, E('label', { for: 'th-info', text: 'Texto de información para el cliente (vacío = no se muestra)' }), infoIn),
-    E('details', { class: 'field' }, E('summary', { text: 'Nombres de los 4 pasos' }), E('div', { class: 'th-steps' }, stepIns.map((s, i) => E('div', { class: 'field' }, E('label', { for: 'th-st' + i, text: 'Paso ' + (i + 1) }), s)))),
-    reset);
-  fill(); draw();
-  return { el: root, value: () => thNorm(t) };
-}
+/* ---------- tema claro / oscuro ---------- */
+(function(){
+  const root = document.documentElement;
+  try { const t = localStorage.getItem('reservas-tema'); if(t === 'dark' || t === 'light') root.setAttribute('data-theme', t); } catch(e){}
+  $('#btnTheme').addEventListener('click', () => {
+    const cur = root.getAttribute('data-theme') || (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('reservas-tema', next); } catch(e){}
+  });
+})();
 
 /* ---------- panel público de reservas (misma pantalla en la vista previa y en reservar.html) ---------- */
 function mountBooking(root, api, opts){
   opts = opts || {};
-  const E = thE;
+  const E = (tag, p, ...kids) => {
+    const e = document.createElement(tag);
+    for(const k in (p || {})){
+      const v = p[k]; if(v == null || v === false) continue;
+      if(k === 'text') e.textContent = v;
+      else if(k === 'class') e.className = v;
+      else if(k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), v);
+      else if(k === 'value') e.value = v;
+      else if(k === 'checked') e.checked = true;
+      else e.setAttribute(k, v === true ? '' : v);
+    }
+    kids.flat(Infinity).forEach(c => { if(c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(String(c))); });
+    return e;
+  };
   const pad = n => String(n).padStart(2, '0');
   const ymd = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
-  const parse = s => { const a = s.split('-').map(Number); return new Date(a[0], a[1] - 1, a[2]); };
   const addD = (s, n) => { const a = s.split('-').map(Number), d = new Date(a[0], a[1] - 1, a[2] + n); return ymd(d); };
-  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
-  const longDate = s => cap(parse(s).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }));
+  const longDate = s => { const a = s.split('-').map(Number), t = new Date(a[0], a[1] - 1, a[2]).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }); return t.charAt(0).toUpperCase() + t.slice(1); };
   const ERR = {
     desactivado: 'Ahora mismo no aceptamos reservas online. Llámanos y te atendemos.',
     tamano: 'Elige cuántas personas sois.',
@@ -1729,208 +1650,142 @@ function mountBooking(root, api, opts){
     plazo: 'Solo se puede cancelar online hasta {horas} antes. Llámanos y lo gestionamos.'
   };
   const plazoMsg = h => ERR.plazo.replace('{horas}', h + (+h === 1 ? ' hora' : ' horas'));
-  let cfg = null, th = thNorm(opts.theme);
-  const today0 = ymd(new Date());
-  const S = { step: 1, size: 2, date: today0, vy: new Date().getFullYear(), vm: new Date().getMonth(), time: null, busy: false, name: '', phone: '', mail: '', notes: '', priv: false, slotsKey: '', slots: null, slotsErr: '', msg: '', warn: null };
+  let cfg = null;
+  const S = { size: 2, date: ymd(new Date()), time: null, shifts: null, busy: false, msg: '' };
   const wrap = E('div', { class: 'pub' });
   root.replaceChildren(wrap);
-  function paint(){
-    thApply(wrap, th);
-    root.style.background = th.page;
-    if(opts.fullPage){ document.documentElement.style.background = th.page; document.body.style.background = th.page; }
-  }
-  paint();
 
-  /* estructura común: tarjeta con título arriba */
-  function shell(...kids){
-    return E('div', { class: 'pub-shell' },
-      E('div', { class: 'pub-top' }, E('h1', { text: th.title })),
-      E('div', { class: 'pub-body' }, kids));
+  function head(sub){
+    return E('header', { class: 'pub-head' }, E('h1', { text: (cfg && cfg.name) || 'Reserva tu mesa' }), sub ? E('p', { class: 'pub-lead', text: sub }) : null);
   }
-  function venue(){ return cfg && cfg.name ? E('p', { class: 'pub-venue', text: cfg.name }) : null; }
   function phoneNote(prefix){
     return cfg && cfg.phone ? E('p', { class: 'pub-note' }, prefix + ' ', E('b', { text: cfg.phone })) : null;
   }
-  function msgBox(text){ return E('p', { class: 'pub-msg', role: 'alert', hidden: !text, text: text || '' }); }
-
-  function steps(){
-    return E('ol', { class: 'pub-steps', 'aria-label': 'Pasos de la reserva' }, th.steps.map((name, i) => {
-      const n = i + 1, st = n === S.step ? 'on' : n < S.step ? 'done' : '';
-      const inner = [E('span', { class: 'n', text: n < S.step ? '✓' : String(n) }), E('span', { class: 'l', text: name })];
-      const canGo = n < S.step && S.step < 4;
-      return E('li', { class: 'pub-step ' + st, 'aria-current': n === S.step ? 'step' : null },
-        canGo ? E('button', { type: 'button', class: 'pub-stepbtn', 'aria-label': 'Volver al paso ' + n + ': ' + name, onclick: () => { S.msg = ''; S.step = n; render(); } }, inner) : E('div', { class: 'pub-stepbtn' }, inner));
-    }));
-  }
+  function showMsg(box, text, ok){ box.textContent = text || ''; box.className = 'pub-msg' + (ok ? ' ok' : ''); box.hidden = !text; }
 
   async function start(){
-    wrap.replaceChildren(shell(E('p', { class: 'pub-note', text: 'Cargando…' })));
-    try { cfg = await api.config(); } catch(e){ wrap.replaceChildren(shell(E('p', { class: 'pub-msg', text: 'No se pudo conectar. Revisa tu conexión e inténtalo de nuevo.' }))); return; }
+    wrap.replaceChildren(E('p', { class: 'pub-note', text: 'Cargando…' }));
+    try { cfg = await api.config(); } catch(e){ wrap.replaceChildren(E('p', { class: 'pub-msg', text: 'No se pudo conectar. Revisa tu conexión e inténtalo de nuevo.' })); return; }
     if(cfg && cfg.msgs) Object.keys(cfg.msgs).forEach(k => { const v = String(cfg.msgs[k] || '').trim(); if(v && k in ERR) ERR[k] = v; });
-    if(!opts.theme && cfg && cfg.theme){ th = thNorm(cfg.theme); paint(); }
     if(opts.token) return cancelView(opts.token);
-    if(!cfg || !cfg.enabled){ wrap.replaceChildren(shell(venue(), E('p', { class: 'pub-msg', text: ERR.desactivado }), phoneNote('Teléfono:'))); return; }
+    if(!cfg || !cfg.enabled){ wrap.replaceChildren(head(), E('p', { class: 'pub-msg', text: ERR.desactivado }), phoneNote('Teléfono:')); return; }
     S.size = Math.min(2, cfg.maxSize);
-    render();
+    form();
   }
 
-  function render(){
-    if(!cfg || !cfg.enabled || opts.token) return;
-    if(S.step === 1) step1(); else if(S.step === 2) step2(); else if(S.step === 3) step3(); else step4();
-  }
+  /* ----- formulario ----- */
+  function form(){
+    const sizeBox = E('div', { class: 'pub-sizes', role: 'group', 'aria-label': 'Número de personas' });
+    const dateIn = E('input', { type: 'date', id: 'pub-date', value: S.date, min: ymd(new Date()), max: addD(ymd(new Date()), cfg.maxDaysAhead || 60) });
+    const slotsBox = E('div', { class: 'pub-slots', 'aria-live': 'polite' });
+    const dataBox = E('div', { class: 'pub-data', hidden: true });
+    const msg = E('p', { class: 'pub-msg', role: 'alert', hidden: true });
+    const warnBox = E('div', { class: 'pub-warn', role: 'alert', hidden: true });
+    const nameIn = E('input', { type: 'text', id: 'pub-name', autocomplete: 'name', maxlength: 80 });
+    const phoneIn = E('input', { type: 'tel', id: 'pub-phone', autocomplete: 'tel', inputmode: 'tel', maxlength: 20 });
+    const mailIn = E('input', { type: 'email', id: 'pub-mail', autocomplete: 'email', inputmode: 'email', maxlength: 120 });
+    const notesIn = E('textarea', { id: 'pub-notes', maxlength: 300, rows: 2, placeholder: 'Alergias, trona, celebración…' });
+    const priv = E('input', { type: 'checkbox', id: 'pub-priv' });
+    const go = E('button', { type: 'submit', class: 'pub-btn', text: 'Confirmar reserva' });
+    const summary = E('p', { class: 'pub-sum' });
 
-  /* ----- paso 1: personas, día y hora ----- */
-  async function loadSlots(){
-    const key = S.date + '|' + S.size; S.slotsKey = key; S.slots = null; S.slotsErr = ''; S.time = null;
-    render();
-    let r; try { r = await api.disponibilidad(S.date, S.size); } catch(e){ r = { ok: false, error: 'red' }; }
-    if(S.slotsKey !== key) return;
-    if(!r.ok){ S.slotsErr = ERR[r.error] || 'No se pudo consultar. Inténtalo de nuevo.'; S.slots = []; }
-    else S.slots = r.shifts;
-    if(S.step === 1) render();
-  }
-  function calendar(){
-    const max = addD(today0, cfg.maxDaysAhead || 60), closed = new Set(cfg.closedDates || []);
-    const y = S.vy, m = S.vm, lead = (new Date(y, m, 1).getDay() + 6) % 7, dim = new Date(y, m + 1, 0).getDate();
-    const total = Math.ceil((lead + dim) / 7) * 7, cells = [];
-    for(let i = 0; i < total; i++){
-      const d = new Date(y, m, 1 - lead + i), s = ymd(d), inM = d.getMonth() === m;
-      const ok = inM && s >= today0 && s <= max && !closed.has(s);
-      const cls = 'pub-day' + (!inM ? ' other' : !ok ? ' off' : '') + (s === S.date && ok ? ' sel' : '') + (s === today0 && ok && s !== S.date ? ' today' : '');
-      if(!inM){ cells.push(E('span', { class: cls, text: String(d.getDate()), 'aria-hidden': 'true' })); continue; }
-      cells.push(E('button', { type: 'button', class: cls, disabled: !ok, text: String(d.getDate()), 'aria-pressed': s === S.date && ok ? 'true' : 'false',
-        'aria-label': longDate(s) + (closed.has(s) ? ' (cerrado)' : ''),
-        onclick: () => { S.date = s; loadSlots(); } }));
+    function drawSizes(){
+      sizeBox.replaceChildren();
+      for(let n = 1; n <= cfg.maxSize; n++){
+        sizeBox.append(E('button', { type: 'button', class: 'pub-chip' + (n === S.size ? ' on' : ''), 'aria-pressed': n === S.size ? 'true' : 'false', text: String(n),
+          onclick: () => { S.size = n; S.time = null; drawSizes(); loadSlots(); } }));
+      }
     }
-    const first = new Date(y, m, 1), nextFirst = new Date(y, m + 1, 1), nowM = new Date();
-    const canPrev = !(y === nowM.getFullYear() && m === nowM.getMonth()), canNext = ymd(nextFirst) <= max;
-    const go = n => { const d = new Date(y, m + n, 1); S.vy = d.getFullYear(); S.vm = d.getMonth(); render(); };
-    return E('div', { class: 'pub-cal' },
-      E('div', { class: 'pub-cal-head' },
-        E('button', { type: 'button', class: 'pub-nav', disabled: !canPrev, 'aria-label': 'Mes anterior', text: '‹', onclick: () => go(-1) }),
-        E('strong', { class: 'pub-cal-title', 'aria-live': 'polite', text: cap(first.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })) }),
-        E('button', { type: 'button', class: 'pub-nav', disabled: !canNext, 'aria-label': 'Mes siguiente', text: '›', onclick: () => go(1) })),
-      E('div', { class: 'pub-cal-dow', 'aria-hidden': 'true' }, ['L', 'M', 'X', 'J', 'V', 'S', 'D'].map(x => E('span', { text: x }))),
-      E('div', { class: 'pub-cal-days' }, cells),
-      E('div', { class: 'pub-legend' },
-        E('span', null, E('i', { class: 'dot sel' }), 'Día elegido'),
-        E('span', null, E('i', { class: 'dot free' }), 'Libre'),
-        E('span', null, E('i', { class: 'dot off' }), 'Cerrado o sin plazo')));
-  }
-  function slotsView(){
-    if(S.slots === null) return E('p', { class: 'pub-note', text: 'Buscando mesa…' });
-    if(S.slotsErr) return E('div', null, E('p', { class: 'pub-note', text: S.slotsErr }), phoneNote('También puedes llamarnos:'));
-    const out = []; let any = false;
-    S.slots.forEach(sh => {
-      if(!sh.slots.length) return; any = true;
-      out.push(E('div', { class: 'pub-shift' }, E('h3', { text: sh.name }),
-        E('div', { class: 'pub-times' }, sh.slots.map(t => E('button', { type: 'button', class: 'pub-time' + (t === S.time ? ' on' : ''), text: t, 'aria-label': 'Reservar a las ' + t,
-          onclick: () => { S.time = t; S.msg = ''; S.step = 2; render(); } })))));
-    });
-    if(!any) out.push(E('p', { class: 'pub-note', text: 'No quedan mesas ese día para ' + S.size + (S.size === 1 ? ' persona.' : ' personas.') + ' Prueba otro día.' }), phoneNote('También puedes llamarnos:'));
-    return E('div', { class: 'pub-slots', 'aria-live': 'polite' }, out);
-  }
-  function step1(){
-    const sel = E('select', { id: 'pub-size', 'aria-label': 'Número de personas' });
-    for(let n = 1; n <= cfg.maxSize; n++) sel.append(E('option', { value: String(n), text: n + (n === 1 ? ' persona' : ' personas'), selected: n === S.size }));
-    sel.addEventListener('change', () => { S.size = +sel.value; loadSlots(); });
-    const info = th.info ? E('div', { class: 'pub-info' }, E('h2', { text: th.infoTitle }), E('p', { text: th.info })) : null;
-    wrap.replaceChildren(shell(venue(), steps(),
-      E('div', { class: 'pub-field' }, E('label', { for: 'pub-size', text: 'Personas' }), sel, phoneNote('¿Sois más de ' + cfg.maxSize + '? Llámanos al')),
-      info,
-      calendar(),
-      slotsView()));
-    const keep = wrap.querySelector('#pub-size'); if(keep && document.activeElement === document.body) { /* sin foco forzado */ }
-  }
+    function drawSummary(){
+      summary.textContent = S.time ? S.size + (S.size === 1 ? ' persona' : ' personas') + ' · ' + longDate(S.date) + ' · ' + S.time : '';
+    }
+    async function loadSlots(){
+      S.time = null; dataBox.hidden = true; showMsg(msg, '');
+      if(!S.date){ slotsBox.replaceChildren(); return; }
+      slotsBox.replaceChildren(E('p', { class: 'pub-note', text: 'Buscando mesa…' }));
+      const my = S.date + '|' + S.size; S.key = my;
+      let r;
+      try { r = await api.disponibilidad(S.date, S.size); } catch(e){ r = { ok: false, error: 'red' }; }
+      if(S.key !== my) return;
+      slotsBox.replaceChildren();
+      if(!r.ok){ slotsBox.append(E('p', { class: 'pub-note', text: ERR[r.error] || 'No se pudo consultar. Inténtalo de nuevo.' })); return; }
+      let any = false;
+      r.shifts.forEach(sh => {
+        if(!sh.slots.length) return; any = true;
+        slotsBox.append(E('div', { class: 'pub-shift' }, E('h3', { text: sh.name }),
+          E('div', { class: 'pub-times' }, sh.slots.map(t => E('button', { type: 'button', class: 'pub-chip time' + (t === S.time ? ' on' : ''), text: t, 'aria-pressed': 'false',
+            onclick: ev => { S.time = t; slotsBox.querySelectorAll('.pub-chip').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-pressed', 'false'); }); ev.currentTarget.classList.add('on'); ev.currentTarget.setAttribute('aria-pressed', 'true'); dataBox.hidden = false; drawSummary(); showMsg(msg, ''); } })))));
+      });
+      if(!any) slotsBox.append(E('p', { class: 'pub-note', text: 'No quedan mesas ese día para ' + S.size + (S.size === 1 ? ' persona.' : ' personas.') + ' Prueba otro día.' }), phoneNote('También puedes llamarnos:'));
+    }
+    dateIn.addEventListener('change', () => { S.date = dateIn.value; loadSlots(); });
 
-  /* ----- paso 2: datos ----- */
-  function summary(){
-    return E('div', { class: 'pub-sumbar' },
-      E('span', { class: 'pub-sum', text: S.size + (S.size === 1 ? ' persona' : ' personas') + ' · ' + longDate(S.date) + ' · ' + S.time }),
-      E('button', { type: 'button', class: 'pub-link2', text: 'Cambiar', onclick: () => { S.msg = ''; S.step = 1; render(); } }));
-  }
-  function field(id, label, input){ return E('div', { class: 'pub-field' }, E('label', { for: id, text: label }), input); }
-  function step2(){
-    const msg = msgBox(S.msg);
-    const nameIn = E('input', { type: 'text', id: 'pub-name', autocomplete: 'name', maxlength: 80, value: S.name });
-    const phoneIn = E('input', { type: 'tel', id: 'pub-phone', autocomplete: 'tel', inputmode: 'tel', maxlength: 20, value: S.phone });
-    const mailIn = E('input', { type: 'email', id: 'pub-mail', autocomplete: 'email', inputmode: 'email', maxlength: 120, value: S.mail });
-    nameIn.addEventListener('input', () => { S.name = nameIn.value; });
-    phoneIn.addEventListener('input', () => { S.phone = phoneIn.value; });
-    mailIn.addEventListener('input', () => { S.mail = mailIn.value; });
-    const show = (el, text) => { el.focus(); msg.textContent = text; msg.hidden = false; };
-    const form = E('form', { class: 'pub-form', novalidate: true, onsubmit: ev => {
-      ev.preventDefault();
-      if(!nameIn.value.trim()) return show(nameIn, ERR.nombre);
-      if(!phoneIn.value.trim()) return show(phoneIn, ERR.telefono);
-      if(!mailIn.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mailIn.value.trim())) return show(mailIn, ERR.email);
-      S.msg = ''; S.step = 3; render();
-    } },
-      field('pub-name', 'Nombre', nameIn),
-      E('div', { class: 'pub-row' }, field('pub-phone', 'Teléfono', phoneIn), field('pub-mail', 'Email', mailIn)),
-      msg,
-      E('div', { class: 'pub-actions' }, E('button', { type: 'button', class: 'pub-btn ghost', text: 'Atrás', onclick: () => { S.msg = ''; S.step = 1; render(); } }), E('button', { type: 'submit', class: 'pub-btn', text: 'Siguiente' })));
-    wrap.replaceChildren(shell(venue(), steps(), summary(), form));
-  }
-
-  /* ----- paso 3: comentarios, privacidad y confirmar ----- */
-  function step3(){
-    const msg = msgBox(S.msg);
-    const warnBox = E('div', { class: 'pub-warn', role: 'alert', hidden: !S.warn });
-    const notesIn = E('textarea', { id: 'pub-notes', maxlength: 300, rows: 3, placeholder: 'Alergias, trona, celebración…', value: S.notes });
-    const priv = E('input', { type: 'checkbox', id: 'pub-priv', checked: S.priv });
-    const go = E('button', { type: 'submit', class: 'pub-btn', text: 'Confirmar reserva', disabled: S.busy });
-    notesIn.addEventListener('input', () => { S.notes = notesIn.value; });
-    priv.addEventListener('change', () => { S.priv = priv.checked; });
     function showWarn(ex){
-      S.warn = ex;
       warnBox.replaceChildren(
         E('p', { text: ERR.duplicada_aviso.replace('{hora}', ex.time).replace('{personas}', ex.size + (+ex.size === 1 ? ' persona' : ' personas')) }),
         E('div', { class: 'pub-warn-btns' },
-          E('button', { type: 'button', class: 'pub-btn', text: 'Sí, hacer otra', onclick: () => { S.warn = null; warnBox.hidden = true; send(true); } }),
-          E('button', { type: 'button', class: 'pub-btn ghost', text: 'No, dejarlo así', onclick: () => { S.warn = null; warnBox.hidden = true; } })));
+          E('button', { type: 'button', class: 'pub-btn', text: 'Sí, hacer otra', onclick: () => { warnBox.hidden = true; send(true); } }),
+          E('button', { type: 'button', class: 'pub-btn ghost', text: 'No, dejarlo así', onclick: () => { warnBox.hidden = true; } })));
       warnBox.hidden = false;
     }
     async function send(confirmar){
       if(S.busy) return;
-      S.busy = true; go.disabled = true; go.textContent = 'Reservando…'; msg.hidden = true; warnBox.hidden = true;
+      S.busy = true; go.disabled = true; go.textContent = 'Reservando…'; showMsg(msg, ''); warnBox.hidden = true;
       let r;
-      try { r = await api.reservar({ date: S.date, time: S.time, size: S.size, name: S.name, phone: S.phone, email: S.mail, notes: S.notes, privacy: true, confirmar: !!confirmar }); }
+      try { r = await api.reservar({ date: S.date, time: S.time, size: S.size, name: nameIn.value, phone: phoneIn.value, email: mailIn.value, notes: notesIn.value, privacy: true, confirmar: !!confirmar }); }
       catch(e){ r = { ok: false, error: 'red' }; }
       S.busy = false; go.disabled = false; go.textContent = 'Confirmar reserva';
       if(!r.ok){
         if(r.error === 'duplicada_aviso' && r.existing){ showWarn(r.existing); return; }
-        const text = ERR[r.error] || 'No se pudo completar la reserva. Inténtalo de nuevo.';
-        if(['sin_mesa', 'hora', 'antelacion', 'fecha', 'cerrado', 'tamano'].includes(r.error)){ S.msg = text; S.step = 1; loadSlots(); return; }
-        if(['nombre', 'telefono', 'email'].includes(r.error)){ S.msg = text; S.step = 2; render(); return; }
-        msg.textContent = text; msg.hidden = false; return;
+        showMsg(msg, ERR[r.error] || 'No se pudo completar la reserva. Inténtalo de nuevo.');
+        if(['sin_mesa', 'hora', 'antelacion'].includes(r.error)) loadSlots().then(() => showMsg(msg, ERR[r.error]));
+        return;
       }
-      S.result = r; S.step = 4; render();
+      done(r);
     }
-    const form = E('form', { class: 'pub-form', novalidate: true, onsubmit: ev => {
-      ev.preventDefault(); if(S.busy) return;
-      if(!priv.checked){ priv.focus(); msg.textContent = ERR.privacidad; msg.hidden = false; return; }
+    function submit(ev){
+      ev.preventDefault();
+      if(S.busy) return;
+      if(!S.time){ showMsg(msg, 'Elige una hora.'); return; }
+      if(!nameIn.value.trim()){ nameIn.focus(); showMsg(msg, ERR.nombre); return; }
+      if(!phoneIn.value.trim()){ phoneIn.focus(); showMsg(msg, ERR.telefono); return; }
+      if(!mailIn.value.trim()){ mailIn.focus(); showMsg(msg, ERR.email); return; }
+      if(!priv.checked){ priv.focus(); showMsg(msg, ERR.privacidad); return; }
       send(false);
-    } },
-      field('pub-notes', 'Comentarios (opcional)', notesIn),
+    }
+
+    wrap.replaceChildren(
+      head('Elige cuántos sois, el día y la hora. La reserva se confirma al momento.'),
+      E('form', { class: 'pub-form', novalidate: true, onsubmit: submit },
+        E('section', null, E('h2', { text: 'Personas' }), sizeBox, phoneNote('¿Sois más de ' + cfg.maxSize + '? Llámanos al')),
+        E('section', null, E('h2', { text: 'Día' }), dateIn),
+        E('section', null, E('h2', { text: 'Hora' }), slotsBox),
+        dataBox,
+        warnBox,
+        msg));
+    dataBox.append(
+      E('h2', { text: 'Tus datos' }), summary,
+      E('div', { class: 'pub-field' }, E('label', { for: 'pub-name', text: 'Nombre' }), nameIn),
+      E('div', { class: 'pub-row' },
+        E('div', { class: 'pub-field' }, E('label', { for: 'pub-phone', text: 'Teléfono' }), phoneIn),
+        E('div', { class: 'pub-field' }, E('label', { for: 'pub-mail', text: 'Email' }), mailIn)),
+      E('div', { class: 'pub-field' }, E('label', { for: 'pub-notes', text: 'Comentarios (opcional)' }), notesIn),
       E('label', { class: 'pub-check', for: 'pub-priv' }, priv, E('span', { text: 'Acepto que ' + ((cfg && cfg.name) || 'el local') + ' guarde mis datos para gestionar esta reserva y contactarme si hace falta. Puedo pedir que los borren cuando quiera.' })),
-      warnBox, msg,
-      E('div', { class: 'pub-actions' }, E('button', { type: 'button', class: 'pub-btn ghost', text: 'Atrás', onclick: () => { S.msg = ''; S.step = 2; render(); } }), go));
-    wrap.replaceChildren(shell(venue(), steps(), summary(), E('p', { class: 'pub-sum2', text: S.name + ' · ' + S.phone + ' · ' + S.mail }), form));
-    if(S.warn) showWarn(S.warn);
+      go);
+    drawSizes(); loadSlots();
   }
 
-  /* ----- paso 4: reserva hecha ----- */
-  function step4(){
-    const r = S.result, link = opts.cancelUrl ? opts.cancelUrl(r.token) : '';
+  /* ----- reserva hecha ----- */
+  function done(r){
+    const link = opts.cancelUrl ? opts.cancelUrl(r.token) : '';
     const copyBtn = E('button', { type: 'button', class: 'pub-btn ghost', text: 'Copiar enlace' });
-    const linkBox = E('input', { type: 'text', readonly: true, class: 'pub-link', id: 'pub-link', value: link, 'aria-label': 'Enlace para cancelar', onfocus: e => e.target.select() });
     copyBtn.addEventListener('click', () => {
       const ok = () => { copyBtn.textContent = 'Copiado'; };
       try { navigator.clipboard.writeText(link).then(ok, () => linkBox.select()); } catch(e){ linkBox.select(); }
     });
-    wrap.replaceChildren(shell(venue(), steps(),
-      E('div', { class: 'pub-head' }, E('p', { class: 'pub-ok', text: 'Reserva confirmada' }), E('h2', { class: 'pub-big', text: r.name + ', te esperamos' })),
+    const linkBox = E('input', { type: 'text', readonly: true, class: 'pub-link', value: link, 'aria-label': 'Enlace para cancelar', onfocus: e => e.target.select() });
+    wrap.replaceChildren(
+      E('header', { class: 'pub-head' }, E('p', { class: 'pub-ok', text: 'Reserva confirmada' }), E('h1', { text: r.name + ', te esperamos' })),
       E('dl', { class: 'pub-card' },
         E('div', null, E('dt', { text: 'Día' }), E('dd', { text: longDate(r.date) })),
         E('div', null, E('dt', { text: 'Hora' }), E('dd', { text: r.time })),
@@ -1938,39 +1793,38 @@ function mountBooking(root, api, opts){
       E('p', { class: 'pub-note', text: 'Guarda este enlace. Es la única forma de cancelar la reserva por tu cuenta.' }),
       E('div', { class: 'pub-linkrow' }, linkBox, copyBtn),
       phoneNote('¿Necesitas cambiarla? Llámanos al'),
-      E('button', { type: 'button', class: 'pub-btn ghost', text: 'Hacer otra reserva', onclick: () => { S.time = null; S.step = 1; S.priv = false; S.notes = ''; loadSlots(); } })));
+      E('button', { type: 'button', class: 'pub-btn ghost', text: 'Hacer otra reserva', onclick: () => { S.time = null; form(); } }));
   }
 
   /* ----- cancelar con enlace ----- */
   async function cancelView(token){
     let r;
     try { r = await api.ver(token); } catch(e){ r = { ok: false, error: 'red' }; }
-    if(!r.ok){ wrap.replaceChildren(shell(venue(), E('p', { class: 'pub-msg', text: ERR[r.error] || 'No se pudo cargar la reserva.' }), phoneNote('Teléfono:'))); return; }
-    const msg = msgBox('');
+    if(!r.ok){ wrap.replaceChildren(head(), E('p', { class: 'pub-msg', text: ERR[r.error] || 'No se pudo cargar la reserva.' }), phoneNote('Teléfono:')); return; }
+    const msg = E('p', { class: 'pub-msg', role: 'alert', hidden: true });
     const btn = E('button', { type: 'button', class: 'pub-btn danger', text: 'Cancelar mi reserva' });
     let sure = false;
     btn.addEventListener('click', async () => {
       if(!sure){ sure = true; btn.textContent = '¿Seguro? Pulsa otra vez'; return; }
       btn.disabled = true;
       let c; try { c = await api.cancelar(token); } catch(e){ c = { ok: false, error: 'red' }; }
-      if(c.error === 'plazo'){ btn.disabled = false; sure = false; btn.textContent = 'Cancelar mi reserva'; msg.textContent = plazoMsg(c.cancelMinH); msg.hidden = false; return; }
-      if(c.ok){ wrap.replaceChildren(shell(venue(), E('p', { class: 'pub-ok', text: 'Reserva cancelada' }), E('p', { class: 'pub-note', text: 'Gracias por avisar. Te esperamos otro día.' }), opts.homeUrl ? E('a', { class: 'pub-btn ghost', href: opts.homeUrl, text: 'Hacer una nueva reserva' }) : null)); return; }
+      if(c.error === 'plazo'){ btn.disabled = false; sure = false; btn.textContent = 'Cancelar mi reserva'; showMsg(msg, plazoMsg(c.cancelMinH)); return; }
+      if(c.ok){ wrap.replaceChildren(head(), E('p', { class: 'pub-ok', text: 'Reserva cancelada' }), E('p', { class: 'pub-note', text: 'Gracias por avisar. Te esperamos otro día.' }), opts.homeUrl ? E('a', { class: 'pub-btn ghost', href: opts.homeUrl, text: 'Hacer una nueva reserva' }) : null); return; }
       btn.disabled = false; sure = false; btn.textContent = 'Cancelar mi reserva';
-      msg.textContent = ERR[c.error] || 'No se pudo cancelar. Llámanos.'; msg.hidden = false;
+      showMsg(msg, ERR[c.error] || 'No se pudo cancelar. Llámanos.');
     });
     const started = new Date(r.date + 'T' + r.time + ':00') <= new Date();
     const st = r.status === 'cancelada' ? 'Esta reserva ya está cancelada.' : r.status !== 'confirmada' ? 'Esta reserva ya no está activa.' : started ? 'Esta reserva ya ha pasado.' : !r.canCancel ? plazoMsg(r.cancelMinH || 0) : '';
-    wrap.replaceChildren(shell(venue(),
+    wrap.replaceChildren(head(),
       E('dl', { class: 'pub-card' },
         E('div', null, E('dt', { text: 'A nombre de' }), E('dd', { text: r.name })),
         E('div', null, E('dt', { text: 'Día' }), E('dd', { text: longDate(r.date) })),
         E('div', null, E('dt', { text: 'Hora' }), E('dd', { text: r.time })),
         E('div', null, E('dt', { text: 'Personas' }), E('dd', { text: String(r.size) }))),
       st ? E('p', { class: 'pub-msg', text: st }) : E('div', { class: 'pub-form' }, btn, msg),
-      phoneNote('¿Dudas? Llámanos al')));
+      phoneNote('¿Dudas? Llámanos al'));
   }
-  start().then(() => { if(cfg && cfg.enabled && !opts.token) loadSlots(); });
-  return { applyTheme(t){ th = thNorm(t); paint(); render(); } };
+  start();
 }
 
 /* ---------- vista previa del panel público (usa los datos de este gestor) ---------- */
@@ -2052,7 +1906,7 @@ const pubLocal = (() => {
 })();
 function openPublicPreview(){
   const ov = h('div', { class: 'pubov', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Vista previa del panel online' });
-  const stage = h('div', { style: 'min-height:90vh' });
+  const stage = h('div');
   const link = h('input', { type: 'text', id: 'pv-link', placeholder: 'Pega aquí el enlace de cancelación', 'aria-label': 'Enlace de cancelación', style: 'min-width:0;flex:1;max-width:320px' });
   const mount = token => mountBooking(stage, pubLocal, { token, cancelUrl: t => new URL('reservar.html?c=' + t, location.href).href, homeUrl: '#' });
   const close = () => { ov.remove(); document.body.classList.remove('noscroll'); };
